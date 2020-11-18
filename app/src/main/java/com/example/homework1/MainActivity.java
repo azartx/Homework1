@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // create toast after pressing the info button
         Button infoButton = findViewById(R.id.infoButton);
 
         View.OnClickListener onClick = new View.OnClickListener() {
