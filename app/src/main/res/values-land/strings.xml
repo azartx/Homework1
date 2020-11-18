@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Homework One</string>
+    <string name="textView">Welcome!\n\nThis is HORIZONTAL US Localization</string>
+    <string name="infoButton">INFO</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Задание один</string>
+    <string name="textView">Приветствую!\n\nЭто HORIZONTAL Русская локализация приложения.</string>
+    <string name="infoButton">ИНФО</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Завданне один</string>
+    <string name="textView">Вітаю!\n\nЦе Українська локалізація застосування.</string>
+    <string name="infoButton">IНФА</string>
+</resources>
