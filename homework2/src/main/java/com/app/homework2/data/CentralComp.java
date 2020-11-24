@@ -1,4 +1,4 @@
-package com.app.homework2;
+package com.app.homework2.data;
 
 import com.app.homework2.interfaces.Notifier;
 import com.app.homework2.interfaces.Observer;
@@ -6,7 +6,7 @@ import com.app.homework2.interfaces.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-class CentralComp implements Notifier {
+public class CentralComp implements Notifier {
     private List observers;
     private ArrayList<Integer> numbers;
 

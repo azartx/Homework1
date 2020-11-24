@@ -1,4 +1,4 @@
-package com.app.homework2;
+package com.app.homework2.data;
 
 import android.util.Log;
 
@@ -7,10 +7,10 @@ import com.app.homework2.interfaces.Observer;
 
 import java.util.ArrayList;
 
-class MiddleArithmetical implements Observer {
+public class Summ implements Observer {
     private Notifier notifier;
 
-    public MiddleArithmetical(Notifier notifier){
+    public Summ(Notifier notifier){
         this.notifier = notifier;
         notifier.addObserver(this);
     }
@@ -22,17 +22,12 @@ class MiddleArithmetical implements Observer {
             average += numbers.get(i);
         }
 
-        if (average != 0){
-            average /= numbers.size();
-        }
-
         show(numbers, average);
     }
 
 
     public void show(ArrayList<Integer> numbers, int average){
-        Log.i("TAG", numbers.toString());
-        Log.i("TAG", "Среднее арифметическое: " + average);
+        Log.i("TAG", "Сумма всех чисел массива: " + average);
     }
 
 
