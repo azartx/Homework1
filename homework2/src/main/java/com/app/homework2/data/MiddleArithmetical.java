@@ -26,11 +26,11 @@ public class MiddleArithmetical implements Observer {
             average /= numbers.size();
         }
 
-        show(numbers, average);
+        show(average);
     }
 
 
-    public void show(ArrayList<Integer> numbers, int average){
+    public void show(int average){
         Log.i("TAG", "Среднее арифметическое: " + average);
     }
 

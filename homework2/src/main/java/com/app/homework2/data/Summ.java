@@ -22,11 +22,11 @@ public class Summ implements Observer {
             average += numbers.get(i);
         }
 
-        show(numbers, average);
+        show(average);
     }
 
 
-    public void show(ArrayList<Integer> numbers, int average){
+    public void show(int average){
         Log.i("TAG", "Сумма всех чисел массива: " + average);
     }
 

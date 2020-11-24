@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.homework2.data.CentralComp;
+import com.app.homework2.data.Evil;
 import com.app.homework2.data.MiddleArithmetical;
 import com.app.homework2.data.Summ;
 
@@ -29,6 +30,7 @@ public class SecondActivity extends AppCompatActivity {
 
         new MiddleArithmetical(subject);
         new Summ(subject);
+        new Evil(subject);
 
         subject.changeData(numbers);
 
