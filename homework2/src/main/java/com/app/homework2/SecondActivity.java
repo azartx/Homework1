@@ -29,10 +29,13 @@ public class SecondActivity extends AppCompatActivity {
 
         if (numbers != null) {
             logOnScreen.setText(numbers.toString());
-
             Log.i("TAG", "Нагенеренные числа:\n" + numbers.toString());
         } else {
-            Log.i("TAG", "Your ArrayList is null");
+            Log.i("TAG", "Your ArrayList is null.");
+            numbers = new ArrayList<>();
+            numbers.add(12345);
+            numbers.add(54321);
+            logOnScreen.setText(numbers.toString());
         }
 
         CentralComp subject = new CentralComp();

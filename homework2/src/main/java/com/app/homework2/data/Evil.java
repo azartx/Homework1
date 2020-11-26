@@ -32,7 +32,14 @@ public class Evil implements Observer {
         for (int i = numbers.size() / 2 + 1; i < numbers.size(); i++) {
             secondPart -= numbers.get(i);
         }
-        firstPart /= (secondPart); // деление двух частей друг на друга
+
+        try{            // обработал, так как может придти деление на ноль
+            firstPart /= (secondPart); // деление двух частей друг на друга
+        }catch(ArithmeticException e){
+            Log.i("TAG", "Arithmetical Exception Evil.java. Деление на ноль. " +
+                    "Установил шаблонные данные.");
+            firstPart = 999;
+        }
 
         show(firstPart);
     }

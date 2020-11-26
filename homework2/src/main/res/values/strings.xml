@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">homework2</string>
-    <string name="change">Change UI</string>
+    <string name="app_name">Homework 2</string>
+    <string name="change">Расчет</string>
     <string name="showInfo">Показать информацию</string>
     <string name="back">Назад</string>
+    <string name="appDescription">При нажатии кнопки "Расчет" пройдет переход на вторую активити.
+    Там отобразится сгенеррованный случайный список чисел. При нажатии кнопки "Произвести расчет",
+    под массивом появится три строки с расчетами.</string>
 </resources>
