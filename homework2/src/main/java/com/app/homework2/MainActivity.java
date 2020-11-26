@@ -11,7 +11,6 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,32 +32,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static void fillArrayList(ArrayList<Integer> list) {
-
         Random rand = new Random();
 
-        list.add(rand.nextInt(499) + 1);
+        int range = rand.nextInt(rand.nextInt(9998) + 1) + 1;
+        int whileNumber = rand.nextInt(499) + 1;
+        if (whileNumber % 2 != 0) {
+            ++whileNumber;
+        }
+
+        list.add(rand.nextInt(range) + 1);
 
         int randomNumber;
         int counter = 0;
 
         // Цикл для заполнения списка.
         do {
-            randomNumber = rand.nextInt(499) + 1;
+            randomNumber = rand.nextInt(range) + 1;
 
             // Проверяем, имеется ли копия числа в списке.
+            // Каждый раз, когда находит копию - возвращается в начало листа и проверяет новое число
             for (int i = 0; i < list.size(); ) {
                 if (list.get(i) == randomNumber) {
                     i = 0;
-                    randomNumber = rand.nextInt(499) + 1;
+                    randomNumber = rand.nextInt(range) + 1;
                 } else {
                     i++;
                 }
             }
 
+            // если не нашел копий после for, число добавляется в список
             list.add(randomNumber);
             ++counter;
 
-        } while (counter != 19);
+        } while (counter != whileNumber);
 
     }
 

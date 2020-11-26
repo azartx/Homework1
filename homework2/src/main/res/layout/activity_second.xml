@@ -6,4 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".SecondActivity">
 
+    <ScrollView
+        android:id="@+id/activity_main"
+        android:layout_width="281dp"
+        android:layout_height="202dp"
+        app:layout_constraintBottom_toTopOf="@+id/showInformation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/logView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/showInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showInfo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <Button
+        android:id="@+id/backOnMainActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

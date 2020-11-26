@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">homework2</string>
     <string name="change">Change UI</string>
+    <string name="showInfo">Показать информацию</string>
+    <string name="back">Назад</string>
 </resources>

@@ -9,17 +9,19 @@ import java.util.ArrayList;
 
 // Третий пункт задания..уточняю :D
 public class Evil implements Observer {
-    private Notifier notifier;
+
+    private int firstPart;
 
     public Evil(Notifier notifier) {
-        this.notifier = notifier;
         notifier.addObserver(this);
     }
 
+    public int getFirstPart() {
+        return firstPart;
+    }
+
     public void update(ArrayList<Integer> numbers) {
-        int firstPart = 0;
         int secondPart = 0;
-        int finishPart = 0;
 
         // Обработка первой части массива
         for (int i = 0; i < numbers.size() / 2; i++) {
@@ -30,16 +32,12 @@ public class Evil implements Observer {
         for (int i = numbers.size() / 2 + 1; i < numbers.size(); i++) {
             secondPart -= numbers.get(i);
         }
-        // Пока что деление работает не правильно.
-        finishPart = firstPart / (secondPart);
+        firstPart /= (secondPart); // деление двух частей друг на друга
 
-        show(finishPart, firstPart, secondPart);
+        show(firstPart);
     }
 
-
-    public void show(double average, int first, int second) {
-        Log.i("TAG", "Махинации с массивом: " + average + " " + first + " " + second);
+    public void show(int finishData) {
+        Log.i("TAG", "Махинации с массивом ( деление двух частей): " + finishData);
     }
-
-
 }
