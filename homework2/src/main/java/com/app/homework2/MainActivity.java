@@ -3,6 +3,7 @@ package com.app.homework2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final ArrayList<Integer> numbers = new ArrayList<>();
+        final ArrayList<Integer> data = getIntentData();
+
+        if (data != null) {
+            TextView resultsView = findViewById(R.id.resultsView);
+            String text = getString(R.string.data_textView,
+                    data.get(0),
+                    data.get(1),
+                    data.get(2));
+            resultsView.setText(text);
+        }
 
         fillArrayList(numbers);
 
@@ -66,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
 
         } while (counter != whileNumber);
 
+    }
+
+    private ArrayList<Integer> getIntentData() {
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            return intent.getIntegerArrayListExtra("data");
+        }
+        return null;
     }
 
 }

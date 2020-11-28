@@ -53,26 +53,34 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+        // По нажатии кнопки назад мы передаём расчеты в мэйн активити при помощи еще одного списка
         findViewById(R.id.backOnMainActivity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+                ArrayList<Integer> data = new ArrayList<>();
+                data.add(summ.getSumm());
+                data.add(average.getAverage());
+                data.add(evil.getFirstPart());
+
+                intent.putIntegerArrayListExtra("data", data);
                 startActivity(intent);
             }
         });
 
     }
 
+
     @SuppressLint("SetTextI18n")
     private void showInformation(TextView logOnScreen, MiddleArithmetical average, Summ summ, Evil evil) {
         // делаю кнопку неактивной после нажатия на нее и отображаю информацию в текст вью
         // кнопка снова станет активной после смены UI
         findViewById(R.id.showInformation).setClickable(false);
-
-        logOnScreen.setText(logOnScreen.getText() + "\n\nСумма всех чисел массива: " + summ.getSumm());
-        logOnScreen.setText(logOnScreen.getText() + "\n\nСреднее арифметическое: " + average.getAverage());
-        logOnScreen.setText(logOnScreen.getText() + "\n\nНепонятные фокусы с массивом: " + evil.getFirstPart());
-
+        String text = getString(R.string.data_textView,
+                summ.getSumm(),
+                average.getAverage(),
+                evil.getFirstPart());
+        logOnScreen.setText(logOnScreen.getText() + "\n\n" + text);
     }
 
     private ArrayList<Integer> getIntentData() {
