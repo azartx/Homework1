@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">homework3</string>
+    <string name="attractions">Attractions</string>
+    <string name="image_1">Image 1</string>
+    <string name="dining">Dining</string>
+    <string name="education">Education</string>
+    <string name="family">Family</string>
+    <string name="health">Health</string>
+    <string name="office">Office</string>
+    <string name="promotions">Promotions</string>
+    <string name="radio">Radio</string>
+    <string name="text">Text</string>
+    <string name="make_photo">Photo</string>
+    <string name="title">Title</string>
+</resources>
