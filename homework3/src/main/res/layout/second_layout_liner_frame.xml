@@ -49,8 +49,8 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="15dp"
-            android:autofillHints="@string/title"
-            android:hint="@string/title"
+            android:autofillHints="Price"
+            android:hint="@string/price"
             android:inputType="text" />
 
         <EditText
@@ -59,8 +59,9 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="15dp"
-            android:autofillHints="@string/title"
-            android:hint="@string/title"
+            android:autofillHints="Location"
+            android:hint="@string/location"
+            android:drawableEnd="@drawable/ic_baseline_add_location_alt_24"
             android:inputType="text" />
 
     </LinearLayout>
@@ -87,8 +88,8 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="70dp"
             android:layout_weight="1"
-            android:autofillHints="@string/title"
-            android:hint="@string/title"
+            android:autofillHints="@string/inventory"
+            android:hint="@string/inventory"
             android:inputType="text" />
 
         <EditText
@@ -98,8 +99,8 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="15dp"
             android:layout_weight="1"
-            android:autofillHints="@string/title"
-            android:hint="@string/title"
+            android:autofillHints="@string/weight"
+            android:hint="@string/weight"
             android:inputType="text" />
 
     </LinearLayout>

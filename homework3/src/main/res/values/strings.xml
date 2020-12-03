@@ -12,4 +12,9 @@
     <string name="text">Text</string>
     <string name="make_photo">Photo</string>
     <string name="title">Title</string>
+    <string name="price">Price</string>
+    <string name="location">Location</string>
+    <string name="description">Description</string>
+    <string name="inventory">Inventory</string>
+    <string name="weight">Weight</string>
 </resources>
