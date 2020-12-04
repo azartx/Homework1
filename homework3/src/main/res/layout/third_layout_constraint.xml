@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/signInTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="40dp"
@@ -12,7 +13,9 @@
         android:paddingEnd="40dp"
         android:paddingBottom="20dp"
         android:text="@string/sing_in"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/setEmail"
@@ -28,7 +31,10 @@
         android:paddingTop="5dp"
         android:paddingEnd="25dp"
         android:paddingBottom="5dp"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signInTextView" />
 
     <EditText
         android:id="@+id/setPassword"
@@ -37,7 +43,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="40dp"
         android:autofillHints="@string/password"
         android:background="@drawable/ic_bg_edit_text"
         android:hint="@string/password"
@@ -46,35 +51,37 @@
         android:paddingTop="5dp"
         android:paddingEnd="25dp"
         android:paddingBottom="5dp"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setEmail" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/rememberCheckBox"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:checked="true"
+        android:text="@string/remember"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setPassword" />
 
-        <CheckBox
-            android:id="@+id/rememberCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:checked="true"
-            android:text="@string/remember"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/forgotPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="end"
-            android:text="@string/forgot_password"
-            android:textSize="20sp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/forgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="end"
+        android:text="@string/forgot_password"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setPassword" />
 
     <Button
         android:layout_width="match_parent"
@@ -86,7 +93,10 @@
         android:background="@drawable/ic_button_sign_in"
         android:text="@string/sign_in"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rememberCheckBox" />
 
     <TextView
         android:layout_width="match_parent"
@@ -94,4 +104,5 @@
         android:gravity="bottom|center"
         android:text="@string/just_sign_in"
         android:textSize="20sp" />
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
