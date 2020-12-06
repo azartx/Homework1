@@ -36,4 +36,10 @@
     <string name="directions">DIRECTIONS</string>
     <string name="save">SAVE</string>
     <string name="website">WEBSITE</string>
+    <string name="certificated">Certificated</string>
+    <string name="rss">rss</string>
+    <string name="star">star</string>
+    <string name="write_smt">write smt</string>
+    <string name="view">View</string>
+    <string name="layouts">Layouts</string>
 </resources>
