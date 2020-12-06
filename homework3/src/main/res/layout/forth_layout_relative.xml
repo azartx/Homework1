@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,197 +8,199 @@
         android:id="@+id/textViewAndroid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:paddingStart="20dp"
         android:paddingTop="20dp"
         android:paddingEnd="20dp"
         android:paddingBottom="10dp"
         android:text="@string/android"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp" />
 
     <ImageView
         android:id="@+id/avatar"
         android:layout_width="110dp"
         android:layout_height="110dp"
+        android:layout_below="@+id/textViewAndroid"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/avatar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAndroid" />
+        android:contentDescription="@string/avatar" />
 
     <TextView
         android:id="@+id/posts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textColor="#000"
-        app:layout_constraintBottom_toBottomOf="@id/avatar"
-        app:layout_constraintEnd_toEndOf="@id/followers"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toTopOf="@id/avatar" />
+        android:layout_alignBottom="@id/avatar"
+        android:layout_toEndOf="@id/avatar"
+        android:padding="25dp"
+        android:text="@string/posts"
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/followers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textColor="#000"
-        app:layout_constraintBottom_toBottomOf="@id/avatar"
-        app:layout_constraintEnd_toEndOf="@id/following"
-        app:layout_constraintStart_toEndOf="@id/posts"
-        app:layout_constraintTop_toTopOf="@id/avatar" />
+        android:layout_alignTop="@id/posts"
+        android:layout_alignBottom="@id/posts"
+        android:layout_toStartOf="@id/following"
+        android:layout_toEndOf="@id/posts"
+        android:gravity="center"
+        android:text="@string/followers"
+        android:textColor="#000" />
+
 
     <TextView
         android:id="@+id/following"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data"
-        android:textColor="#000"
-        app:layout_constraintBottom_toBottomOf="@id/avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/followers"
-        app:layout_constraintTop_toTopOf="@id/avatar" />
-
-    <TextView
-        android:id="@+id/textPosts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/posts"
-        android:textColor="#000"
-        app:layout_constraintEnd_toEndOf="@id/followers"
-        app:layout_constraintStart_toEndOf="@id/avatar"
-        app:layout_constraintTop_toBottomOf="@id/posts" />
-
-    <TextView
-        android:id="@+id/textFollowers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/followers"
-        android:textColor="#000"
-        app:layout_constraintEnd_toEndOf="@id/following"
-        app:layout_constraintStart_toEndOf="@id/posts"
-        app:layout_constraintTop_toBottomOf="@id/followers" />
-
-    <TextView
-        android:id="@+id/textFollowing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/followers"
+        android:layout_alignBottom="@id/followers"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:padding="25dp"
         android:text="@string/following"
-        android:textColor="#000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/followers"
-        app:layout_constraintTop_toBottomOf="@id/following" />
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/postsData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/posts"
+        android:layout_alignTop="@id/avatar"
+        android:layout_alignEnd="@id/posts"
+        android:layout_toEndOf="@id/avatar"
+        android:gravity="center|bottom"
+        android:text="@string/no_data"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/postsFollowers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/posts"
+        android:layout_alignStart="@id/followers"
+        android:layout_alignTop="@id/avatar"
+        android:layout_alignEnd="@id/followers"
+        android:layout_toEndOf="@id/followers"
+        android:gravity="center|bottom"
+        android:text="@string/no_data"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/postsFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/posts"
+        android:layout_alignStart="@id/following"
+        android:layout_alignTop="@id/avatar"
+        android:layout_alignEnd="@id/following"
+        android:layout_toEndOf="@id/following"
+        android:gravity="center|bottom"
+        android:text="@string/no_data"
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/avatar"
         android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
         android:text="@string/username"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/avatar" />
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/username"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:text="@string/address"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username" />
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/profile_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/address"
         android:layout_marginStart="20dp"
         android:paddingBottom="20dp"
         android:text="@string/description"
-        android:textColor="#000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/address" />
-
-    <!-- Тут блок картинок на превью хорошо влезает, но на моём устройстве
-    границы немного не сходятся. Хорошо бы смотрелось пять блоков.
-    Шесть блоков немного не влезают в боковые границы 20dp start и end-->
+        android:textColor="#000" />
 
     <ImageView
         android:id="@+id/image1"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
+
         android:layout_marginStart="20dp"
+        android:layout_toStartOf="@id/image2"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toStartOf="@id/image2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_description" />
+        android:contentDescription="@string/no_data" />
 
     <ImageView
         android:id="@+id/image2"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
         android:layout_marginStart="10dp"
+        android:layout_toStartOf="@id/image3"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toStartOf="@id/image3"
-        app:layout_constraintStart_toEndOf="@id/image1"
-        app:layout_constraintTop_toBottomOf="@id/profile_description" />
+        android:contentDescription="@string/no_data" />
 
     <ImageView
         android:id="@+id/image3"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
         android:layout_marginStart="10dp"
+        android:layout_toStartOf="@id/image4"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toStartOf="@id/image4"
-        app:layout_constraintStart_toEndOf="@id/image2"
-        app:layout_constraintTop_toBottomOf="@id/profile_description" />
+        android:contentDescription="@string/no_data" />
 
     <ImageView
         android:id="@+id/image4"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
         android:layout_marginStart="10dp"
+        android:layout_toStartOf="@id/image5"
         android:background="@android:color/darker_gray"
         android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toStartOf="@id/image5"
-        app:layout_constraintStart_toEndOf="@id/image3"
-        app:layout_constraintTop_toBottomOf="@id/profile_description" />
+
+        />
 
     <ImageView
         android:id="@+id/image5"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
         android:layout_marginStart="10dp"
+        android:layout_toStartOf="@id/image6"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toStartOf="@id/image6"
-        app:layout_constraintStart_toEndOf="@id/image4"
-        app:layout_constraintTop_toBottomOf="@id/profile_description" />
+        android:contentDescription="@string/no_data" />
 
     <ImageView
         android:id="@+id/image6"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/profile_description"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/darker_gray"
-        android:contentDescription="@string/no_data"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/image5"
-        app:layout_constraintTop_toBottomOf="@id/profile_description" />
+        android:contentDescription="@string/no_data" />
 
     <Button
         android:id="@+id/directions"
         style="@style/Widget.AppCompat.ButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/image1"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="50dp"
         android:backgroundTintMode="add"
@@ -207,9 +208,6 @@
         android:drawableTint="@android:color/holo_blue_bright"
         android:text="@string/directions"
         android:textColor="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toStartOf="@id/call"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image1"
         tools:targetApi="m" />
 
     <Button
@@ -217,15 +215,14 @@
         style="@style/Widget.AppCompat.ButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/image1"
         android:layout_marginTop="50dp"
+        android:layout_toEndOf="@id/directions"
         android:backgroundTintMode="add"
         android:drawableTop="@drawable/ic_baseline_local_phone_24"
         android:drawableTint="@android:color/holo_blue_bright"
         android:text="@string/call"
         android:textColor="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toStartOf="@id/save"
-        app:layout_constraintStart_toEndOf="@id/directions"
-        app:layout_constraintTop_toBottomOf="@id/image1"
         tools:targetApi="m" />
 
     <Button
@@ -233,15 +230,15 @@
         style="@style/Widget.AppCompat.ButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/image1"
         android:layout_marginTop="50dp"
+        android:layout_toStartOf="@id/website"
+        android:layout_toEndOf="@id/call"
         android:backgroundTintMode="add"
         android:drawableTop="@drawable/ic_baseline_star_24"
         android:drawableTint="@android:color/holo_blue_bright"
         android:text="@string/save"
         android:textColor="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toStartOf="@id/website"
-        app:layout_constraintStart_toEndOf="@id/call"
-        app:layout_constraintTop_toBottomOf="@id/image1"
         tools:targetApi="m" />
 
     <Button
@@ -249,6 +246,9 @@
         style="@style/Widget.AppCompat.ButtonBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/image1"
+        android:layout_alignEnd="@id/image3"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:backgroundTintMode="add"
@@ -256,9 +256,6 @@
         android:drawableTint="@android:color/holo_blue_bright"
         android:text="@string/website"
         android:textColor="@android:color/holo_blue_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/save"
-        app:layout_constraintTop_toBottomOf="@id/image1"
         tools:targetApi="m" />
 
     <View
@@ -268,43 +265,37 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="35dp"
         android:background="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/directions" />
+        android:layout_below="@id/directions" />
 
     <ImageView
         android:id="@+id/bottom_image1"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="20dp"
         android:background="@android:color/darker_gray"
         android:contentDescription="@string/no_data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/bottom_image2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line" />
+        android:layout_below="@id/line" />
 
     <ImageView
         android:id="@+id/bottom_image2"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="5dp"
         android:background="@android:color/darker_gray"
         android:contentDescription="@string/no_data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/bottom_image3"
-        app:layout_constraintStart_toEndOf="@id/bottom_image1"
-        app:layout_constraintTop_toBottomOf="@id/line" />
+        android:layout_below="@id/line"
+        android:layout_toEndOf="@id/bottom_image1"/>
 
     <ImageView
         android:id="@+id/bottom_image3"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="20dp"
         android:background="@android:color/darker_gray"
         android:contentDescription="@string/no_data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/bottom_image2"
-        app:layout_constraintTop_toBottomOf="@id/line" />
+        android:layout_below="@id/line"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/bottom_image2"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
