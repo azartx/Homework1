@@ -2,90 +2,72 @@ package com.app.homework2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static ArrayList<Integer> numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final ArrayList<Integer> numbers = new ArrayList<>();
-        final ArrayList<Integer> data = getIntentData();
-
-        if (data != null) {
-            TextView resultsView = findViewById(R.id.resultsView);
-            String text = getString(R.string.data_textView,
-                    data.get(0),
-                    data.get(1),
-                    data.get(2));
-            resultsView.setText(text);
-        }
-
-        fillArrayList(numbers);
+        numbers = new ArrayList<>(fillArray());
 
         findViewById(R.id.goSecActButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
                 intent.putIntegerArrayListExtra("ListOfNumbers", numbers);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
-
     }
 
-    private static void fillArrayList(ArrayList<Integer> list) {
+    private void resultsOnScreen(ArrayList<Integer> results) {
+        if (results != null) {
+            TextView resultsView = findViewById(R.id.resultsView);
+            String text = getString(R.string.data_textView,
+                    results.get(0),
+                    results.get(1),
+                    results.get(2));
+            resultsView.setText(text);
+        }
+    }
+
+    private ArrayList<Integer> fillArray() {
+        HashSet<Integer> set = new HashSet<Integer>();
         Random rand = new Random();
+        int forBound = rand.nextInt(499) + 1;
 
-        int range = rand.nextInt(rand.nextInt(9998) + 1) + 1;
-        int whileNumber = rand.nextInt(499) + 1;
-        if (whileNumber % 2 != 0) {
-            ++whileNumber;
+        for (int i = 0; i < forBound; i++) {
+            set.add(rand.nextInt(9998) + 1);
         }
-
-        list.add(rand.nextInt(range) + 1);
-
-        int randomNumber;
-        int counter = 0;
-
-        // Цикл для заполнения списка.
-        do {
-            randomNumber = rand.nextInt(range) + 1;
-
-            // Проверяем, имеется ли копия числа в списке.
-            // Каждый раз, когда находит копию - возвращается в начало листа и проверяет новое число
-            for (int i = 0; i < list.size(); ) {
-                if (list.get(i) == randomNumber) {
-                    i = 0;
-                    randomNumber = rand.nextInt(range) + 1;
-                } else {
-                    i++;
-                }
-            }
-
-            // если не нашел копий после for, число добавляется в список
-            list.add(randomNumber);
-            ++counter;
-
-        } while (counter != whileNumber);
-
+        return new ArrayList<>(set);
     }
 
-    private ArrayList<Integer> getIntentData() {
-        Intent intent = getIntent();
-
-        if (intent != null) {
-            return intent.getIntegerArrayListExtra("data");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            Log.i("TAG2", data.getIntegerArrayListExtra("data").toString());
+            numbers = fillArray();
+            resultsOnScreen(data.getIntegerArrayListExtra("data"));
         }
-        return null;
     }
 
 }

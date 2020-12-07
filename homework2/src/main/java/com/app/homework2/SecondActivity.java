@@ -17,6 +17,7 @@ import com.app.homework2.data.Summ;
 import java.util.ArrayList;
 
 public class SecondActivity extends AppCompatActivity {
+    static Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,6 @@ public class SecondActivity extends AppCompatActivity {
 
         ArrayList<Integer> numbers = getIntentData();
         final TextView logOnScreen = findViewById(R.id.logView);
-
 
         if (numbers != null) {
             logOnScreen.setText(numbers.toString());
@@ -57,14 +57,16 @@ public class SecondActivity extends AppCompatActivity {
         findViewById(R.id.backOnMainActivity).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+
                 ArrayList<Integer> data = new ArrayList<>();
                 data.add(summ.getSumm());
                 data.add(average.getAverage());
                 data.add(evil.getFirstPart());
 
+
                 intent.putIntegerArrayListExtra("data", data);
-                startActivity(intent);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -84,7 +86,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private ArrayList<Integer> getIntentData() {
-        Intent intent = getIntent();
+        intent = getIntent();
 
         if (intent != null) {
             return intent.getIntegerArrayListExtra("ListOfNumbers");
