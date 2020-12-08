@@ -15,4 +15,7 @@
     <string name="search_contacts">Search contacts</string>
     <string name="some_name">Some name</string>
     <string name="contact">contact</string>
+    <string name="phone_number">Phone number</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
 </resources>
