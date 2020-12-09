@@ -6,7 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbarSearch"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <TextView
+        android:id="@+id/noContactsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_contacts_please_add"
@@ -55,11 +65,5 @@
             app:layout_constraintTop_toTopOf="@+id/toolbarSearch" />
 
     </androidx.appcompat.widget.Toolbar>
-
-    <androidx.recyclerview.widget.RecyclerView
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,13 @@
 package com.app.homework4;
 
-public class ContactBody {
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
+
+public class ContactBody implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private int image;
     private String contactName;
     private String emailOrNumber;
@@ -12,6 +18,8 @@ public class ContactBody {
         this.emailOrNumber = emailOrNumber;
 
     }
+
+
 
     public int getImage() {
         return image;
@@ -36,4 +44,6 @@ public class ContactBody {
     public void setEmailOrNumber(String emailOrNumber) {
         this.emailOrNumber = emailOrNumber;
     }
+
+
 }

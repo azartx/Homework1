@@ -1,10 +1,13 @@
 package com.app.homework4;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView noContactsTextView;
     ArrayList<ContactBody> contacts = new ArrayList<>();
 
     @Override
@@ -22,20 +26,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarSearch);
         setSupportActionBar(toolbar);
 
+        noContactsTextView = findViewById(R.id.noContactsTextView);
+
+        checkState();
+
         findViewById(R.id.addContactButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddContactActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
 
-        setInitialData();
+        //setInitialData();
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        // создаем адаптер
         DataAdapter adapter = new DataAdapter(this, contacts);
-        // устанавливаем для списка адаптер
         recyclerView.setAdapter(adapter);
     }
 
@@ -44,52 +50,28 @@ public class MainActivity extends AppCompatActivity {
         contacts.add(new ContactBody(R.drawable.ic_baseline_contact_phone_24,
                 "Alexander Pushkin",
                 "+375298885554"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "aaaaaDavid Blame",
-                "blame.asdasd@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "asdasdgg.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.dfgdfgdfg@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
-        contacts.add(new ContactBody(R.drawable.ic_baseline_email_24,
-                "David Blame",
-                "blame.david@gmail.com"));
+
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 1) {
+
+            ContactBody cb = (ContactBody) data.getSerializableExtra("add_contact");
+
+            contacts.add(cb);
+        }
+        checkState();
+    }
+
+    private void checkState() {
+        if (contacts.size() == 0) {
+            noContactsTextView.setVisibility(View.VISIBLE);
+        } else {
+            noContactsTextView.setVisibility(View.INVISIBLE);
+        }
+    }
 }
