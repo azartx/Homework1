@@ -61,10 +61,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
             intent.putExtra("ObjectContent",contacts.get(position));
             mainActivity.startActivityForResult(intent, 2);*/
 
-            if (holder.getAdapterPosition() == 0) {
+            /*if (holder.getAdapterPosition() == 0) {
                 Toast.makeText(context, contact.getContactName(), Toast.LENGTH_LONG).show();
-            }
-            return false;
+            }*/
+            return true;
         });
     }
 

@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onContactClick(ContactBody contactBody) {
                 Toast.makeText(MainActivity.this, contactBody.getContactName(), Toast.LENGTH_LONG).show();
+                contactBody.setContactName("iiiiiii"); // имя установил, теперь нужно обновить холдер
             }
         };
 
