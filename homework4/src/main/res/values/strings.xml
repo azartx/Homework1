@@ -20,4 +20,6 @@
     <string name="name">Name</string>
     <string name="back">Back</string>
     <string name="submit">Submit</string>
+    <string name="edit_contact">Edit contact</string>
+    <string name="remove">Remove</string>
 </resources>

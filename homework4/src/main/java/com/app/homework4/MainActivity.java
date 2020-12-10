@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView noContactsTextView;
     ArrayList<ContactBody> contacts = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
 
         checkState();
 
+        /*findViewById(R.id.itemBody).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contacts.get(v)
+            }
+        });*/
+
+
+
+
+
+
         findViewById(R.id.addContactButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,10 +53,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //setInitialData();
+        DataAdapter.OnContactClickListener onContactClickListener = new DataAdapter.OnContactClickListener() {
+            @Override
+            public void onContactClick(ContactBody contactBody) {
+                Toast.makeText(MainActivity.this, contactBody.getContactName(), Toast.LENGTH_LONG).show();
+            }
+        };
+
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        DataAdapter adapter = new DataAdapter(this, contacts);
+        DataAdapter adapter = new DataAdapter(this, contacts, onContactClickListener);
         recyclerView.setAdapter(adapter);
+
+        
+
     }
 
     private void setInitialData() {
@@ -53,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -74,4 +98,9 @@ public class MainActivity extends AppCompatActivity {
             noContactsTextView.setVisibility(View.INVISIBLE);
         }
     }
+
+    public static void startActivity1(int position) {
+
+    }
+
 }

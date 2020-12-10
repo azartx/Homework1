@@ -6,21 +6,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
-    private LayoutInflater inflater;
-    private List<ContactBody> contacts;
+    private final LayoutInflater inflater;
+    private final List<ContactBody> contacts;
+    Context context;
+    private final DataAdapter.OnContactClickListener onContactClickListener;
 
-    DataAdapter(Context context, List<ContactBody> contacts) {
+    DataAdapter(Context context, List<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
         this.inflater = LayoutInflater.from(context);
+        this.context = context;
+        this.onContactClickListener = onContactClickListener;
     }
+
+    public interface OnContactClickListener {
+        void onContactClick(ContactBody contactBody);
+    }
+
 
     @NonNull
     @Override
@@ -32,9 +43,29 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DataAdapter.ViewHolder holder, int position) {
         ContactBody contactBody = contacts.get(position);
+
         holder.imageView.setImageResource(contactBody.getImage());
         holder.nameView.setText(contactBody.getContactName());
         holder.numberView.setText(contactBody.getEmailOrNumber());
+
+        bind(contacts.get(position), onContactClickListener, holder);
+
+
+    }
+
+    private void bind(ContactBody contact, OnContactClickListener onContactClickListener, @NonNull DataAdapter.ViewHolder holder) {
+        holder.layoutParent.setOnLongClickListener(v -> {
+            onContactClickListener.onContactClick(contact);
+
+            /*Intent intent = new Intent(mainActivity.getApplicationContext(), AddContactActivity.class);
+            intent.putExtra("ObjectContent",contacts.get(position));
+            mainActivity.startActivityForResult(intent, 2);*/
+
+            if (holder.getAdapterPosition() == 0) {
+                Toast.makeText(context, contact.getContactName(), Toast.LENGTH_LONG).show();
+            }
+            return false;
+        });
     }
 
     @Override
@@ -45,12 +76,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView imageView;
         final TextView nameView, numberView;
+        final ConstraintLayout layoutParent;
 
         ViewHolder(View view) {
             super(view);
             imageView = view.findViewById(R.id.image);
             nameView = view.findViewById(R.id.name);
             numberView = view.findViewById(R.id.numberOrEmail);
+            layoutParent = view.findViewById(R.id.itemBody);
         }
+
     }
+
+
 }
