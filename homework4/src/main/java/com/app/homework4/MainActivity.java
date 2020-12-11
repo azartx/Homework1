@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Intent intent;
     ContactBody cb;
     DataAdapter adapter;
+    LinearLayoutManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new DataAdapter(this, contacts, onContactClickListener);
         recyclerView.setAdapter(adapter);
-
+        manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
     }
 
     @Override
@@ -86,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
-        outState.putParcelableArrayList("saveKey", contacts);
         super.onSaveInstanceState(outState);
 
     }

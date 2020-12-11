@@ -17,13 +17,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     private final LayoutInflater inflater;
     private final List<ContactBody> contacts;
-    Context context;
     private final DataAdapter.OnContactClickListener onContactClickListener;
 
     DataAdapter(Context context, List<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
         this.inflater = LayoutInflater.from(context);
-        this.context = context;
         this.onContactClickListener = onContactClickListener;
     }
 
@@ -77,6 +75,5 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         }
 
     }
-
 
 }

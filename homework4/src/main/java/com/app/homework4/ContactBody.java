@@ -17,8 +17,6 @@ public class ContactBody implements Serializable, Parcelable {
         this.image = image;
         this.contactName = contactName;
         this.emailOrNumber = emailOrNumber;
-
-
     }
 
     private ContactBody(Parcel in) {

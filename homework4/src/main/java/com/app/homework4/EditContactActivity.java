@@ -45,7 +45,6 @@ public class EditContactActivity extends AppCompatActivity {
             }
         });
 
-
         findViewById(R.id.removeContactButton).setOnClickListener(v -> {
             intent.putExtra("edit pool2", (Serializable) actualData);
             intent.putExtra("position", position);
