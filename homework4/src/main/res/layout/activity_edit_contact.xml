@@ -7,7 +7,7 @@
     tools:context=".AddContactActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarAddContact"
+        android:id="@+id/toolbarEditContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -64,7 +64,7 @@
         android:autofillHints="@string/name"
         android:hint="@string/name"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/toolbarAddContact" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarEditContact" />
 
     <EditText
         android:id="@+id/numberOrEmailEditEditText"

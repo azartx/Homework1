@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -29,9 +28,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
     }
 
     public interface OnContactClickListener {
-        void onContactClick(ContactBody contactBody);
+        void onContactClick(ContactBody contactBody, int position);
     }
-
 
     @NonNull
     @Override
@@ -48,23 +46,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         holder.nameView.setText(contactBody.getContactName());
         holder.numberView.setText(contactBody.getEmailOrNumber());
 
-        bind(contacts.get(position), onContactClickListener, holder);
-
+        bind(contacts.get(position), onContactClickListener, holder, position);
 
     }
 
-    private void bind(ContactBody contact, OnContactClickListener onContactClickListener, @NonNull DataAdapter.ViewHolder holder) {
-        holder.layoutParent.setOnLongClickListener(v -> {
-            onContactClickListener.onContactClick(contact);
+    private void bind(ContactBody contact,
+                      OnContactClickListener onContactClickListener,
+                      @NonNull DataAdapter.ViewHolder holder,
+                      int position) {
 
-            /*Intent intent = new Intent(mainActivity.getApplicationContext(), AddContactActivity.class);
-            intent.putExtra("ObjectContent",contacts.get(position));
-            mainActivity.startActivityForResult(intent, 2);*/
-
-            /*if (holder.getAdapterPosition() == 0) {
-                Toast.makeText(context, contact.getContactName(), Toast.LENGTH_LONG).show();
-            }*/
-            return true;
+        holder.layoutParent.setOnClickListener(v -> {
+            onContactClickListener.onContactClick(contact, position);
         });
     }
 

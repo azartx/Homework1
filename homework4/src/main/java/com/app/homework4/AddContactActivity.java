@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.Serializable;
+
 public class AddContactActivity extends AppCompatActivity {
 
     private Intent intent;
@@ -75,7 +77,7 @@ public class AddContactActivity extends AppCompatActivity {
             if (check) {
 
                 ContactBody cb = new ContactBody(image, name, numberOrEmail);
-                intent.putExtra("add_contact", cb);
+                intent.putExtra("add_contact", (Serializable) cb);
                 setResult(RESULT_OK, intent);
                 finish();
             }

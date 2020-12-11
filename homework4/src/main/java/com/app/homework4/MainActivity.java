@@ -1,82 +1,57 @@
 package com.app.homework4;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView noContactsTextView;
     ArrayList<ContactBody> contacts = new ArrayList<>();
-
+    RecyclerView recyclerView;
+    Intent intent;
+    ContactBody cb;
+    DataAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbarSearch);
+        recyclerView = findViewById(R.id.recyclerView);
         setSupportActionBar(toolbar);
 
         noContactsTextView = findViewById(R.id.noContactsTextView);
 
         checkState();
 
-        /*findViewById(R.id.itemBody).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                contacts.get(v)
-            }
-        });*/
-
-
-
-
-
-
-        findViewById(R.id.addContactButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddContactActivity.class);
-                startActivityForResult(intent, 1);
-            }
+        findViewById(R.id.addContactButton).setOnClickListener(v -> {
+            intent = new Intent(MainActivity.this, AddContactActivity.class);
+            startActivityForResult(intent, 1);
         });
 
-
-        DataAdapter.OnContactClickListener onContactClickListener = new DataAdapter.OnContactClickListener() {
-            @Override
-            public void onContactClick(ContactBody contactBody) {
-                Toast.makeText(MainActivity.this, contactBody.getContactName(), Toast.LENGTH_LONG).show();
-                contactBody.setContactName("iiiiiii"); // имя установил, теперь нужно обновить холдер
-            }
+        DataAdapter.OnContactClickListener onContactClickListener = (contactBody, position) -> {
+            intent = new Intent(MainActivity.this, EditContactActivity.class);
+            intent.putExtra("edit pool", (Serializable) contactBody);
+            startActivityForResult(intent, 2);
+            contacts.set(position, cb);
+            adapter.notifyItemChanged(position);
         };
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        DataAdapter adapter = new DataAdapter(this, contacts, onContactClickListener);
+        adapter = new DataAdapter(this, contacts, onContactClickListener);
         recyclerView.setAdapter(adapter);
 
-        
-
     }
 
-    private void setInitialData() {
-
-        contacts.add(new ContactBody(R.drawable.ic_baseline_contact_phone_24,
-                "Alexander Pushkin",
-                "+375298885554"));
-
-
-    }
 
 
     @Override
@@ -84,11 +59,16 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == 1) {
-
-            ContactBody cb = (ContactBody) data.getSerializableExtra("add_contact");
+            cb = (ContactBody) data.getSerializableExtra("add_contact");
 
             contacts.add(cb);
+        } else if (resultCode == RESULT_OK && requestCode == 2) {
+
+            cb = (ContactBody) data.getSerializableExtra("edit pool");
+
         }
+
+
         checkState();
     }
 
@@ -100,8 +80,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void startActivity1(int position) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
 
+        outState.putParcelableArrayList("saveKey", contacts);
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        savedInstanceState.getParcelableArrayList("saveKey");
     }
 
 }
