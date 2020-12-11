@@ -55,9 +55,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
                       @NonNull DataAdapter.ViewHolder holder,
                       int position) {
 
-        holder.layoutParent.setOnClickListener(v -> {
-            onContactClickListener.onContactClick(contact, position);
-        });
+        holder.layoutParent.setOnClickListener(v -> onContactClickListener.onContactClick(contact, position));
     }
 
     @Override

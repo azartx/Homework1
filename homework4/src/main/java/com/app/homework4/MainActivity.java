@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         DataAdapter.OnContactClickListener onContactClickListener = (contactBody, position) -> {
             intent = new Intent(MainActivity.this, EditContactActivity.class);
             intent.putExtra("edit pool", (Serializable) contactBody);
+            intent.putExtra("position", contactBody.getPosition());
             startActivityForResult(intent, 2);
-            contacts.set(position, cb);
-            adapter.notifyItemChanged(position);
+
         };
 
         adapter = new DataAdapter(this, contacts, onContactClickListener);
@@ -52,27 +52,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        int position;
 
         if (resultCode == RESULT_OK && requestCode == 1) {
             cb = (ContactBody) data.getSerializableExtra("add_contact");
-
+            cb.setPosition(contacts.size());
             contacts.add(cb);
         } else if (resultCode == RESULT_OK && requestCode == 2) {
-
-            cb = (ContactBody) data.getSerializableExtra("edit pool");
-
+            if (data.hasExtra("edit pool2")) {
+                position = intent.getIntExtra("position", 0);
+                contacts.remove(position);
+                adapter.notifyDataSetChanged();
+            } else if (data.hasExtra("edit pool")) {
+                cb = (ContactBody) data.getSerializableExtra("edit pool");
+                position = intent.getIntExtra("position", 0);
+                contacts.set(position, cb);
+                adapter.notifyDataSetChanged();
+            }
         }
-
-
         checkState();
     }
 
-    private void checkState() {
+    private void checkState() { // проверяем длинну списка, устанавливаем видимость textView
         if (contacts.size() == 0) {
             noContactsTextView.setVisibility(View.VISIBLE);
         } else {
