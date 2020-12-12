@@ -44,7 +44,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         holder.nameView.setText(contactBody.getContactName());
         holder.numberView.setText(contactBody.getEmailOrNumber());
 
-        bind(contacts.get(position), onContactClickListener, holder, position);
+        bind(contactBody, onContactClickListener, holder, getItemCount());
 
     }
 
@@ -58,7 +58,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return contacts.size();
+        return contacts != null ? contacts.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -2,6 +2,7 @@ package com.app.homework4;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class EditContactActivity extends AppCompatActivity {
 
         ContactBody actualData = (ContactBody) intent.getSerializableExtra("edit pool");
         int position = intent.getIntExtra("position", 0);
+        Log.i("TTT", "in edit" + position);
 
         getIntentData(name, emailOfPhone, actualData);
 

@@ -2,6 +2,7 @@ package com.app.homework4;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         DataAdapter.OnContactClickListener onContactClickListener = (contactBody, position) -> {
+
+            Log.i("TTT", String.valueOf(position));
             intent = new Intent(MainActivity.this, EditContactActivity.class);
             intent.putExtra("edit pool", (Serializable) contactBody);
-            intent.putExtra("position", contactBody.getPosition());
+            intent.putExtra("position", position);
             startActivityForResult(intent, 2);
 
         };
@@ -58,22 +61,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int position;
+
 
         if (resultCode == RESULT_OK && requestCode == 1) {
+
             cb = (ContactBody) data.getSerializableExtra("add_contact");
-            cb.setPosition(contacts.size());
             contacts.add(cb);
+
         } else if (resultCode == RESULT_OK && requestCode == 2) {
             if (data.hasExtra("edit pool2")) {
-                position = intent.getIntExtra("position", 0);
-                contacts.remove(position);
+
+                int position = intent.getIntExtra("position", 0);
+                contacts.remove(position - 1);
                 adapter.notifyDataSetChanged();
+
             } else if (data.hasExtra("edit pool")) {
+
                 cb = (ContactBody) data.getSerializableExtra("edit pool");
-                position = intent.getIntExtra("position", 0);
-                contacts.set(position, cb);
+                int position  = intent.getIntExtra("position", 0);
+                contacts.set(position - 1, cb);
                 adapter.notifyDataSetChanged();
+
             }
         }
         checkState();
