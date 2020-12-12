@@ -35,20 +35,22 @@ public class EditContactActivity extends AppCompatActivity {
             finish();
         });
 
+        // нажатие кнопки сабмит
         findViewById(R.id.submitButton).setOnClickListener(v -> {
             if (name != null && emailOfPhone != null) {
                 actualData.setContactName(name.getText().toString());
                 actualData.setEmailOrNumber(emailOfPhone.getText().toString());
 
-                intent.putExtra("edit pool", (Serializable) actualData);
+                intent.putExtra("edit", (Serializable) actualData);
                 intent.putExtra("position", position);
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
 
+        // нажатие кнопки дэлит
         findViewById(R.id.removeContactButton).setOnClickListener(v -> {
-            intent.putExtra("edit pool2", (Serializable) actualData);
+            intent.putExtra("remove", (Serializable) actualData);
             intent.putExtra("position", position);
             setResult(RESULT_OK, intent);
             finish();

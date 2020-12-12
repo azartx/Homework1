@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });
 
+        // кастомным кликером забираю позицию и сам объект по нажатию на вью, потом передаю
+        // позицию и объект на обработку в EditContactActivity
+        // ps. позицию передаю просто что бы она потом вернулась обратно и я смог установить ее
+        // в методе онАктивитиРезалт
         DataAdapter.OnContactClickListener onContactClickListener = (contactBody, position) -> {
 
             Log.i("TTT", String.valueOf(position));
@@ -58,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(manager);
     }
 
+    // тут я принимаю интэнт и устанавливаю значения в список (удаляю, изменяю, добавляю)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (resultCode == RESULT_OK && requestCode == 1) {
 
@@ -71,13 +75,14 @@ public class MainActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_OK && requestCode == 2) {
             if (data.hasExtra("edit pool2")) {
 
+                cb = (ContactBody) data.getSerializableExtra("remove");
                 int position = intent.getIntExtra("position", 0);
                 contacts.remove(position - 1);
                 adapter.notifyDataSetChanged();
 
             } else if (data.hasExtra("edit pool")) {
 
-                cb = (ContactBody) data.getSerializableExtra("edit pool");
+                cb = (ContactBody) data.getSerializableExtra("edit");
                 int position  = intent.getIntExtra("position", 0);
                 contacts.set(position - 1, cb);
                 adapter.notifyDataSetChanged();
