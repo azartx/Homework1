@@ -1,7 +1,9 @@
 package com.app.homework4;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String KEY_RECYCLER_STATE = "KEY";
     TextView noContactsTextView;
     ArrayList<ContactBody> contacts = new ArrayList<>();
     RecyclerView recyclerView;
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ContactBody cb;
     DataAdapter adapter;
     LinearLayoutManager manager;
+    Bundle mBundleRecyclerViewState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +62,36 @@ public class MainActivity extends AppCompatActivity {
         };
 
         adapter = new DataAdapter(this, contacts, onContactClickListener);
-        recyclerView.setAdapter(adapter);
         manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
     }
 
-    // тут я принимаю интэнт и устанавливаю значения в список (удаляю, изменяю, добавляю)
+
+    // к слову, почему то тоже не отрабатывает......
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        mBundleRecyclerViewState = new Bundle();
+        Parcelable listState = manager.onSaveInstanceState();
+        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        if (mBundleRecyclerViewState != null) {
+            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
+            manager.onRestoreInstanceState(listState);
+        }
+    }
+
+
+    // тут я принимаю интэнт и устанавливаю значения в список (удаляю, изменяю, добавляю))
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -92,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         checkState();
     }
 
-    private void checkState() { // проверяем длинну списка, устанавливаем видимость textView
+    private void checkState() { // проверяем длинну списка, устанавливаем видимость  textView
         if (contacts.size() == 0) {
             noContactsTextView.setVisibility(View.VISIBLE);
         } else {
