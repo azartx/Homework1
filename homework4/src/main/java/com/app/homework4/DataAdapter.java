@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,22 +13,32 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
+public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> implements Filterable {
 
     private final LayoutInflater inflater;
-    private final List<ContactBody> contacts;
+    private final ArrayList<ContactBody> contacts;
+    private final ArrayList<ContactBody> contactsCopy;
     private final DataAdapter.OnContactClickListener onContactClickListener;
 
-    DataAdapter(Context context, List<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
+    DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
+        contactsCopy = contacts;
         this.inflater = LayoutInflater.from(context);
         this.onContactClickListener = onContactClickListener;
     }
 
+    public ArrayList<ContactBody> getContactsCopy() {
+        return contactsCopy;
+    }
+
     public interface OnContactClickListener {
         void onContactClick(ContactBody contactBody, int position);
+    }
+
+    public ArrayList<ContactBody> getContacts() {
+        return contacts;
     }
 
     @NonNull
@@ -75,5 +87,40 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         }
 
     }
+
+    @Override
+    public Filter getFilter() {
+        return contactFilter;
+    }
+
+    public Filter contactFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<ContactBody> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(contactsCopy);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (ContactBody item : contactsCopy) {
+                    if (item.getContactName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            contacts.clear();
+            contacts.addAll((ArrayList) results.values);
+            notifyDataSetChanged();
+
+        }
+    };
+
 
 }

@@ -1,17 +1,17 @@
 package com.app.homework4;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     ContactBody cb;
     DataAdapter adapter;
     LinearLayoutManager manager;
-    Bundle mBundleRecyclerViewState;
+    SearchView searchView;
+    DataAdapter.OnContactClickListener onContactClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,31 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         setSupportActionBar(toolbar);
 
+        searchView = findViewById(R.id.searchView);
         noContactsTextView = findViewById(R.id.noContactsTextView);
+
+        onContactClickListener = (contactBody, position) -> {
+            Log.i("TTT", String.valueOf(position));
+            intent = new Intent(MainActivity.this, EditContactActivity.class);
+            intent.putExtra("edit pool", (Serializable) contactBody);
+            intent.putExtra("position", position);
+            startActivityForResult(intent, 2);
+        };
+
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
 
         checkState();
 
@@ -51,45 +76,20 @@ public class MainActivity extends AppCompatActivity {
         // позицию и объект на обработку в EditContactActivity
         // ps. позицию передаю просто что бы она потом вернулась обратно и я смог установить ее
         // в методе онАктивитиРезалт
-        DataAdapter.OnContactClickListener onContactClickListener = (contactBody, position) -> {
 
-            Log.i("TTT", String.valueOf(position));
-            intent = new Intent(MainActivity.this, EditContactActivity.class);
-            intent.putExtra("edit pool", (Serializable) contactBody);
-            intent.putExtra("position", position);
-            startActivityForResult(intent, 2);
 
-        };
+        if (savedInstanceState != null) {
+            contacts = savedInstanceState.getParcelableArrayList("listLocal");
+            adapter = new DataAdapter(this, savedInstanceState.getParcelableArrayList("listAdapter"), onContactClickListener);
+            checkState();
+        } else {
+            adapter = new DataAdapter(this, contacts, onContactClickListener);
+        }
 
-        adapter = new DataAdapter(this, contacts, onContactClickListener);
         manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);
     }
-
-
-    // к слову, почему то тоже не отрабатывает......
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        mBundleRecyclerViewState = new Bundle();
-        Parcelable listState = manager.onSaveInstanceState();
-        mBundleRecyclerViewState.putParcelable(KEY_RECYCLER_STATE, listState);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        if (mBundleRecyclerViewState != null) {
-            Parcelable listState = mBundleRecyclerViewState.getParcelable(KEY_RECYCLER_STATE);
-            manager.onRestoreInstanceState(listState);
-        }
-    }
-
 
     // тут я принимаю интэнт и устанавливаю значения в список (удаляю, изменяю, добавляю))
     @Override
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (data.hasExtra("edit pool")) {
 
                 cb = (ContactBody) data.getSerializableExtra("edit");
-                int position  = intent.getIntExtra("position", 0);
+                int position = intent.getIntExtra("position", 0);
                 contacts.set(position - 1, cb);
                 adapter.notifyDataSetChanged();
 
@@ -130,16 +130,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        savedInstanceState.getParcelableArrayList("saveKey");
+        if (adapter.getContacts().size() != 0) {
+            outState.putParcelableArrayList("listLocal", contacts);
+            outState.putParcelableArrayList("listAdapter", adapter.getContacts());
+        } else {
+            outState.putParcelableArrayList("list", new ArrayList<>());
+        }
+        checkState();
     }
 
 }
