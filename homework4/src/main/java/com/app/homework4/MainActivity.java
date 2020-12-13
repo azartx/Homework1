@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+           // ты должен здесь сохранять данные, а не в другом месте
     }
 
     @Override
