@@ -20,35 +20,40 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String KEY_RECYCLER_STATE = "KEY";
-    TextView noContactsTextView;
-    ArrayList<ContactBody> contacts = new ArrayList<>();
-    RecyclerView recyclerView;
-    Intent intent;
-    ContactBody cb;
-    DataAdapter adapter;
-    LinearLayoutManager manager;
-    SearchView searchView;
-    DataAdapter.OnContactClickListener onContactClickListener;
+    private static final String KEY = "KEY";
+    private TextView noContactsTextView;
+    private Intent intent;
+    private DataAdapter adapter;
+    private DataAdapter.OnContactClickListener onContactClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbarSearch);
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         setSupportActionBar(toolbar);
 
-        searchView = findViewById(R.id.searchView);
+        SearchView searchView = findViewById(R.id.searchView);
         noContactsTextView = findViewById(R.id.noContactsTextView);
 
         onContactClickListener = (contactBody, position) -> {
-            Log.i("TTT", String.valueOf(position));
             intent = new Intent(MainActivity.this, EditContactActivity.class);
             intent.putExtra("edit pool", (Serializable) contactBody);
             intent.putExtra("position", position);
             startActivityForResult(intent, 2);
         };
+
+        findViewById(R.id.addContactButton).setOnClickListener(v -> {
+            intent = new Intent(MainActivity.this, AddContactActivity.class);
+            startActivityForResult(intent, 1);
+        });
+
+        restoreDataAfterRotate(savedInstanceState);
+
+        LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(manager);
 
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -64,65 +69,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        checkState();
-
-        findViewById(R.id.addContactButton).setOnClickListener(v -> {
-            intent = new Intent(MainActivity.this, AddContactActivity.class);
-            startActivityForResult(intent, 1);
-        });
-
-        // кастомным кликером забираю позицию и сам объект по нажатию на вью, потом передаю
-        // позицию и объект на обработку в EditContactActivity
-        // ps. позицию передаю просто что бы она потом вернулась обратно и я смог установить ее
-        // в методе онАктивитиРезалт
-
-
-        if (savedInstanceState != null) {
-            contacts = savedInstanceState.getParcelableArrayList("listLocal");
-            adapter = new DataAdapter(this, savedInstanceState.getParcelableArrayList("listAdapter"), onContactClickListener);
-            checkState();
-        } else {
-            adapter = new DataAdapter(this, contacts, onContactClickListener);
-        }
-
-        manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(manager);
     }
 
-    // тут я принимаю интэнт и устанавливаю значения в список (удаляю, изменяю, добавляю))
+    private void restoreDataAfterRotate(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            adapter = new DataAdapter(this,
+                    savedInstanceState.getParcelableArrayList(KEY),
+                    onContactClickListener);
+            checkState();
+        } else {
+            adapter = new DataAdapter(this, new ArrayList<>(), onContactClickListener);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        ContactBody cb;
         if (resultCode == RESULT_OK && requestCode == 1) {
 
             cb = (ContactBody) data.getSerializableExtra("add_contact");
-            contacts.add(cb);
+            adapter.add(cb);
 
         } else if (resultCode == RESULT_OK && requestCode == 2) {
-            if (data.hasExtra("edit pool2")) {
+            if (data.hasExtra("remove")) {
 
-                cb = (ContactBody) data.getSerializableExtra("remove");
                 int position = intent.getIntExtra("position", 0);
-                contacts.remove(position - 1);
-                adapter.notifyDataSetChanged();
-
+                adapter.remove(position);
             } else if (data.hasExtra("edit pool")) {
 
                 cb = (ContactBody) data.getSerializableExtra("edit");
                 int position = intent.getIntExtra("position", 0);
-                contacts.set(position - 1, cb);
-                adapter.notifyDataSetChanged();
-
+                adapter.edit(cb, position);
             }
         }
         checkState();
     }
 
-    private void checkState() { // проверяем длинну списка, устанавливаем видимость  textView
-        if (contacts.size() == 0) {
+    private void checkState() {
+        if (adapter.getContacts().size() == 0) {
             noContactsTextView.setVisibility(View.VISIBLE);
         } else {
             noContactsTextView.setVisibility(View.INVISIBLE);
@@ -132,13 +118,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (adapter.getContacts().size() != 0) {
-            outState.putParcelableArrayList("listLocal", contacts);
-            outState.putParcelableArrayList("listAdapter", adapter.getContacts());
-        } else {
-            outState.putParcelableArrayList("list", new ArrayList<>());
+        if (adapter != null) {
+            if (adapter.getContacts().size() != 0) {
+                outState.putParcelableArrayList(KEY, adapter.getContacts());
+            } else {
+                outState.putParcelableArrayList("list", new ArrayList<>());
+            }
+            checkState();
         }
-        checkState();
     }
 
 }

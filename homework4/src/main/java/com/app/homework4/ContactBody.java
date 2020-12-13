@@ -11,7 +11,6 @@ public class ContactBody implements Serializable, Parcelable {
     private int image;
     private String contactName;
     private String emailOrNumber;
-    private int position;
 
     public ContactBody(int image, String contactName, String emailOrNumber) {
         this.image = image;
@@ -23,13 +22,6 @@ public class ContactBody implements Serializable, Parcelable {
         image = in.readInt();
         contactName = in.readString();
         emailOrNumber = in.readString();
-    }
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
     public int getImage() {
         return image;

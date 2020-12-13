@@ -48,10 +48,9 @@ public class EditContactActivity extends AppCompatActivity {
             }
         });
 
-        // нажатие кнопки дэлит
+        // нажатие кнопки remove
         findViewById(R.id.removeContactButton).setOnClickListener(v -> {
-            intent.putExtra("remove", (Serializable) actualData);
-            intent.putExtra("position", position);
+            intent.putExtra("remove", position);
             setResult(RESULT_OK, intent);
             finish();
         });

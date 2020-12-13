@@ -29,16 +29,27 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         this.onContactClickListener = onContactClickListener;
     }
 
-    public ArrayList<ContactBody> getContactsCopy() {
-        return contactsCopy;
-    }
-
     public interface OnContactClickListener {
         void onContactClick(ContactBody contactBody, int position);
     }
 
     public ArrayList<ContactBody> getContacts() {
         return contacts;
+    }
+
+    public void add(ContactBody contact) {
+        contacts.add(contact);
+        notifyDataSetChanged();
+    }
+
+    public void remove(int position) {
+        contacts.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void edit(ContactBody contact, int position) {
+        contacts.set(position, contact);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -56,17 +67,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         holder.nameView.setText(contactBody.getContactName());
         holder.numberView.setText(contactBody.getEmailOrNumber());
 
-        bind(contactBody, onContactClickListener, holder, getItemCount());
-
+        holder.bind(contactBody, onContactClickListener, holder);
     }
 
-    private void bind(ContactBody contact,
-                      OnContactClickListener onContactClickListener,
-                      @NonNull DataAdapter.ViewHolder holder,
-                      int position) {
-
-        holder.layoutParent.setOnClickListener(v -> onContactClickListener.onContactClick(contact, position));
-    }
 
     @Override
     public int getItemCount() {
@@ -84,6 +87,14 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
             nameView = view.findViewById(R.id.name);
             numberView = view.findViewById(R.id.numberOrEmail);
             layoutParent = view.findViewById(R.id.itemBody);
+
+        }
+
+        private void bind(ContactBody contact,
+                          OnContactClickListener onContactClickListener,
+                          @NonNull DataAdapter.ViewHolder holder) {
+
+            holder.layoutParent.setOnClickListener(v -> onContactClickListener.onContactClick(contact, getAdapterPosition()));
         }
 
     }
@@ -109,12 +120,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
             }
             FilterResults results = new FilterResults();
             results.values = filteredList;
+
             return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
             contacts.clear();
             contacts.addAll((ArrayList) results.values);
             notifyDataSetChanged();
