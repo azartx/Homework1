@@ -12,6 +12,10 @@ import java.io.Serializable;
 
 public class EditContactActivity extends AppCompatActivity {
 
+    private Intent intent;
+    int position;
+    ContactBody actualData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,11 +26,15 @@ public class EditContactActivity extends AppCompatActivity {
         EditText name = findViewById(R.id.nameEditEditText);
         EditText emailOfPhone = findViewById(R.id.numberOrEmailEditEditText);
 
-        Intent intent = getIntent();
-
-        ContactBody actualData = (ContactBody) intent.getSerializableExtra("edit pool");
-        int position = intent.getIntExtra("position", 0);
-        Log.i("TTT", "in edit" + position);
+        if (savedInstanceState == null) {
+            intent = getIntent();
+            actualData = (ContactBody) intent.getSerializableExtra("edit pool");
+            position = intent.getIntExtra("position", 0);
+        } else {
+            intent = new Intent();
+            actualData = savedInstanceState.getParcelable("object");
+            position = savedInstanceState.getInt("position");
+        }
 
         getIntentData(name, emailOfPhone, actualData);
 
@@ -60,5 +68,13 @@ public class EditContactActivity extends AppCompatActivity {
     private void getIntentData(EditText name, EditText emailOfPhone, ContactBody actualData) {
         name.setText(actualData.getContactName());
         emailOfPhone.setText(actualData.getEmailOrNumber());
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("position", position);
+        savedInstanceState.putParcelable("object", actualData);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

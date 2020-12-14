@@ -2,7 +2,6 @@ package com.app.homework4;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void restoreDataAfterRotate(Bundle savedInstanceState) {
+    protected void restoreDataAfterRotate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             adapter = new DataAdapter(this,
                     savedInstanceState.getParcelableArrayList(KEY),
@@ -95,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (resultCode == RESULT_OK && requestCode == 2) {
             if (data.hasExtra("remove")) {
 
-                int position = intent.getIntExtra("position", 0);
+                int position = intent.getIntExtra("remove", 0);
                 adapter.remove(position);
+
             } else if (data.hasExtra("edit pool")) {
 
                 cb = (ContactBody) data.getSerializableExtra("edit");
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkState() {
-        if (adapter.getContacts().size() == 0) {
+        if (adapter.getItemCount() == 0) {
             noContactsTextView.setVisibility(View.VISIBLE);
         } else {
             noContactsTextView.setVisibility(View.INVISIBLE);
@@ -119,10 +119,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (adapter != null) {
-            if (adapter.getContacts().size() != 0) {
+            if (adapter.getItemCount() != 0) {
                 outState.putParcelableArrayList(KEY, adapter.getContacts());
             } else {
-                outState.putParcelableArrayList("list", new ArrayList<>());
+                outState.putParcelableArrayList(KEY, new ArrayList<>());
             }
             checkState();
         }

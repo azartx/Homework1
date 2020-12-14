@@ -24,7 +24,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
 
     DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
-        contactsCopy = contacts;
+        contactsCopy = new ArrayList<>(contacts);;
         this.inflater = LayoutInflater.from(context);
         this.onContactClickListener = onContactClickListener;
     }
@@ -39,16 +39,19 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
 
     public void add(ContactBody contact) {
         contacts.add(contact);
+        contactsCopy.add(contact);
         notifyDataSetChanged();
     }
 
     public void remove(int position) {
         contacts.remove(position);
+        contactsCopy.remove(position);
         notifyDataSetChanged();
     }
 
     public void edit(ContactBody contact, int position) {
         contacts.set(position, contact);
+        contactsCopy.set(position, contact);
         notifyDataSetChanged();
     }
 
@@ -126,8 +129,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            contacts.clear();
-            contacts.addAll((ArrayList) results.values);
+            if (contacts != null) {
+                contacts.clear();
+                contacts.addAll((ArrayList) results.values);
+            }
             notifyDataSetChanged();
 
         }

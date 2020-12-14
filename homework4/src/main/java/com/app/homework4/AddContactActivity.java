@@ -3,24 +3,26 @@ package com.app.homework4;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class AddContactActivity extends AppCompatActivity {
-
-    private Intent intent;
 
     private RadioButton numberRadioButton;
     private RadioButton emailRadioButton;
     private EditText nameEditText;
     private EditText numberOrEmailEditText;
+    Intent intent;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -30,7 +32,7 @@ public class AddContactActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarAddContact);
         setSupportActionBar(toolbar);
 
-        intent = getIntent();
+        intent = new Intent();
 
         numberRadioButton = findViewById(R.id.numberRadioButton);
         numberOrEmailEditText = findViewById(R.id.numberOrEmailEditText);
@@ -56,8 +58,12 @@ public class AddContactActivity extends AppCompatActivity {
 
         findViewById(R.id.submitButton).setOnClickListener(v -> {
             int image = 0;
-            String name = nameEditText.getText().toString();
-            String numberOrEmail = numberOrEmailEditText.getText().toString();
+            String name;
+            String numberOrEmail;
+
+            name = nameEditText.getText().toString();
+            numberOrEmail = numberOrEmailEditText.getText().toString();
+
             boolean check = true;
 
             if (numberRadioButton.isChecked()) {
@@ -75,7 +81,6 @@ public class AddContactActivity extends AppCompatActivity {
             }
 
             if (check) {
-
                 ContactBody cb = new ContactBody(image, name, numberOrEmail);
                 intent.putExtra("add_contact", (Serializable) cb);
                 setResult(RESULT_OK, intent);
