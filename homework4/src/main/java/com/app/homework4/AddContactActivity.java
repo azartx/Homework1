@@ -3,18 +3,15 @@ package com.app.homework4;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class AddContactActivity extends AppCompatActivity {
 
