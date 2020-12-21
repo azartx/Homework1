@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void restoreDataAfterRotate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             adapter = new DataAdapter(this,
-                    savedInstanceState.getParcelableArrayList(KEY),
+                    (ArrayList<ContactBody>) savedInstanceState.getSerializable(KEY),
                     onContactClickListener);
             checkState();
         } else {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (adapter != null) {
             if (adapter.getItemCount() != 0) {
-                outState.putParcelableArrayList(KEY, adapter.getContacts());
+                outState.putSerializable(KEY, adapter.getContacts());
             } else {
                 outState.putParcelableArrayList(KEY, new ArrayList<>());
             }

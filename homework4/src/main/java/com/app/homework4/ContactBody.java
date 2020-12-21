@@ -1,13 +1,12 @@
 package com.app.homework4;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class ContactBody implements Serializable, Parcelable {
+public class ContactBody implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private final long serialVersionUID = 1L;
     private int image;
     private String contactName;
     private String emailOrNumber;
@@ -23,6 +22,7 @@ public class ContactBody implements Serializable, Parcelable {
         contactName = in.readString();
         emailOrNumber = in.readString();
     }
+
     public int getImage() {
         return image;
     }
@@ -47,27 +47,4 @@ public class ContactBody implements Serializable, Parcelable {
         this.emailOrNumber = emailOrNumber;
     }
 
-    public static final Creator<ContactBody> CREATOR = new Creator<ContactBody>() {
-        @Override
-        public ContactBody createFromParcel(Parcel in) {
-            return new ContactBody(in);
-        }
-
-        @Override
-        public ContactBody[] newArray(int size) {
-            return new ContactBody[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(image);
-        dest.writeString(contactName);
-        dest.writeString(emailOrNumber);
-    }
 }

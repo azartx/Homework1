@@ -24,7 +24,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
 
     DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
-        contactsCopy = new ArrayList<>(contacts);;
+        contactsCopy = new ArrayList<>(contacts);
+        ;
         this.inflater = LayoutInflater.from(context);
         this.onContactClickListener = onContactClickListener;
     }
@@ -66,9 +67,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
     public void onBindViewHolder(@NonNull DataAdapter.ViewHolder holder, int position) {
         ContactBody contactBody = contacts.get(position);
 
-        holder.imageView.setImageResource(contactBody.getImage());
-        holder.nameView.setText(contactBody.getContactName());
-        holder.numberView.setText(contactBody.getEmailOrNumber());
 
         holder.bind(contactBody, onContactClickListener, holder);
     }
@@ -97,6 +95,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
                           OnContactClickListener onContactClickListener,
                           @NonNull DataAdapter.ViewHolder holder) {
 
+            holder.imageView.setImageResource(contact.getImage());
+            holder.nameView.setText(contact.getContactName());
+            holder.numberView.setText(contact.getEmailOrNumber());
+
             holder.layoutParent.setOnClickListener(v -> onContactClickListener.onContactClick(contact, getAdapterPosition()));
         }
 
@@ -107,7 +109,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         return contactFilter;
     }
 
-    public Filter contactFilter = new Filter() {
+    private final Filter contactFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<ContactBody> filteredList = new ArrayList<>();

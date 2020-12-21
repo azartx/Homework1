@@ -19,7 +19,6 @@ public class AddContactActivity extends AppCompatActivity {
     private RadioButton emailRadioButton;
     private EditText nameEditText;
     private EditText numberOrEmailEditText;
-    Intent intent;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -29,7 +28,7 @@ public class AddContactActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarAddContact);
         setSupportActionBar(toolbar);
 
-        intent = new Intent();
+        Intent intent = new Intent();
 
         numberRadioButton = findViewById(R.id.numberRadioButton);
         numberOrEmailEditText = findViewById(R.id.numberOrEmailEditText);
@@ -45,10 +44,10 @@ public class AddContactActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener((radioGroup1, i) -> {
             switch (i) {
                 case R.id.numberRadioButton:
-                    numberOrEmailEditText.setHint("Number");
+                    numberOrEmailEditText.setHint(R.string.number);
                     break;
                 case R.id.emailRadioButton:
-                    numberOrEmailEditText.setHint("Email");
+                    numberOrEmailEditText.setHint(R.string.email);
                     break;
             }
         });
@@ -72,20 +71,29 @@ public class AddContactActivity extends AppCompatActivity {
                 check = false;
             }
 
-            if (name.length() < 1 || numberOrEmail.length() < 1) {
-                Toast.makeText(getApplicationContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
-                check = false;
-            }
+            check = checkPoolIsFill(name, numberOrEmail, check);
 
-            if (check) {
-                ContactBody cb = new ContactBody(image, name, numberOrEmail);
-                intent.putExtra("add_contact", (Serializable) cb);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+            finishActivity(intent, image, name, numberOrEmail, check);
 
         });
 
+    }
+
+    private void finishActivity(Intent intent, int image, String name, String numberOrEmail, boolean check) {
+        if (check) {
+            ContactBody cb = new ContactBody(image, name, numberOrEmail);
+            intent.putExtra("add_contact", (Serializable) cb);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    private boolean checkPoolIsFill(String name, String numberOrEmail, boolean check) {
+        if (name.length() < 1 || numberOrEmail.length() < 1) {
+            Toast.makeText(getApplicationContext(), "Заполните все поля", Toast.LENGTH_LONG).show();
+            check = false;
+        }
+        return check;
     }
 
 }

@@ -11,9 +11,8 @@ import java.io.Serializable;
 
 public class EditContactActivity extends AppCompatActivity {
 
-    private Intent intent;
-    int position;
-    ContactBody actualData;
+    private int position;
+    private ContactBody actualData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +23,8 @@ public class EditContactActivity extends AppCompatActivity {
 
         EditText name = findViewById(R.id.nameEditEditText);
         EditText emailOfPhone = findViewById(R.id.numberOrEmailEditEditText);
+
+        Intent intent;
 
         if (savedInstanceState == null) {
             intent = getIntent();
@@ -48,10 +49,7 @@ public class EditContactActivity extends AppCompatActivity {
                 actualData.setContactName(name.getText().toString());
                 actualData.setEmailOrNumber(emailOfPhone.getText().toString());
 
-                intent.putExtra("edit", (Serializable) actualData);
-                intent.putExtra("position", position);
-                setResult(RESULT_OK, intent);
-                finish();
+                finishActivity(intent);
             }
         });
 
@@ -64,6 +62,13 @@ public class EditContactActivity extends AppCompatActivity {
 
     }
 
+    private void finishActivity(Intent intent) {
+        intent.putExtra("edit", (Serializable) actualData);
+        intent.putExtra("position", position);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     private void getIntentData(EditText name, EditText emailOfPhone, ContactBody actualData) {
         name.setText(actualData.getContactName());
         emailOfPhone.setText(actualData.getEmailOrNumber());
@@ -72,7 +77,7 @@ public class EditContactActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putInt("position", position);
-        savedInstanceState.putParcelable("object", actualData);
+        savedInstanceState.putSerializable("object", actualData);
 
         super.onSaveInstanceState(savedInstanceState);
     }
