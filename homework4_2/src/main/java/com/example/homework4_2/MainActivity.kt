@@ -23,16 +23,14 @@ class MainActivity : AppCompatActivity(), CircleCustomView.OnTouchCustomClickLis
 
     override fun onClickCoords(view: View, x: Int, y: Int, color: Int) {
         when (checkBox?.isChecked) {
-            true -> Snackbar.make(view, "Координаты $x, $y", Snackbar.LENGTH_LONG)
+            true -> Snackbar.make(view, getString(R.string.koords, x, y), Snackbar.LENGTH_LONG)
                     .setTextColor(color)
                     .show()
             false -> Toast.makeText(applicationContext,
-                    "Координаты $x, $y",
+                    getString(R.string.koords, x, y),
                     Toast.LENGTH_SHORT)
                     .show()
-
         }
-
     }
 }
 

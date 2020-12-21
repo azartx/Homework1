@@ -40,7 +40,7 @@ class CircleCustomView : View {
             -256,
             -3355444)
 
-    private var coordsListener: OnTouchCustomClickListener? = null
+    var customClickListener: OnTouchCustomClickListener? = null
 
     interface OnTouchCustomClickListener {
         fun onClickCoords(view: View, x: Int, y: Int, color: Int)
@@ -102,19 +102,18 @@ class CircleCustomView : View {
         super.onDraw(canvas)
     }
 
-    fun customListenerData(coordsListener: OnTouchCustomClickListener) {
-        this.coordsListener = coordsListener
+    fun customListenerData(customClickListener: OnTouchCustomClickListener) {
+        this.customClickListener = customClickListener
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
-        performClick()
         if (event?.action == MotionEvent.ACTION_DOWN) {
             val x = event.x
             val y = event.y
 
             if (regions[4].contains(x.toInt(), y.toInt())) {
-                coordsListener?.onClickCoords(this, x.toInt(), y.toInt(), paints[4].color)
+                customClickListener?.onClickCoords(this, x.toInt(), y.toInt(), paints[4].color)
                 for (i in 0..3) {
                     paints[i].color = colors.random()
                     invalidate()
@@ -123,17 +122,13 @@ class CircleCustomView : View {
                 for (i in 0..3) {
                     if (regions[i].contains(x.toInt(), y.toInt())) {
                         paints[i].color = colors.random()
-                        coordsListener?.onClickCoords(this, x.toInt(), y.toInt(), paints[i].color)
+                        customClickListener?.onClickCoords(this, x.toInt(), y.toInt(), paints[i].color)
                         invalidate()
                     }
                 }
             }
         }
         return super.onTouchEvent(event)
-    }
-
-    override fun performClick(): Boolean {
-        return super.performClick()
     }
 
 }
