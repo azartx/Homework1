@@ -10,9 +10,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class CarAdapter(private val context: Context,
-                 private val inflater: LayoutInflater = LayoutInflater.from(context),
-                 private val cars: ArrayList<CarData>) :
+                  val cars: ArrayList<CarData>) :
         RecyclerView.Adapter<CarAdapter.ViewHolder>() {
+
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = inflater.inflate(R.layout.item_car_list, parent, false)
@@ -45,9 +46,8 @@ class CarAdapter(private val context: Context,
         }
     }
 
-
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return cars.size
     }
 
 
