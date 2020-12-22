@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">homework5</string>
+    <string name="edit">edit</string>
+    <string name="viewbackground">ViewBackground</string>
+    <string name="car_gos_number">car gos number</string>
+    <string name="no_image">no image</string>
+    <string name="no_number">no number</string>
+    <string name="driver_name">Driver Name</string>
+    <string name="car_name">Car Name</string>
+    <string name="list_is_empty_please_add_new_car">List is empty! Please, add new car</string>
+    <string name="search">search</string>
+</resources>
