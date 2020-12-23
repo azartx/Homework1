@@ -15,6 +15,11 @@ class CarAdapter(private val context: Context,
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
+    fun add(carData: CarData) {
+        cars.add(carData)
+        notifyItemChanged(cars.indexOf(carData))
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = inflater.inflate(R.layout.item_car_list, parent, false)
 
@@ -36,7 +41,7 @@ class CarAdapter(private val context: Context,
         private val parent: ConstraintLayout = view.findViewById(R.id.parent)
 
         fun bind(carData: CarData, holder: ViewHolder) {
-            holder.image.setImageResource(carData.carImage)
+            holder.image.setImageBitmap(carData.carImage)
             holder.carOwnerName.text = carData.carOwnerName
             holder.carModelName.text = carData.carModelName
             holder.carGosNumber.text = carData.carGosNumber
