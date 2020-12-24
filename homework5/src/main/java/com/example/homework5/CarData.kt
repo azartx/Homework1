@@ -7,13 +7,13 @@ import android.os.Parcelable
 class CarData(val carOwnerName: String?,
               val carModelName: String?,
               val carGosNumber: String?,
-              val carImage: Bitmap) : Parcelable {
+              val carImage: Bitmap?) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readParcelable<Bitmap>(Bitmap::class.java.classLoader) as Bitmap) {
+            parcel.readParcelable<Bitmap?>(Bitmap::class.java.classLoader)) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

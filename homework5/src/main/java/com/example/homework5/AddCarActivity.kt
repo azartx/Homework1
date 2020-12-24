@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar
 class AddCarActivity : AppCompatActivity() {
 
     private lateinit var image: ImageView
-    private lateinit var bitmap: Bitmap
+    private var bitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +40,19 @@ class AddCarActivity : AppCompatActivity() {
 
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
-                /*if (bitmap == null) {
-                    bitmap
-                }*/
 
-                val car = CarData(ownerName.text.toString(),
-                        carName.text.toString(),
-                        gosNumber.text.toString(),
-                        bitmap)
+                val car = if (bitmap == null) {
+                    CarData(ownerName.text.toString(),
+                            carName.text.toString(),
+                            gosNumber.text.toString(),
+                            null)
+                } else {
+                    CarData(ownerName.text.toString(),
+                            carName.text.toString(),
+                            gosNumber.text.toString(),
+                            bitmap)
+                }
+
                 intent.putExtra("add", car)
                 setResult(RESULT_OK, intent)
                 finish()
@@ -65,8 +70,8 @@ class AddCarActivity : AppCompatActivity() {
         if (requestCode == 1) {
             val photo = data?.extras?.get("data") as Bitmap?
             if (photo != null) {
-                    bitmap = Bitmap.createBitmap(photo)
-                }
+                bitmap = photo
+            }
             image.setImageBitmap(photo)
         }
     }

@@ -10,10 +10,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
 class CarAdapter(private val context: Context,
-                  val cars: ArrayList<CarData>) :
+                 val cars: ArrayList<CarData>,
+                 private val onCarClickListener: CarAdapter.OnCarClickListener) :
         RecyclerView.Adapter<CarAdapter.ViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+
+    interface OnCarClickListener {
+        fun onCarClick(carData: CarData, position: Int)
+    }
 
     fun add(carData: CarData) {
         cars.add(carData)
@@ -29,7 +34,7 @@ class CarAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val carData: CarData = cars[position]
 
-        holder.bind(carData, holder)
+        holder.bind(carData, holder, onCarClickListener)
     }
 
     class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,14 +44,24 @@ class CarAdapter(private val context: Context,
         private val carModelName: TextView = view.findViewById(R.id.carName)
         private val carGosNumber: TextView = view.findViewById(R.id.carNumber)
         private val parent: ConstraintLayout = view.findViewById(R.id.parent)
+        private val carEditButton: ImageView = view.findViewById(R.id.editCarButton)
+        private val cameraNoPhoto: ImageView = view.findViewById(R.id.cameraNoPhoto)
 
-        fun bind(carData: CarData, holder: ViewHolder) {
-            holder.image.setImageBitmap(carData.carImage)
+        fun bind(carData: CarData, holder: ViewHolder, onCarClickListener: OnCarClickListener) {
+            if (carData.carImage == null) {
+                holder.image.setImageResource(R.drawable.ic_background_view)
+            } else {
+                holder.image.setImageBitmap(carData.carImage)
+                cameraNoPhoto.visibility = View.INVISIBLE
+            }
+
             holder.carOwnerName.text = carData.carOwnerName
             holder.carModelName.text = carData.carModelName
             holder.carGosNumber.text = carData.carGosNumber
 
-            //holder.parent.setOnClickListener()
+            holder.carEditButton.setOnClickListener(View.OnClickListener {
+                onCarClickListener.onCarClick(carData, adapterPosition)
+            })
 
         }
     }
