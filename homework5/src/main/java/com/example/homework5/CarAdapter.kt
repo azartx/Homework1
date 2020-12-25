@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 
-class CarAdapter(private val context: Context,
-                 val cars: ArrayList<CarData>,
-                 private val onCarClickListener: CarAdapter.OnCarClickListener) :
+class CarAdapter(context: Context,
+                 private val cars: ArrayList<CarData>,
+                 private val onCarClickListener: OnCarClickListener) :
         RecyclerView.Adapter<CarAdapter.ViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -23,6 +23,23 @@ class CarAdapter(private val context: Context,
     fun add(carData: CarData) {
         cars.add(carData)
         notifyItemChanged(cars.indexOf(carData))
+    }
+
+    fun edit(carData: CarData, position: Int) {
+        cars[position] = carData
+        notifyDataSetChanged()
+    }
+
+    fun remove(position: Int) {
+        cars.removeAt(position)
+        notifyDataSetChanged()
+    }
+
+    private fun selector(p: CarData): String = p.carModelName
+
+    fun sortByCarBrand() {
+        cars.sortBy { selector(it) }
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,9 +76,9 @@ class CarAdapter(private val context: Context,
             holder.carModelName.text = carData.carModelName
             holder.carGosNumber.text = carData.carGosNumber
 
-            holder.carEditButton.setOnClickListener(View.OnClickListener {
+            holder.carEditButton.setOnClickListener {
                 onCarClickListener.onCarClick(carData, adapterPosition)
-            })
+            }
 
         }
     }
@@ -69,6 +86,5 @@ class CarAdapter(private val context: Context,
     override fun getItemCount(): Int {
         return cars.size
     }
-
 
 }

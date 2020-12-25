@@ -3,16 +3,21 @@ package com.example.homework5
 import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 
-class CarData(val carOwnerName: String?,
-              val carModelName: String?,
-              val carGosNumber: String?,
+@Entity
+class CarData(@PrimaryKey @ColumnInfo val carOwnerName: String,
+              @ColumnInfo val carModelName: String,
+              @ColumnInfo val carGosNumber: String,
               val carImage: Bitmap?) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
+            parcel.readString().toString(),
+            parcel.readString().toString(),
+            parcel.readString().toString(),
             parcel.readParcelable<Bitmap?>(Bitmap::class.java.classLoader)) {
     }
 

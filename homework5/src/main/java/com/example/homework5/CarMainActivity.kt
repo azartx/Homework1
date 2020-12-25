@@ -2,6 +2,7 @@ package com.example.homework5
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,7 @@ class CarMainActivity : AppCompatActivity() {
 
     private lateinit var adapter: CarAdapter
 
-    //    private lateinit var dao: CarsDatabaseDAO
+//    private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class CarMainActivity : AppCompatActivity() {
         var intent: Intent
 
         // инициализация БД
-        // dao = CarsDatabase.init(this).getCarDatabaseDAO()
+//        dao = CarsDatabase.init(this).getCarDatabaseDAO()
 
 
         //  добавление новой машины
@@ -42,15 +43,17 @@ class CarMainActivity : AppCompatActivity() {
 
         // редактирование машины
         onEditButtonClick = object : CarAdapter.OnCarClickListener {
-
             override fun onCarClick(carData: CarData, position: Int) {
                 intent = Intent(applicationContext, EditCarActivity::class.java)
+                intent.putExtra("editCar", carData)
+                intent.putExtra("editPosition", position)
                 startActivityForResult(intent, 2)
             }
         }
 
+        // настройка ресайклера и адаптера
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        adapter = CarAdapter(this, ArrayList<CarData>(), onEditButtonClick)
+        adapter = CarAdapter(this, ArrayList(), onEditButtonClick)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
 
@@ -59,15 +62,24 @@ class CarMainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        lateinit var t: CarData // ?????
-        data?.getParcelableExtra<CarData>("add")?.let {
-            adapter.add(it)
-            t = it
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            val a: CarData = data?.getParcelableExtra<CarData>("add")!!
+            data?.getParcelableExtra<CarData>("add")?.let { adapter.add(it) }
+            adapter.sortByCarBrand()
+//            dao.addCarToDatabase(a)
+//
+//            val rrr = dao.getCarsList()
+//            Log.i("RRR", rrr.toString())
+
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            val carObject = data?.getParcelableExtra<CarData>("editCar")!!
+            val position = data.getIntExtra("editPosition", 0)
+            adapter.edit(carObject, position)
+            adapter.sortByCarBrand()
         }
 
-        /*dao.addCarToDatabase(t.carGosNumber.toString())
-        val rrr = dao.getCarsList()
-        Log.i("RRR", rrr.toString())*/
+
 
     }
 

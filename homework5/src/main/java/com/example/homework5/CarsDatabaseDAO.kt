@@ -5,11 +5,11 @@ import androidx.room.*
 @Dao
 interface CarsDatabaseDAO {
 
-    @Query("SELECT * FROM CarsInfoDatabase")
-    fun getCarsList(): List<CarsInfoDatabase>
+    @Query("SELECT * FROM CarData")
+    fun getCarsList(): List<CarData>
 
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addCarToDatabase(entity: CarsInfoDatabase)
+    fun addCarToDatabase(entity: CarData)
 }

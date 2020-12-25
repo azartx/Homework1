@@ -4,8 +4,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -35,7 +37,7 @@ class AddCarActivity : AppCompatActivity() {
         // нажатие на кнопку камеры
         camera.setOnClickListener {
             val intentGetPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(intentGetPhoto, 1)
+            startActivityForResult(intentGetPhoto, 5)
         }
 
         submit.setOnClickListener {
@@ -67,12 +69,13 @@ class AddCarActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 1) {
+        if (requestCode == 5) {
             val photo = data?.extras?.get("data") as Bitmap?
             if (photo != null) {
                 bitmap = photo
             }
             image.setImageBitmap(photo)
+            findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
         }
     }
 
