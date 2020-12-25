@@ -13,6 +13,11 @@ class CarInfoActivity : AppCompatActivity() {
 
     private var carObject: CarData? = null
     private var carPosition: Int = 0
+    private var checkInputActivity = false
+    private lateinit var image: ImageView
+    private lateinit var ownerName: TextView
+    private lateinit var carName: TextView
+    private lateinit var gosNumber: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,24 +27,41 @@ class CarInfoActivity : AppCompatActivity() {
 
         val intent = intent
 
-        val image: ImageView = findViewById(R.id.background)
+        image = findViewById(R.id.background)
         val back: ImageView = findViewById(R.id.backButton)
         val worksButton: FloatingActionButton = findViewById(R.id.viewWorks)
         val editButton: FloatingActionButton = findViewById(R.id.editActionButton)
-        val ownerName: TextView = findViewById(R.id.getOwnerName)
-        val carName: TextView = findViewById(R.id.getCarName)
-        val gosNumber: TextView = findViewById(R.id.getGosNumber)
+        ownerName = findViewById(R.id.getOwnerName)
+        carName = findViewById(R.id.getCarName)
+        gosNumber = findViewById(R.id.getGosNumber)
 
         // нажата кнопка НАЗАД
-        back.setOnClickListener { finish() }
+        back.setOnClickListener {
+            if (checkInputActivity) {
+                intent.putExtra("editCar", carObject)
+                intent.putExtra("editPosition", carObject)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+            finish()
 
-        getIntentData(intent)
+        }
 
-        fillPage(ownerName, carName, gosNumber, image)
+        // нажата кнопка РЕДАКТИРОВАТЬ
+        editButton.setOnClickListener {
+            val editIntent = Intent(this, EditCarActivity::class.java)
+            editIntent.putExtra("editCar", carObject)
+            editIntent.putExtra("editPosition", carPosition)
+            startActivityForResult(editIntent, 1)
+        }
+
+        if (!checkInputActivity) getIntentData(intent)
+
+        fillPage()
 
     }
 
-    private fun fillPage(ownerName: TextView, carName: TextView, gosNumber: TextView, image: ImageView) {
+    private fun fillPage() {
         ownerName.text = carObject?.carOwnerName
         carName.text = carObject?.carModelName
         gosNumber.text = carObject?.carGosNumber
@@ -55,6 +77,20 @@ class CarInfoActivity : AppCompatActivity() {
     private fun getIntentData(intent: Intent) {
         carObject = intent.getParcelableExtra("object")
         carPosition = intent.getIntExtra("position", 0)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            if (data != null) {
+                carObject = data.getParcelableExtra("editCar")
+                carPosition = data.getIntExtra("editPosition", 0)
+                checkInputActivity = true
+                fillPage()
+            }
+        }
+
     }
 
 

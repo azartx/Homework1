@@ -82,11 +82,13 @@ class CarMainActivity : AppCompatActivity() {
 //            val rrr = dao.getCarsList()
 //            Log.i("RRR", rrr.toString())
 
-        } else if (requestCode == 2 && resultCode == RESULT_OK) {
-            val carObject = data?.getParcelableExtra<CarData>("editCar")!!
-            val position = data.getIntExtra("editPosition", 0)
-            adapter.edit(carObject, position)
-            adapter.sortByCarBrand()
+        } else if (requestCode == 2 || requestCode == 3) {
+            if (resultCode == RESULT_OK) {
+                val carObject = data?.getParcelableExtra<CarData>("editCar")!!
+                val position = data.getIntExtra("editPosition", 0)
+                adapter.edit(carObject, position)
+                adapter.sortByCarBrand()
+            }
         }
 
 
