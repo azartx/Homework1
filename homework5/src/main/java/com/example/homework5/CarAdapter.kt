@@ -17,7 +17,7 @@ class CarAdapter(context: Context,
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     interface OnCarClickListener {
-        fun onCarClick(carData: CarData, position: Int)
+        fun onCarClick(carData: CarData, position: Int, flag: Int)
     }
 
     fun add(carData: CarData) {
@@ -76,8 +76,14 @@ class CarAdapter(context: Context,
             holder.carModelName.text = carData.carModelName
             holder.carGosNumber.text = carData.carGosNumber
 
+            // редактирование машины
             holder.carEditButton.setOnClickListener {
-                onCarClickListener.onCarClick(carData, adapterPosition)
+                onCarClickListener.onCarClick(carData, adapterPosition, 1)
+            }
+
+            // информация о машине
+            holder.parent.setOnClickListener {
+                onCarClickListener.onCarClick(carData, adapterPosition, 2)
             }
 
         }

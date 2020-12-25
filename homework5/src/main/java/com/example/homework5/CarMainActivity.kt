@@ -17,7 +17,7 @@ class CarMainActivity : AppCompatActivity() {
 
     private lateinit var adapter: CarAdapter
 
-//    private lateinit var dao: CarsDatabaseDAO
+    //    private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,13 +41,23 @@ class CarMainActivity : AppCompatActivity() {
             startActivityForResult(intent, 1)
         }
 
-        // редактирование машины
+        // редактирование и информация о машине
         onEditButtonClick = object : CarAdapter.OnCarClickListener {
-            override fun onCarClick(carData: CarData, position: Int) {
-                intent = Intent(applicationContext, EditCarActivity::class.java)
-                intent.putExtra("editCar", carData)
-                intent.putExtra("editPosition", position)
-                startActivityForResult(intent, 2)
+            override fun onCarClick(carData: CarData, position: Int, flag: Int) {
+                when (flag) {
+                    1 -> {
+                        intent = Intent(applicationContext, EditCarActivity::class.java)
+                        intent.putExtra("editCar", carData)
+                        intent.putExtra("editPosition", position)
+                        startActivityForResult(intent, 2)
+                    }
+                    2 -> {
+                        intent = Intent(applicationContext, CarInfoActivity::class.java)
+                        intent.putExtra("object", carData)
+                        intent.putExtra("position", position)
+                        startActivityForResult(intent, 3)
+                    }
+                }
             }
         }
 
@@ -78,7 +88,6 @@ class CarMainActivity : AppCompatActivity() {
             adapter.edit(carObject, position)
             adapter.sortByCarBrand()
         }
-
 
 
     }

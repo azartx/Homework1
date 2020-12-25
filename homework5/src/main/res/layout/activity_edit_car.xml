@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/add_car"
+                android:text="@string/edit"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/backButton"
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toTopOf="@id/background" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/createPhotoActionButton"
+        android:id="@+id/editActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"

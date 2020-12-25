@@ -35,22 +35,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/add_car"
+                android:text="@string/info"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/backButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/submitButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:background="@color/design_default_color_primary"
-                android:contentDescription="@string/submit"
-                android:src="@drawable/ic_submit_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -83,83 +71,99 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:contentDescription="@string/take_a_photo"
-        android:src="@drawable/ic_camera"
+        android:contentDescription="@string/edit"
+        android:src="@drawable/ic_edit_pan"
         app:layout_constraintBottom_toBottomOf="@id/background"
         app:layout_constraintEnd_toEndOf="@id/background"
         app:layout_constraintTop_toBottomOf="@id/background" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/viewWorks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="@string/view_works"
+        android:src="@drawable/ic_work"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        app:layout_constraintEnd_toStartOf="@id/editActionButton"
+        app:layout_constraintTop_toBottomOf="@id/background" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout1"
+    <TextView
+        android:id="@+id/ownerNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/background">
+        android:autofillHints="@string/owner_name"
+        android:gravity="center"
+        android:hint="@string/owner_name"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/background" />
 
-        <EditText
-            android:id="@+id/ownerNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/owner_name"
-            android:background="@color/white"
-            android:hint="@string/owner_name"
-            android:inputType="text" />
+    <TextView
+        android:id="@+id/getOwnerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:autofillHints="@string/owner_name"
+        android:gravity="center"
+        android:hint="@string/owner_name"
+        app:layout_constraintTop_toBottomOf="@id/ownerNameText" />
 
-    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayout1">
+        app:layout_constraintTop_toBottomOf="@id/getOwnerName">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/carNameEditText"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:autofillHints="@string/car_name"
-                android:background="@color/white"
-                android:hint="@string/carName"
-                android:inputType="text" />
+                android:gravity="center"
+                android:text="@string/car_name"
+                android:textSize="20sp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/getCarName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/car_name" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout3"
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/gosNumberEditText"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:autofillHints="@string/gos_number"
-                android:background="@color/white"
-                android:hint="@string/gos_number"
-                android:inputType="text"
-                tools:ignore="TextFields" />
+                android:gravity="center"
+                android:text="@string/gos_number"
+                android:textSize="20sp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/getGosNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="@string/gos_number" />
+        </LinearLayout>
 
     </LinearLayout>
 

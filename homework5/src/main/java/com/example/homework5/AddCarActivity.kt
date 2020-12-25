@@ -32,28 +32,22 @@ class AddCarActivity : AppCompatActivity() {
         val gosNumber: EditText = findViewById(R.id.gosNumberEditText)
         val back: ImageView = findViewById(R.id.backButton)
         val submit: ImageView = findViewById(R.id.submitButton)
-        val camera: ImageView = findViewById(R.id.createPhotoActionButton)
+        val camera: ImageView = findViewById(R.id.editActionButton)
 
-        // нажатие на кнопку камеры
+        // нажата кнопка КАМЕРЫ
         camera.setOnClickListener {
             val intentGetPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             startActivityForResult(intentGetPhoto, 5)
         }
 
+        // нажата кнопка НАЗАД
+        back.setOnClickListener { finish() }
+
+        // нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
 
-                val car = if (bitmap == null) {
-                    CarData(ownerName.text.toString(),
-                            carName.text.toString(),
-                            gosNumber.text.toString(),
-                            null)
-                } else {
-                    CarData(ownerName.text.toString(),
-                            carName.text.toString(),
-                            gosNumber.text.toString(),
-                            bitmap)
-                }
+                val car = createCarObject(ownerName, carName, gosNumber)
 
                 intent.putExtra("add", car)
                 setResult(RESULT_OK, intent)
@@ -64,6 +58,20 @@ class AddCarActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun createCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
+        return if (bitmap == null) {
+            CarData(ownerName.text.toString(),
+                    carName.text.toString(),
+                    gosNumber.text.toString(),
+                    null)
+        } else {
+            CarData(ownerName.text.toString(),
+                    carName.text.toString(),
+                    gosNumber.text.toString(),
+                    bitmap)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -2,7 +2,6 @@ package com.example.homework5
 
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -10,6 +9,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 class EditCarActivity : AppCompatActivity() {
 
@@ -21,13 +22,15 @@ class EditCarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_car)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         val ownerName: EditText = findViewById(R.id.ownerNameEditText)
         val carName: EditText = findViewById(R.id.carNameEditText)
         val gosNumber: EditText = findViewById(R.id.gosNumberEditText)
         val back: ImageView = findViewById(R.id.backButton)
         val submit: ImageView = findViewById(R.id.submitButton)
-        val camera: ImageView = findViewById(R.id.createPhotoActionButton)
+        val camera: ImageView = findViewById(R.id.editActionButton)
         image = findViewById(R.id.background)
 
         val intent = intent
@@ -37,7 +40,7 @@ class EditCarActivity : AppCompatActivity() {
         if (carObject != null) fillPage(ownerName, carName, gosNumber, image)
 
         // нажата кнопка НАЗАД
-        back.setOnClickListener { finishActivity(RESULT_CANCELED) }
+        back.setOnClickListener { finish() }
 
         // нажата кнопка КАМЕРА
         camera.setOnClickListener {
