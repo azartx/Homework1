@@ -1,6 +1,7 @@
-package com.example.homework5
+package com.example.homework5.database
 
 import androidx.room.*
+import com.example.homework5.data.CarData
 
 @Dao
 interface CarsDatabaseDAO {

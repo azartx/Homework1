@@ -19,4 +19,17 @@
     <string name="fill_all_fields">Fill in all the fields</string>
     <string name="view_works">View works</string>
     <string name="info">Info</string>
+    <string name="work_progress">Work Progress</string>
+    <string name="progress_text">progress text</string>
+    <string name="type_of_work">Type of work</string>
+    <string name="coast">Coast</string>
+    <string name="time">Time</string>
+    <string name="works_empty_list">The work list is empty! Please, add.</string>
+    <string name="add_work">Add work</string>
+    <string name="application_data_text">Application data - </string>
+    <string name="work_name">Work name</string>
+    <string name="description">Description</string>
+    <string name="pending">pending</string>
+    <string name="arrow_forward">Arrow forward</string>
+    <string name="in_progress">in progress</string>
 </resources>

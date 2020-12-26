@@ -1,4 +1,4 @@
-package com.example.homework5
+package com.example.homework5.data
 
 import android.graphics.Bitmap
 import android.os.Parcel
@@ -6,7 +6,6 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import org.jetbrains.annotations.NotNull
 
 @Entity
 class CarData(@PrimaryKey @ColumnInfo val carOwnerName: String,

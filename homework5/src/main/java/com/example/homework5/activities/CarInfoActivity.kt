@@ -1,4 +1,4 @@
-package com.example.homework5
+package com.example.homework5.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.homework5.R
+import com.example.homework5.data.CarData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CarInfoActivity : AppCompatActivity() {
@@ -18,6 +20,11 @@ class CarInfoActivity : AppCompatActivity() {
     private lateinit var ownerName: TextView
     private lateinit var carName: TextView
     private lateinit var gosNumber: TextView
+
+    companion object {
+        const val OBJECT = "editCar"
+        const val POSITION = "editPosition"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,24 +45,31 @@ class CarInfoActivity : AppCompatActivity() {
         // нажата кнопка НАЗАД
         back.setOnClickListener {
             if (checkInputActivity) {
-                intent.putExtra("editCar", carObject)
-                intent.putExtra("editPosition", carObject)
+                intent.putExtra(OBJECT, carObject)
+                intent.putExtra(POSITION, carObject)
                 setResult(RESULT_OK, intent)
                 finish()
             }
             finish()
-
         }
 
         // нажата кнопка РЕДАКТИРОВАТЬ
         editButton.setOnClickListener {
             val editIntent = Intent(this, EditCarActivity::class.java)
-            editIntent.putExtra("editCar", carObject)
-            editIntent.putExtra("editPosition", carPosition)
+            editIntent.putExtra(OBJECT, carObject)
+            editIntent.putExtra(POSITION, carPosition)
             startActivityForResult(editIntent, 1)
         }
 
         if (!checkInputActivity) getIntentData(intent)
+
+        // нажата кнопка РАБОТЫ
+        worksButton.setOnClickListener {
+            val worksIntent = Intent(this, WorksActivity::class.java)
+            worksIntent.putExtra(OBJECT, carObject)
+            worksIntent.putExtra(POSITION, carPosition)
+            startActivityForResult(worksIntent, 2)
+        }
 
         fillPage()
 
@@ -75,8 +89,8 @@ class CarInfoActivity : AppCompatActivity() {
     }
 
     private fun getIntentData(intent: Intent) {
-        carObject = intent.getParcelableExtra("object")
-        carPosition = intent.getIntExtra("position", 0)
+        carObject = intent.getParcelableExtra(OBJECT)
+        carPosition = intent.getIntExtra(POSITION, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -84,8 +98,8 @@ class CarInfoActivity : AppCompatActivity() {
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
             if (data != null) {
-                carObject = data.getParcelableExtra("editCar")
-                carPosition = data.getIntExtra("editPosition", 0)
+                carObject = data.getParcelableExtra(OBJECT)
+                carPosition = data.getIntExtra(POSITION, 0)
                 checkInputActivity = true
                 fillPage()
             }

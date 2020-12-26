@@ -1,4 +1,4 @@
-package com.example.homework5
+package com.example.homework5.activities
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.homework5.R
+import com.example.homework5.data.CarData
 
 class EditCarActivity : AppCompatActivity() {
 
@@ -19,13 +21,18 @@ class EditCarActivity : AppCompatActivity() {
     private var carPosition: Int = 0
     private var bitmap: Bitmap? = null
 
+    companion object {
+        const val OBJECT = "editCar"
+        const val POSITION = "editPosition"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_car)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val ownerName: EditText = findViewById(R.id.ownerNameEditText)
+        val ownerName: EditText = findViewById(R.id.workNameEditText)
         val carName: EditText = findViewById(R.id.carNameEditText)
         val gosNumber: EditText = findViewById(R.id.gosNumberEditText)
         val back: ImageView = findViewById(R.id.backButton)
@@ -61,8 +68,8 @@ class EditCarActivity : AppCompatActivity() {
         if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
             val car = fillCarObject(ownerName, carName, gosNumber)
 
-            intent.putExtra("editCar", car)
-            intent.putExtra("editPosition", carPosition)
+            intent.putExtra(OBJECT, car)
+            intent.putExtra(POSITION, carPosition)
             setResult(RESULT_OK, intent)
             finish()
         } else {
@@ -85,8 +92,8 @@ class EditCarActivity : AppCompatActivity() {
     }
 
     private fun getIntentExtras(intent: Intent) {
-        carObject = intent.getParcelableExtra("editCar")
-        carPosition = intent.getIntExtra("editPosition", 0)
+        carObject = intent.getParcelableExtra(OBJECT)
+        carPosition = intent.getIntExtra(POSITION, 0)
     }
 
     private fun fillPage(ownerName: EditText, carName: EditText, gosNumber: EditText, image: ImageView) {

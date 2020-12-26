@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddCarActivity">
+    tools:context=".activities.AddWorkActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/edit"
+                android:text="@string/add_work"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/backButton"
@@ -57,67 +57,58 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:contentDescription="@string/no_image"
-        android:src="@drawable/ic_background_view"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/applicationDataText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="@string/application_data_text"
+        android:textSize="17sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <TextView
-        android:id="@+id/noPhotoTextView"
+        android:id="@+id/setTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_image"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@id/background"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toTopOf="@id/background" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:contentDescription="@string/take_a_photo"
-        android:src="@drawable/ic_camera"
-        app:layout_constraintBottom_toBottomOf="@id/background"
-        app:layout_constraintEnd_toEndOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@id/background" />
-
+        android:layout_marginTop="20dp"
+        android:text="@string/time"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/applicationDataText"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="15dp"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/background">
+        app:layout_constraintTop_toBottomOf="@id/applicationDataText">
 
         <EditText
             android:id="@+id/workNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/owner_name"
+            android:autofillHints="@string/work_name"
             android:background="@color/white"
-            android:hint="@string/owner_name"
+            android:hint="@string/work_name"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
+        android:id="@+id/descCoastParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:paddingBottom="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textInputLayout1">
@@ -130,13 +121,13 @@
             android:layout_weight="1">
 
             <EditText
-                android:id="@+id/carNameEditText"
+                android:id="@+id/descriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:autofillHints="@string/car_name"
+                android:autofillHints="@string/description"
                 android:background="@color/white"
-                android:hint="@string/carName"
+                android:hint="@string/description"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -146,21 +137,74 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_weight="1">
+            android:layout_weight="0.4">
 
             <EditText
-                android:id="@+id/gosNumberEditText"
+                android:id="@+id/coastEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:autofillHints="@string/gos_number"
+                android:autofillHints="@string/coast"
                 android:background="@color/white"
-                android:hint="@string/gos_number"
-                android:inputType="text"
-                tools:ignore="TextFields" />
+                android:hint="@string/coast"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/pending"
+        android:src="@drawable/ic_work"
+        app:layout_constraintEnd_toStartOf="@id/arrow1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/descCoastParent" />
+
+    <ImageView
+        android:id="@+id/arrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/arrow_forward"
+        android:src="@drawable/ic_arrow_forward"
+        app:layout_constraintEnd_toStartOf="@id/inProgress"
+        app:layout_constraintStart_toEndOf="@id/pending"
+        app:layout_constraintTop_toBottomOf="@id/descCoastParent" />
+
+    <ImageView
+        android:id="@+id/inProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/in_progress"
+        android:src="@drawable/ic_work"
+        app:layout_constraintEnd_toStartOf="@id/arrow2"
+        app:layout_constraintStart_toEndOf="@id/arrow1"
+        app:layout_constraintTop_toBottomOf="@id/descCoastParent" />
+
+    <ImageView
+        android:id="@+id/arrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/arrow_forward"
+        android:src="@drawable/ic_arrow_forward"
+        app:layout_constraintEnd_toStartOf="@id/completed"
+        app:layout_constraintStart_toEndOf="@id/inProgress"
+        app:layout_constraintTop_toBottomOf="@id/descCoastParent" />
+
+    <ImageView
+        android:id="@+id/completed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/in_progress"
+        android:src="@drawable/ic_work"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/arrow2"
+        app:layout_constraintTop_toBottomOf="@id/descCoastParent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

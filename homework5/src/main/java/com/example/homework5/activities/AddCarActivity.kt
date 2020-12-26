@@ -1,4 +1,4 @@
-package com.example.homework5
+package com.example.homework5.activities
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.homework5.R
+import com.example.homework5.data.CarData
 
 
 class AddCarActivity : AppCompatActivity() {
@@ -27,7 +29,7 @@ class AddCarActivity : AppCompatActivity() {
         val intent = intent
 
         image = findViewById(R.id.background)
-        val ownerName: EditText = findViewById(R.id.ownerNameEditText)
+        val ownerName: EditText = findViewById(R.id.workNameEditText)
         val carName: EditText = findViewById(R.id.carNameEditText)
         val gosNumber: EditText = findViewById(R.id.gosNumberEditText)
         val back: ImageView = findViewById(R.id.backButton)

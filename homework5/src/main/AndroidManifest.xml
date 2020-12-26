@@ -10,10 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Homework1">
-        <activity android:name=".CarInfoActivity"></activity>
-        <activity android:name=".EditCarActivity" />
-        <activity android:name=".AddCarActivity" />
-        <activity android:name=".CarMainActivity">
+        <activity android:name=".activities.AddWorkActivity"></activity>
+        <activity android:name=".activities.WorksActivity" />
+        <activity android:name=".activities.CarInfoActivity" />
+        <activity android:name=".activities.EditCarActivity" />
+        <activity android:name=".activities.AddCarActivity" />
+        <activity android:name=".activities.CarMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

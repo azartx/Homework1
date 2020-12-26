@@ -1,4 +1,4 @@
-package com.example.homework5
+package com.example.homework5.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.homework5.R
+import com.example.homework5.data.CarData
 
 class CarAdapter(context: Context,
                  private val cars: ArrayList<CarData>,
@@ -60,7 +63,7 @@ class CarAdapter(context: Context,
         private val carOwnerName: TextView = view.findViewById(R.id.driverName)
         private val carModelName: TextView = view.findViewById(R.id.carName)
         private val carGosNumber: TextView = view.findViewById(R.id.carNumber)
-        private val parent: ConstraintLayout = view.findViewById(R.id.parent)
+        private val parent: CardView = view.findViewById(R.id.parent)
         private val carEditButton: ImageView = view.findViewById(R.id.editCarButton)
         private val cameraNoPhoto: ImageView = view.findViewById(R.id.cameraNoPhoto)
 
