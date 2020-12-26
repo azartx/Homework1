@@ -32,4 +32,6 @@
     <string name="pending">pending</string>
     <string name="arrow_forward">Arrow forward</string>
     <string name="in_progress">in progress</string>
+    <string name="selectProgress">Select one of the work progress buttons</string>
+    <string name="fillAllFields">Fill all fields!</string>
 </resources>

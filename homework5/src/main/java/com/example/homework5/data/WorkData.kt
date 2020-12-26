@@ -7,9 +7,11 @@ class WorkData(val typeOfWork: String,
                val time: String,
                val progress: String,
                val coast: String,
-               val color: Int) : Parcelable {
+               val color: String,
+               val positionInCarList: Int) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+            parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
@@ -21,7 +23,8 @@ class WorkData(val typeOfWork: String,
         parcel.writeString(time)
         parcel.writeString(progress)
         parcel.writeString(coast)
-        parcel.writeInt(color)
+        parcel.writeString(color)
+        parcel.writeInt(positionInCarList)
     }
 
     override fun describeContents(): Int {

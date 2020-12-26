@@ -41,6 +41,7 @@ class WorksActivity : AppCompatActivity() {
 
         getIntentData(intent)
 
+        // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
             val addWorkIntent = Intent(this, AddWorkActivity::class.java)
             addWorkIntent.putExtra(OBJECT, carObject)
@@ -66,6 +67,17 @@ class WorksActivity : AppCompatActivity() {
     private fun getIntentData(intent: Intent) {
         carObject = intent.getParcelableExtra(OBJECT)
         carPosition = intent.getIntExtra(POSITION, 0)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            data?.getParcelableExtra<WorkData>(OBJECT)?.let {
+                adapter.add(it)
+            }
+        }
+
     }
 
 }

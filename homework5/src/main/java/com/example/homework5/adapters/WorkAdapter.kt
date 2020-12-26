@@ -1,6 +1,7 @@
 package com.example.homework5.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +68,7 @@ class WorkAdapter(context: Context,
                 holder.image.setImageBitmap(carData.carImage)
                 cameraNoPhoto.visibility = View.INVISIBLE
             }*/
-
+            holder.image.setColorFilter(Color.parseColor(workData.color))
             holder.typeOfWork.text = workData.typeOfWork
             holder.time.text = workData.time
             holder.progress.text = workData.progress
