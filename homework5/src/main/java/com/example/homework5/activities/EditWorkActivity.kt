@@ -2,30 +2,23 @@ package com.example.homework5.activities
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.ColorFilter
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.homework5.R
-import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
 
-class AddWorkActivity : AppCompatActivity() {
+class EditWorkActivity : AppCompatActivity() {
 
-    private var carObject: CarData? = null
-    private var carPosition: Int = 0
+    private var workObject: WorkData? = null
+    private var workPosition: Int = 0
     private var color: String? = null
     private var progress: String? = null
-    private var currentData: String = SimpleDateFormat(
-            "dd/M/yyyy hh:mm:ss",
-            Locale.getDefault())
-            .format(Date())
 
     companion object {
         const val OBJECT = "editCar"
@@ -43,23 +36,33 @@ class AddWorkActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_work)
+        setContentView(R.layout.activity_edit_work)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         val intent = intent
+
         getIntentData(intent)
 
-        val submit: ImageView = findViewById(R.id.submitButton)
         val time: TextView = findViewById(R.id.setTime)
         val workNameEditText: EditText = findViewById(R.id.workNameEditText)
         val workDescriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val coastEditText: EditText = findViewById(R.id.coastEditText)
+        val workCoastEditText: EditText = findViewById(R.id.coastEditText)
         val pending: ImageView = findViewById(R.id.pending)
         val inProgress: ImageView = findViewById(R.id.inProgress)
         val completed: ImageView = findViewById(R.id.completed)
+        val submit: ImageView = findViewById(R.id.submitButton)
+        val backButton: ImageView = findViewById(R.id.backButton)
 
-        time.text = currentData
+        findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
+                ?: getString(R.string.edit)
+
+        fillPage(time,
+                workNameEditText,
+                workDescriptionEditText,
+                workCoastEditText,
+                pending, inProgress,
+                completed)
 
         pending.setOnClickListener {
             pendingSetColor(pending, inProgress, completed)
@@ -73,17 +76,21 @@ class AddWorkActivity : AppCompatActivity() {
             completedSetColor(pending, inProgress, completed)
         }
 
+        // нажата кнопка НАЗАД
+        backButton.setOnClickListener { finish() }
+
         // Нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (color == null) {
                 Toast.makeText(this, getString(R.string.selectProgress), Toast.LENGTH_LONG).show()
             } else if (workNameEditText.text.isNotEmpty()
                     && workDescriptionEditText.text.isNotEmpty()
-                    && coastEditText.text.isNotEmpty()) {
+                    && workCoastEditText.text.isNotEmpty()) {
 
-                val work = createObject(workNameEditText, time, workDescriptionEditText, coastEditText)
+                val work = createObject(workNameEditText, time, workDescriptionEditText, workCoastEditText)
 
                 intent.putExtra(OBJECT, work)
+                intent.putExtra(POSITION, workPosition)
                 setResult(RESULT_OK, intent)
                 finish()
 
@@ -94,28 +101,52 @@ class AddWorkActivity : AppCompatActivity() {
 
     }
 
+    private fun fillPage(time: TextView, workNameEditText: EditText, workDescriptionEditText: EditText, workCoastEditText: EditText, pending: ImageView, inProgress: ImageView, completed: ImageView) {
+        if (workObject != null) {
+            time.text = workObject?.time
+            workNameEditText.setText(workObject?.workName)
+            workDescriptionEditText.setText(workObject?.workDescription)
+            workCoastEditText.setText(workObject?.coast)
+
+            when (progress) {
+                PROGRESS_PENDING -> pending.setColorFilter(Color.parseColor(PENDING))
+                PROGRESS_IN_PROGRESS -> inProgress.setColorFilter(Color.parseColor(IN_PROGRESS))
+                PROGRESS_COMPLETE -> completed.setColorFilter(Color.parseColor(COMPLETE))
+            }
+
+        }
+    }
+
+    private fun getIntentData(intent: Intent) {
+        workObject = intent.getParcelableExtra(OBJECT)
+        workPosition = intent.getIntExtra(POSITION, 0)
+
+        progress = workObject?.progress ?: PROGRESS_PENDING
+        color = workObject?.color
+    }
+
     private fun completedSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
-        pending.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        inProgress.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        completed.setColorFilter(Color.parseColor(COMPLETE))
-        color = COMPLETE
-        progress = PROGRESS_COMPLETE
+        pending.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        inProgress.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        completed.setColorFilter(Color.parseColor(AddWorkActivity.COMPLETE))
+        color = AddWorkActivity.COMPLETE
+        progress = AddWorkActivity.PROGRESS_COMPLETE
     }
 
     private fun inProgressSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
-        pending.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        inProgress.setColorFilter(Color.parseColor(IN_PROGRESS))
-        completed.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        color = IN_PROGRESS
-        progress = PROGRESS_IN_PROGRESS
+        pending.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        inProgress.setColorFilter(Color.parseColor(AddWorkActivity.IN_PROGRESS))
+        completed.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        color = AddWorkActivity.IN_PROGRESS
+        progress = AddWorkActivity.PROGRESS_IN_PROGRESS
     }
 
     private fun pendingSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
-        pending.setColorFilter(Color.parseColor(PENDING))
-        inProgress.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        completed.setColorFilter(Color.parseColor(DEFAULT_COLOR))
-        color = PENDING
-        progress = PROGRESS_PENDING
+        pending.setColorFilter(Color.parseColor(AddWorkActivity.PENDING))
+        inProgress.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        completed.setColorFilter(Color.parseColor(AddWorkActivity.DEFAULT_COLOR))
+        color = AddWorkActivity.PENDING
+        progress = AddWorkActivity.PROGRESS_PENDING
     }
 
     private fun createObject(workNameEditText: EditText,
@@ -129,12 +160,7 @@ class AddWorkActivity : AppCompatActivity() {
                 progress!!, // проверяется color на null, если color не null, то и тут будет не null
                 coastEditText.text.toString(),
                 color.toString(),
-                carPosition)
-    }
-
-    private fun getIntentData(intent: Intent) {
-        carObject = intent.getParcelableExtra(OBJECT)
-        carPosition = intent.getIntExtra(POSITION, 0)
+                workObject!!.positionInCarList)
     }
 
 }

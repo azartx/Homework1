@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toBottomOf="@id/workImage" />
 
             <TextView
-                android:id="@+id/typeOfWorkTextView"
+                android:id="@+id/typeOfWork"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
@@ -58,7 +58,7 @@
                 android:text="@string/time"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/workImage"
-                app:layout_constraintTop_toBottomOf="@id/typeOfWorkTextView" />
+                app:layout_constraintTop_toBottomOf="@id/typeOfWork" />
 
             <TextView
                 android:id="@+id/coastTextView"

@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/design_default_color_primary"
         android:elevation="4dp"
+        app:title=" "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,6 +28,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/carNameInToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_name"/>
 
     </androidx.appcompat.widget.Toolbar>
 

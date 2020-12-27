@@ -8,9 +8,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.Homework1">
-        <activity android:name=".activities.AddWorkActivity"></activity>
+        <activity android:name=".activities.EditWorkActivity"></activity>
+        <activity android:name=".activities.AddWorkActivity" />
         <activity android:name=".activities.WorksActivity" />
         <activity android:name=".activities.CarInfoActivity" />
         <activity android:name=".activities.EditCarActivity" />

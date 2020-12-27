@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
@@ -55,34 +56,26 @@ class WorkAdapter(context: Context,
 
     class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view) {
 
-        private val typeOfWork: TextView = view.findViewById(R.id.typeOfWorkTextView)
+        private val typeOfWork: TextView = view.findViewById(R.id.typeOfWork)
         private val time: TextView = view.findViewById(R.id.timeTextView)
         private val progress: TextView = view.findViewById(R.id.progressTextView)
         private val coast: TextView = view.findViewById(R.id.coastTextView)
         private val image: ImageView = view.findViewById(R.id.workImage)
+        private val parent: CardView = view.findViewById(R.id.parent)
 
         fun bind(workData: WorkData, holder: WorkAdapter.ViewHolder, onWorkClickListener: WorkAdapter.OnWorkClickListener) {
-            /*if (carData.carImage == null) {
-                holder.image.setImageResource(R.drawable.ic_background_view)
-            } else {
-                holder.image.setImageBitmap(carData.carImage)
-                cameraNoPhoto.visibility = View.INVISIBLE
-            }*/
+
             holder.image.setColorFilter(Color.parseColor(workData.color))
-            holder.typeOfWork.text = workData.typeOfWork
+            holder.typeOfWork.text = workData.workName
             holder.time.text = workData.time
             holder.progress.text = workData.progress
             holder.coast.text = workData.coast
 
-            /*// редактирование машины
-            holder.carEditButton.setOnClickListener {
-                onCarClickListener.onCarClick(carData, adapterPosition, 1)
+            // редактирование работы
+            holder.parent.setOnClickListener {
+                onWorkClickListener.onWorkClick(workData, adapterPosition)
             }
 
-            // информация о машине
-            holder.parent.setOnClickListener {
-                onCarClickListener.onCarClick(carData, adapterPosition, 2)
-            }*/
 
         }
 
