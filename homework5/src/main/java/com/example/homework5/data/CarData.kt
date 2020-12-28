@@ -5,13 +5,15 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 import java.io.File as File
 
 @Entity
-class CarData(@PrimaryKey @ColumnInfo val carOwnerName: String,
+class CarData(@ColumnInfo val carOwnerName: String,
               @ColumnInfo val carModelName: String,
               @ColumnInfo val carGosNumber: String,
-              val carImage: String?) : Parcelable {
+              @ColumnInfo val carImage: String?) : Parcelable {
+
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),

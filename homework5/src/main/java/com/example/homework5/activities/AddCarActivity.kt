@@ -88,7 +88,6 @@ class AddCarActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     private fun createCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
@@ -101,7 +100,6 @@ class AddCarActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         image.setImageURI(photoFile?.path?.toUri())
 
     }

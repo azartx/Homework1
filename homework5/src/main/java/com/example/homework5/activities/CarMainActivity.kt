@@ -2,6 +2,7 @@ package com.example.homework5.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.*
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
+import com.example.homework5.database.CarsDatabase
+import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
@@ -19,7 +22,7 @@ class CarMainActivity : AppCompatActivity() {
 
     private lateinit var adapter: CarAdapter
 
-    //    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
 
     companion object {
@@ -39,7 +42,7 @@ class CarMainActivity : AppCompatActivity() {
         var intent: Intent
 
         // инициализация БД
-//        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        dao = CarsDatabase.init(this).getCarDatabaseDAO()
 
 
         //  добавление новой машины
@@ -81,13 +84,15 @@ class CarMainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
-//            val a: CarData = data?.getParcelableExtra<CarData>("add")!!
+            val a: CarData = data?.getParcelableExtra<CarData>("add")!!
+
             data?.getParcelableExtra<CarData>("add")?.let { adapter.add(it) }
             adapter.sortByCarBrand()
-//            dao.addCarToDatabase(a)
-//
-//            val rrr = dao.getCarsList()
-//            Log.i("RRR", rrr.toString())
+
+                    dao.addCarToDatabase(a)
+
+            val rrr = dao.getCarsList()
+            Log.i("RRR", rrr.toString())
 
         } else if (requestCode == 2 || requestCode == 3) {
             if (resultCode == RESULT_OK) {
