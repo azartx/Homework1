@@ -1,6 +1,7 @@
 package com.example.homework5.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 
@@ -71,7 +74,9 @@ class CarAdapter(context: Context,
             if (carData.carImage == null) {
                 holder.image.setImageResource(R.drawable.ic_background_view)
             } else {
-                holder.image.setImageBitmap(carData.carImage)
+                //holder.image.setImageURI(carData.carImage.toUri())
+                Glide.with(itemView).load(carData.carImage).into(image)
+                Log.i("FFFF", carData.carImage)
                 cameraNoPhoto.visibility = View.INVISIBLE
             }
 

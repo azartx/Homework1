@@ -1,30 +1,30 @@
 package com.example.homework5.data
 
-import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.File as File
 
 @Entity
 class CarData(@PrimaryKey @ColumnInfo val carOwnerName: String,
               @ColumnInfo val carModelName: String,
               @ColumnInfo val carGosNumber: String,
-              val carImage: Bitmap?) : Parcelable {
+              val carImage: String?) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
-            parcel.readParcelable<Bitmap?>(Bitmap::class.java.classLoader)) {
+            parcel.readString().toString()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(carOwnerName)
         parcel.writeString(carModelName)
         parcel.writeString(carGosNumber)
-        parcel.writeParcelable(carImage, flags)
+        parcel.writeString(carImage)
     }
 
     override fun describeContents(): Int {

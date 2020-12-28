@@ -1,24 +1,28 @@
 package com.example.homework5.activities
 
 import android.content.Intent
-import android.graphics.Bitmap
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.View
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
+import java.io.File
+import java.util.UUID
 
 
 class AddCarActivity : AppCompatActivity() {
 
     private lateinit var image: ImageView
-    private var bitmap: Bitmap? = null
+    private var photoFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +40,36 @@ class AddCarActivity : AppCompatActivity() {
         val submit: ImageView = findViewById(R.id.submitButton)
         val camera: ImageView = findViewById(R.id.editActionButton)
 
+        photoFile = File(this.filesDir, UUID.randomUUID().toString() + "IMG.jpg")
+
+        val photoUri = FileProvider.getUriForFile(this,
+                "com.example.homework5.fileprovider",
+                photoFile!!)
+
+        val intentGetPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        packageManager.resolveActivity(intentGetPhoto,
+                PackageManager.MATCH_DEFAULT_ONLY)
+
+
         // нажата кнопка КАМЕРЫ
         camera.setOnClickListener {
-            val intentGetPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            intentGetPhoto.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+
+            val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(intentGetPhoto,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+
+            for (cameraActivity in cameraActivities) {
+                this.grantUriPermission(cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            }
+
             startActivityForResult(intentGetPhoto, 5)
+
         }
+
 
         // нажата кнопка НАЗАД
         back.setOnClickListener { finish() }
@@ -63,30 +92,18 @@ class AddCarActivity : AppCompatActivity() {
     }
 
     private fun createCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
-        return if (bitmap == null) {
-            CarData(ownerName.text.toString(),
-                    carName.text.toString(),
-                    gosNumber.text.toString(),
-                    null)
-        } else {
-            CarData(ownerName.text.toString(),
-                    carName.text.toString(),
-                    gosNumber.text.toString(),
-                    bitmap)
-        }
+        return CarData(ownerName.text.toString(),
+                carName.text.toString(),
+                gosNumber.text.toString(),
+                photoFile?.path)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 5) {
-            val photo = data?.extras?.get("data") as Bitmap?
-            if (photo != null) {
-                bitmap = photo
-            }
-            image.setImageBitmap(photo)
-            findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
-        }
+        image.setImageURI(photoFile?.path?.toUri())
+
     }
 
 

@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -82,7 +83,7 @@ class CarInfoActivity : AppCompatActivity() {
         if (carObject?.carImage == null) {
             image.setImageResource(R.drawable.ic_background_view)
         } else {
-            image.setImageBitmap(carObject?.carImage)
+            image.setImageURI(carObject!!.carImage!!.toUri())
             findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
 
         }

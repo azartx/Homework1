@@ -1,7 +1,9 @@
 package com.example.homework5.activities
 
 import android.content.Intent
-import android.graphics.Bitmap
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
@@ -11,15 +13,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
+import java.io.File
+import java.util.UUID
 
 class EditCarActivity : AppCompatActivity() {
 
     private lateinit var image: ImageView
+    private var photoFile: File? = null
+    private var photoUri: Uri? = null
+
     private var carObject: CarData? = null
     private var carPosition: Int = 0
-    private var bitmap: Bitmap? = null
 
     companion object {
         const val OBJECT = "editCar"
@@ -46,25 +54,50 @@ class EditCarActivity : AppCompatActivity() {
 
         if (carObject != null) fillPage(ownerName, carName, gosNumber, image)
 
+        createFileAndUri()
+
         // нажата кнопка НАЗАД
         back.setOnClickListener { finish() }
 
         // нажата кнопка КАМЕРА
         camera.setOnClickListener {
             val intentGetPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+            packageManager.resolveActivity(intentGetPhoto,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+
+            intentGetPhoto.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+
+            val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(intentGetPhoto,
+                    PackageManager.MATCH_DEFAULT_ONLY)
+
+            for (cameraActivity in cameraActivities) {
+                this.grantUriPermission(cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            }
             startActivityForResult(intentGetPhoto, 1)
         }
 
         // нажата кнопка SUBMIT
         submit.setOnClickListener {
-
             submitListenerBody(ownerName, carName, gosNumber, intent)
-
         }
 
     }
 
-    private fun submitListenerBody(ownerName: EditText, carName: EditText, gosNumber: EditText, intent: Intent) {
+    private fun createFileAndUri() {
+        photoFile = File(this.filesDir, UUID.randomUUID().toString() + "IMG.jpg")
+
+        photoUri = FileProvider.getUriForFile(this,
+                "com.example.homework5.fileprovider",
+                photoFile!!)
+    }
+
+    private fun submitListenerBody(ownerName: EditText,
+                                   carName: EditText,
+                                   gosNumber: EditText,
+                                   intent: Intent) {
         if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
             val car = fillCarObject(ownerName, carName, gosNumber)
 
@@ -78,17 +111,11 @@ class EditCarActivity : AppCompatActivity() {
     }
 
     private fun fillCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
-        return if (bitmap == null) {
-            CarData(ownerName.text.toString(),
-                    carName.text.toString(),
-                    gosNumber.text.toString(),
-                    null)
-        } else {
-            CarData(ownerName.text.toString(),
-                    carName.text.toString(),
-                    gosNumber.text.toString(),
-                    bitmap)
-        }
+        return CarData(ownerName.text.toString(),
+                carName.text.toString(),
+                gosNumber.text.toString(),
+                photoFile?.path ?: carObject?.carImage)
+
     }
 
     private fun getIntentExtras(intent: Intent) {
@@ -103,7 +130,7 @@ class EditCarActivity : AppCompatActivity() {
         if (carObject?.carImage == null) {
             image.setImageResource(R.drawable.ic_background_view)
         } else {
-            image.setImageBitmap(carObject?.carImage)
+            image.setImageURI(carObject!!.carImage!!.toUri())
             findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
 
         }
@@ -111,15 +138,12 @@ class EditCarActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1) {
-            val photo = data?.extras?.get("data") as Bitmap?
-            if (photo != null) {
-                bitmap = photo
-            }
-            image.setImageBitmap(photo)
-            findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
-        }
+
+        image.setImageURI(photoFile?.path?.toUri())
+
+        findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
+
     }
-
-
 }
+
+
