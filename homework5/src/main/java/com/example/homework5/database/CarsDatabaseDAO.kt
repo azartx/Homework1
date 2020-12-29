@@ -9,8 +9,14 @@ interface CarsDatabaseDAO {
     @Query("SELECT * FROM CarData")
     fun getCarsList(): List<CarData>
 
+    @Delete
+    fun delete(carData: CarData)
 
+    @Update
+    fun update(carData: CarData)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addCarToDatabase(entity: CarData)
+
+
 }

@@ -17,6 +17,7 @@ import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CarMainActivity : AppCompatActivity() {
 
@@ -43,7 +44,6 @@ class CarMainActivity : AppCompatActivity() {
 
         // инициализация БД
         dao = CarsDatabase.init(this).getCarDatabaseDAO()
-
 
         //  добавление новой машины
         addActionButton.setOnClickListener {
@@ -77,22 +77,27 @@ class CarMainActivity : AppCompatActivity() {
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
 
+        checkDataBase()
 
+    }
+
+    private fun checkDataBase() {
+        val carList = dao.getCarsList()
+        if (carList.isNotEmpty()) adapter.cars = carList as ArrayList<CarData>
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            val a: CarData = data?.getParcelableExtra<CarData>("add")!!
 
-            data?.getParcelableExtra<CarData>("add")?.let { adapter.add(it) }
+            data?.getParcelableExtra<CarData>("add")?.let {
+                adapter.add(it)
+                dao.addCarToDatabase(it)
+
+            }
+
             adapter.sortByCarBrand()
-
-                    dao.addCarToDatabase(a)
-
-            val rrr = dao.getCarsList()
-            Log.i("RRR", rrr.toString())
 
         } else if (requestCode == 2 || requestCode == 3) {
             if (resultCode == RESULT_OK) {
@@ -100,6 +105,7 @@ class CarMainActivity : AppCompatActivity() {
                 val position = data.getIntExtra(POSITION, 0)
                 adapter.edit(carObject, position)
                 adapter.sortByCarBrand()
+                dao.update(carObject)
             }
         }
 

@@ -2,14 +2,26 @@ package com.example.homework5.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
+import androidx.room.PrimaryKey
+import java.util.*
 
-class WorkData(val workName: String,
-               val workDescription: String,
-               val time: String,
-               val progress: String,
-               val coast: String,
-               val color: String,
-               val positionInCarList: Int) : Parcelable {
+@Entity/*(foreignKeys = [ForeignKey(entity = CarData::class,
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("id"),
+        onDelete = CASCADE)])*/
+class WorkData(@ColumnInfo val workName: String,
+               @ColumnInfo val workDescription: String,
+               @ColumnInfo val time: String,
+               @ColumnInfo val progress: String,
+               @ColumnInfo val coast: String,
+               @ColumnInfo val color: String,
+               @ColumnInfo val positionInCarList: Int) : Parcelable {
+
+   @PrimaryKey() var id: String = UUID.randomUUID().toString()
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),

@@ -16,7 +16,7 @@ import com.example.homework5.R
 import com.example.homework5.data.CarData
 
 class CarAdapter(context: Context,
-                 private val cars: ArrayList<CarData>,
+                 var cars: ArrayList<CarData>,
                  private val onCarClickListener: OnCarClickListener) :
         RecyclerView.Adapter<CarAdapter.ViewHolder>() {
 

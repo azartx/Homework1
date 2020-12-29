@@ -11,6 +11,9 @@ import com.example.homework5.R
 import com.example.homework5.adapters.WorkAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
+import com.example.homework5.database.CarsDatabase
+import com.example.homework5.database.WorksDatabaseDAO
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.ArrayList
 
@@ -20,6 +23,7 @@ class WorksActivity : AppCompatActivity() {
     private var carPosition: Int = 0
     private lateinit var adapter: WorkAdapter
     private lateinit var editWorkListener: WorkAdapter.OnWorkClickListener
+    private lateinit var dao: WorksDatabaseDAO
 
     companion object {
         const val OBJECT = "editCar"
@@ -39,6 +43,9 @@ class WorksActivity : AppCompatActivity() {
         val intent = intent
 
         getIntentData(intent, carNameInToolbar)
+
+        // инициализация БД
+        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
 
         // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
@@ -80,6 +87,7 @@ class WorksActivity : AppCompatActivity() {
         if (requestCode == 1 && resultCode == RESULT_OK) {
             data?.getParcelableExtra<WorkData>(OBJECT)?.let {
                 adapter.add(it)
+                dao.addCarToDatabase(it)
             }
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             val position = data?.getIntExtra(POSITION, 0)
