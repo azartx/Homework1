@@ -3,6 +3,7 @@ package com.example.homework5.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,7 @@ import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.WorksDatabaseDAO
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.ArrayList
+import java.util.*
 
 class WorksActivity : AppCompatActivity() {
 
@@ -39,6 +40,7 @@ class WorksActivity : AppCompatActivity() {
 
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         val addWorkActionButton = findViewById<FloatingActionButton>(R.id.addNewWork)
+        val backButton: ImageView = findViewById(R.id.backButton)
 
         val intent = intent
 
@@ -65,13 +67,25 @@ class WorksActivity : AppCompatActivity() {
             }
         }
 
+        // нажата кнопка назад
+        backButton.setOnClickListener { finish() }
+
         // настройка ресайклера и адаптера
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         adapter = WorkAdapter(this, ArrayList(), editWorkListener)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
 
+        checkDataBase()
 
+    }
+
+    private fun checkDataBase() {
+        val workList = dao.getParentWorks(carObject!!.carModelName)
+        if (workList.isNotEmpty()) {
+            adapter.works = workList as ArrayList<WorkData>
+            adapter.notifyDataSetChanged()
+        }
     }
 
     private fun getIntentData(intent: Intent, carNameInToolbar: TextView) {
@@ -86,12 +100,18 @@ class WorksActivity : AppCompatActivity() {
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
             data?.getParcelableExtra<WorkData>(OBJECT)?.let {
+                it.parentCar = carObject!!.carModelName
+                it.id = UUID.randomUUID().toString()
                 adapter.add(it)
                 dao.addCarToDatabase(it)
             }
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             val position = data?.getIntExtra(POSITION, 0)
-            data?.getParcelableExtra<WorkData>(OBJECT)?.let { adapter.edit(it, position!!) }
+            data?.getParcelableExtra<WorkData>(OBJECT)?.let {
+
+                it.parentCar = carObject!!.carModelName
+                adapter.edit(it, position!!)
+            }
         }
 
     }

@@ -76,7 +76,6 @@ class CarAdapter(context: Context,
             } else {
                 //holder.image.setImageURI(carData.carImage.toUri())
                 Glide.with(itemView).load(carData.carImage).into(image)
-                Log.i("FFFF", carData.carImage)
                 cameraNoPhoto.visibility = View.INVISIBLE
             }
 

@@ -15,13 +15,15 @@ class CarData(@ColumnInfo val carOwnerName: String,
               @ColumnInfo val carGosNumber: String,
               @ColumnInfo val carImage: String?) : Parcelable {
 
-    @PrimaryKey(autoGenerate = true) @ColumnInfo var id: Long = 0
+    @PrimaryKey(autoGenerate = true) @ColumnInfo var id: Long? = 0
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString()) {
+
+        parcel.readLong()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -29,6 +31,7 @@ class CarData(@ColumnInfo val carOwnerName: String,
         parcel.writeString(carModelName)
         parcel.writeString(carGosNumber)
         parcel.writeString(carImage)
+        parcel.writeLong(id ?: -1)
     }
 
     override fun describeContents(): Int {
@@ -44,6 +47,5 @@ class CarData(@ColumnInfo val carOwnerName: String,
             return arrayOfNulls(size)
         }
     }
-
 
 }

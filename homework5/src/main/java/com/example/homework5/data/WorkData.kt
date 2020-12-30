@@ -21,7 +21,8 @@ class WorkData(@ColumnInfo val workName: String,
                @ColumnInfo val color: String,
                @ColumnInfo val positionInCarList: Int) : Parcelable {
 
-   @PrimaryKey() var id: String = UUID.randomUUID().toString()
+    @PrimaryKey @ColumnInfo var id: String = "null"
+    @ColumnInfo var parentCar: String? = null
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),
@@ -30,7 +31,10 @@ class WorkData(@ColumnInfo val workName: String,
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
-            parcel.readInt())
+            parcel.readInt()) {
+        parcel.readString().toString()
+        parcel.readString().toString()
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(workName)
@@ -40,6 +44,8 @@ class WorkData(@ColumnInfo val workName: String,
         parcel.writeString(coast)
         parcel.writeString(color)
         parcel.writeInt(positionInCarList)
+        parcel.writeString(id)
+        parcel.writeString(parentCar)
     }
 
     override fun describeContents(): Int {

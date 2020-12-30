@@ -9,6 +9,9 @@ interface WorksDatabaseDAO {
     @Query("SELECT * FROM WorkData")
     fun getCarsList(): List<WorkData>
 
+    @Query("SELECT * FROM WorkData WHERE parentCar LIKE :parentCar")
+    fun getParentWorks(parentCar: String) : List<WorkData>
+
     @Delete
     fun delete(carData: WorkData)
 

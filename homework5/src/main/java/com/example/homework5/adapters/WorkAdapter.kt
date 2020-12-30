@@ -13,7 +13,7 @@ import com.example.homework5.R
 import com.example.homework5.data.WorkData
 
 class WorkAdapter(context: Context,
-                  private val works: ArrayList<WorkData>,
+                  var works: ArrayList<WorkData>,
                   private val onWorkClickListener: WorkAdapter.OnWorkClickListener) :
         RecyclerView.Adapter<WorkAdapter.ViewHolder>() {
 

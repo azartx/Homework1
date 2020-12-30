@@ -83,7 +83,10 @@ class CarMainActivity : AppCompatActivity() {
 
     private fun checkDataBase() {
         val carList = dao.getCarsList()
-        if (carList.isNotEmpty()) adapter.cars = carList as ArrayList<CarData>
+        if (carList.isNotEmpty()) {
+            adapter.cars = carList as ArrayList<CarData>
+            adapter.sortByCarBrand()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -92,7 +95,10 @@ class CarMainActivity : AppCompatActivity() {
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             data?.getParcelableExtra<CarData>("add")?.let {
+                it.id = adapter.itemCount.toLong()
                 adapter.add(it)
+                Log.i("FFFF", it.carOwnerName + it.carModelName + it.carGosNumber + it.id)
+
                 dao.addCarToDatabase(it)
 
             }
@@ -105,6 +111,9 @@ class CarMainActivity : AppCompatActivity() {
                 val position = data.getIntExtra(POSITION, 0)
                 adapter.edit(carObject, position)
                 adapter.sortByCarBrand()
+                carObject.id = position.toLong()
+                Log.i("FFFF", carObject.carOwnerName + carObject.carModelName + carObject.carGosNumber + carObject.id)
+
                 dao.update(carObject)
             }
         }
