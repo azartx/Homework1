@@ -72,12 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
     protected void restoreDataAfterRotate(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            adapter = new DataAdapter(this,
-                    (ArrayList<ContactBody>) savedInstanceState.getSerializable(KEY),
+            adapter = new DataAdapter((ArrayList<ContactBody>) savedInstanceState.getSerializable(KEY),
                     onContactClickListener);
             checkState();
         } else {
-            adapter = new DataAdapter(this, new ArrayList<>(), onContactClickListener);
+            adapter = new DataAdapter(new ArrayList<>(), onContactClickListener);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.app.homework4;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,13 @@ import java.util.ArrayList;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> implements Filterable {
 
-    private final LayoutInflater inflater;
     private final ArrayList<ContactBody> contacts;
     private final ArrayList<ContactBody> contactsCopy;
     private final DataAdapter.OnContactClickListener onContactClickListener;
 
-    DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
+    DataAdapter(ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
         contactsCopy = new ArrayList<>(contacts);
-        ;
-        this.inflater = LayoutInflater.from(context);
         this.onContactClickListener = onContactClickListener;
     }
 
@@ -59,6 +55,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
     @NonNull
     @Override
     public DataAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.item_layout_contact_block, parent, false);
         return new ViewHolder(view);
     }
