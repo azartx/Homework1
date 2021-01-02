@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">homework5</string>
     <string name="edit">Edit</string>
-    <string name="viewbackground">ViewBackground</string>
+    <string name="viewbackground" translatable="false">ViewBackground</string>
     <string name="car_gos_number">car gos number</string>
     <string name="no_image">No photo</string>
     <string name="no_number">no number</string>
