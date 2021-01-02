@@ -10,22 +10,24 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
+import com.example.homework5.data.staticData.Constants
+import com.example.homework5.database.CarsDatabase
+import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CarInfoActivity : AppCompatActivity() {
 
-    private var carObject: CarData? = null
-    private var carPosition: Int = 0
-    private var checkInputActivity = false
+    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var carObject: CarData
+    private var carId: Long = 0
     private lateinit var image: ImageView
     private lateinit var ownerName: TextView
     private lateinit var carName: TextView
     private lateinit var gosNumber: TextView
-
-    companion object {
-        const val OBJECT = "editCar"
-        const val POSITION = "editPosition"
-    }
+    private lateinit var noPhotoTextView: TextView
+    private lateinit var back: ImageView
+    private lateinit var worksButton: FloatingActionButton
+    private lateinit var editButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,43 +35,39 @@ class CarInfoActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val intent = intent
+        // инициализация БД
+        dao = CarsDatabase.init(this).getCarDatabaseDAO()
 
         image = findViewById(R.id.background)
-        val back: ImageView = findViewById(R.id.backButton)
-        val worksButton: FloatingActionButton = findViewById(R.id.viewWorks)
-        val editButton: FloatingActionButton = findViewById(R.id.editActionButton)
+        back = findViewById(R.id.backButton)
+        worksButton = findViewById(R.id.viewWorks)
+        editButton = findViewById(R.id.editActionButton)
         ownerName = findViewById(R.id.getOwnerName)
         carName = findViewById(R.id.getCarName)
         gosNumber = findViewById(R.id.getGosNumber)
+        noPhotoTextView = findViewById(R.id.noPhotoTextView)
 
         // нажата кнопка НАЗАД
-        back.setOnClickListener {
-            if (checkInputActivity) {
-                intent.putExtra(OBJECT, carObject)
-                intent.putExtra(POSITION, carObject)
-                setResult(RESULT_OK, intent)
-                finish()
-            }
-            finish()
-        }
+        back.setOnClickListener { finish() }
 
         // нажата кнопка РЕДАКТИРОВАТЬ
         editButton.setOnClickListener {
-            val editIntent = Intent(this, EditCarActivity::class.java)
-            editIntent.putExtra(OBJECT, carObject)
-            editIntent.putExtra(POSITION, carPosition)
-            startActivityForResult(editIntent, 1)
+            Intent(this, EditCarActivity::class.java).apply {
+                putExtra(Constants.POSITION_CAR_IN_DB, carId)
+                startActivityForResult(this, 1)
+            }
         }
 
-        if (!checkInputActivity) getIntentData(intent)
+        getIntentData(intent)
+        carObject = dao.getCar(carId)
 
         // нажата кнопка РАБОТЫ
         worksButton.setOnClickListener {
-            val worksIntent = Intent(this, WorksActivity::class.java)
-            worksIntent.putExtra(OBJECT, carObject)
-            worksIntent.putExtra(POSITION, carPosition)
-            startActivityForResult(worksIntent, 2)
+            Intent(this, WorksActivity::class.java).apply {
+                putExtra("modelName", carObject.carModelName)
+                putExtra(Constants.POSITION_CAR_IN_DB, carId)
+                startActivityForResult(this, 2)
+            }
         }
 
         fillPage()
@@ -77,21 +75,20 @@ class CarInfoActivity : AppCompatActivity() {
     }
 
     private fun fillPage() {
-        ownerName.text = carObject?.carOwnerName
-        carName.text = carObject?.carModelName
-        gosNumber.text = carObject?.carGosNumber
-        if (carObject?.carImage == null) {
+        ownerName.text = carObject.carOwnerName
+        carName.text = carObject.carModelName
+        gosNumber.text = carObject.carGosNumber
+        if (carObject.carImage == null) {
             image.setImageResource(R.drawable.ic_background_view)
         } else {
-            image.setImageURI(carObject!!.carImage!!.toUri())
-            findViewById<TextView>(R.id.noPhotoTextView).visibility = View.INVISIBLE
-
+            image.setImageURI(carObject.carImage?.toUri())
+            noPhotoTextView.visibility = View.INVISIBLE
         }
     }
 
     private fun getIntentData(intent: Intent) {
-        carObject = intent.getParcelableExtra(OBJECT)
-        carPosition = intent.getIntExtra(POSITION, 0)
+        carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
+        carObject = dao.getCar(carId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -99,14 +96,14 @@ class CarInfoActivity : AppCompatActivity() {
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
             if (data != null) {
-                carObject = data.getParcelableExtra(OBJECT)
-                carPosition = data.getIntExtra(POSITION, 0)
-                checkInputActivity = true
+                val getCarData = data.getParcelableExtra<CarData>(Constants.OBJECT)
+                if (getCarData != null) carObject = getCarData
+                carId = data.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
+                carObject = dao.getCar(carId)
                 fillPage()
             }
         }
 
     }
-
 
 }

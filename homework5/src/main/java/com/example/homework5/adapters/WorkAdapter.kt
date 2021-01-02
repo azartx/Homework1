@@ -63,9 +63,9 @@ class WorkAdapter(context: Context,
         private val image: ImageView = view.findViewById(R.id.workImage)
         private val parent: CardView = view.findViewById(R.id.parent)
 
-        fun bind(workData: WorkData, holder: WorkAdapter.ViewHolder, onWorkClickListener: WorkAdapter.OnWorkClickListener) {
+        fun bind(workData: WorkData, holder: ViewHolder, onWorkClickListener: OnWorkClickListener) {
 
-            holder.image.setColorFilter(Color.parseColor(workData.color))
+            holder.image.setColorFilter(itemView.resources.getColor(workData.color, itemView.context.theme))
             holder.typeOfWork.text = workData.workName
             holder.time.text = workData.time
             holder.progress.text = workData.progress

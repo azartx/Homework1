@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.R
 import com.example.homework5.adapters.WorkAdapter
-import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
+import com.example.homework5.data.staticData.Constants
+import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
 import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.WorksDatabaseDAO
 
@@ -20,29 +21,28 @@ import java.util.*
 
 class WorksActivity : AppCompatActivity() {
 
-    private var carObject: CarData? = null
-    private var carPosition: Int = 0
-    private lateinit var adapter: WorkAdapter
+    private var parentCar: String? = null
+    private var carId: Long = 0
+    private lateinit var localAdapter: WorkAdapter
     private lateinit var editWorkListener: WorkAdapter.OnWorkClickListener
     private lateinit var dao: WorksDatabaseDAO
 
-    companion object {
-        const val OBJECT = "editCar"
-        const val POSITION = "editPosition"
-    }
+    private lateinit var toolbar: Toolbar
+    private lateinit var recycler: RecyclerView
+    private lateinit var addWorkActionButton: FloatingActionButton
+    private lateinit var carNameInToolbar: TextView
+    private lateinit var backButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_works)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        val carNameInToolbar = findViewById<TextView>(R.id.carNameInToolbar)
+        toolbar = findViewById(R.id.toolbar)
+        carNameInToolbar = findViewById(R.id.carNameInToolbar)
         setSupportActionBar(toolbar)
 
-        val recycler: RecyclerView = findViewById(R.id.recyclerView)
-        val addWorkActionButton = findViewById<FloatingActionButton>(R.id.addNewWork)
-        val backButton: ImageView = findViewById(R.id.backButton)
-
-        val intent = intent
+        recycler = findViewById(R.id.recyclerView)
+        addWorkActionButton = findViewById(R.id.addNewWork)
+        backButton = findViewById(R.id.backButton)
 
         getIntentData(intent, carNameInToolbar)
 
@@ -51,19 +51,20 @@ class WorksActivity : AppCompatActivity() {
 
         // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
-            val addWorkIntent = Intent(this, AddWorkActivity::class.java)
-            addWorkIntent.putExtra(OBJECT, carObject)
-            addWorkIntent.putExtra(POSITION, carPosition)
-            startActivityForResult(addWorkIntent, 1)
+            Intent(this, AddWorkActivity::class.java).apply {
+                putExtra(PARENT_CAR, parentCar)
+                startActivityForResult(this, 1)
+            }
         }
 
         // нажатие на работу
         editWorkListener = object : WorkAdapter.OnWorkClickListener {
             override fun onWorkClick(workData: WorkData, position: Int) {
-                val editWorkIntent = Intent(applicationContext, EditWorkActivity::class.java)
-                editWorkIntent.putExtra(OBJECT, workData)
-                editWorkIntent.putExtra(POSITION, position)
-                startActivityForResult(editWorkIntent, 2)
+                Intent(applicationContext, EditWorkActivity::class.java).apply {
+                    //putExtra(Constants.OBJECT, workData)
+                    putExtra(Constants.POSITION_CAR_IN_DB, workData.id)
+                    startActivityForResult(this, 2)
+                }
             }
         }
 
@@ -71,49 +72,34 @@ class WorksActivity : AppCompatActivity() {
         backButton.setOnClickListener { finish() }
 
         // настройка ресайклера и адаптера
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        adapter = WorkAdapter(this, ArrayList(), editWorkListener)
-        recycler.layoutManager = layoutManager
-        recycler.adapter = adapter
-
+        val localLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        localAdapter = WorkAdapter(this, ArrayList(), editWorkListener)
+        recycler.apply {
+            layoutManager = localLayoutManager
+            adapter = localAdapter
+        }
         checkDataBase()
 
     }
 
     private fun checkDataBase() {
-        val workList = dao.getParentWorks(carObject!!.carModelName)
+        val workList = dao.getParentWorks(parentCar)
         if (workList.isNotEmpty()) {
-            adapter.works = workList as ArrayList<WorkData>
-            adapter.notifyDataSetChanged()
+            localAdapter.works = workList as ArrayList<WorkData>
+            localAdapter.notifyDataSetChanged()
         }
     }
 
     private fun getIntentData(intent: Intent, carNameInToolbar: TextView) {
-        carObject = intent.getParcelableExtra(OBJECT)
-        carPosition = intent.getIntExtra(POSITION, 0)
+        carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
+        parentCar = intent.getStringExtra("modelName")
 
-        carNameInToolbar.text = carObject?.carModelName ?: getString(R.string.car_works)
+        carNameInToolbar.text = parentCar ?: getString(R.string.car_works)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            data?.getParcelableExtra<WorkData>(OBJECT)?.let {
-                it.parentCar = carObject!!.carModelName
-                it.id = UUID.randomUUID().toString()
-                adapter.add(it)
-                dao.addCarToDatabase(it)
-            }
-        } else if (requestCode == 2 && resultCode == RESULT_OK) {
-            val position = data?.getIntExtra(POSITION, 0)
-            data?.getParcelableExtra<WorkData>(OBJECT)?.let {
-
-                it.parentCar = carObject!!.carModelName
-                adapter.edit(it, position!!)
-            }
-        }
-
+        checkDataBase()
     }
 
 }

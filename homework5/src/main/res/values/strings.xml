@@ -35,4 +35,5 @@
     <string name="selectProgress">Select one of the work progress buttons</string>
     <string name="fillAllFields">Fill all fields!</string>
     <string name="car_works">Car works</string>
+    <string name="complete">complete</string>
 </resources>

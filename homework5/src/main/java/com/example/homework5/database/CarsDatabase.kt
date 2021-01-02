@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
 
-@Database(entities = [CarData::class, WorkData::class], version = 2)
+@Database(entities = [CarData::class, WorkData::class], version = 3)
 abstract class CarsDatabase : RoomDatabase() {
 
     abstract fun getCarDatabaseDAO(): CarsDatabaseDAO

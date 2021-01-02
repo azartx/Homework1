@@ -18,10 +18,9 @@ class WorkData(@ColumnInfo val workName: String,
                @ColumnInfo val time: String,
                @ColumnInfo val progress: String,
                @ColumnInfo val coast: String,
-               @ColumnInfo val color: String,
-               @ColumnInfo val positionInCarList: Int) : Parcelable {
+               @ColumnInfo val color: Int) : Parcelable {
 
-    @PrimaryKey @ColumnInfo var id: String = "null"
+    @PrimaryKey(autoGenerate = true) @ColumnInfo var id: Long? = null
     @ColumnInfo var parentCar: String? = null
 
     constructor(parcel: Parcel) : this(
@@ -30,9 +29,8 @@ class WorkData(@ColumnInfo val workName: String,
             parcel.readString().toString(),
             parcel.readString().toString(),
             parcel.readString().toString(),
-            parcel.readString().toString(),
             parcel.readInt()) {
-        parcel.readString().toString()
+        parcel.readLong()
         parcel.readString().toString()
     }
 
@@ -42,9 +40,8 @@ class WorkData(@ColumnInfo val workName: String,
         parcel.writeString(time)
         parcel.writeString(progress)
         parcel.writeString(coast)
-        parcel.writeString(color)
-        parcel.writeInt(positionInCarList)
-        parcel.writeString(id)
+        parcel.writeInt(color)
+        parcel.writeLong(id ?: -1)
         parcel.writeString(parentCar)
     }
 

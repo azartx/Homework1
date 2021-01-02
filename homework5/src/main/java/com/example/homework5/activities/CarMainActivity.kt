@@ -13,23 +13,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.*
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
+import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.*
 import kotlin.collections.ArrayList
 
 class CarMainActivity : AppCompatActivity() {
 
-    private lateinit var adapter: CarAdapter
+    private lateinit var localAdapter: CarAdapter
 
     private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
-
-    companion object {
-        const val OBJECT = "editCar"
-        const val POSITION = "editPosition"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,14 +35,12 @@ class CarMainActivity : AppCompatActivity() {
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         val addActionButton: FloatingActionButton = findViewById(R.id.addNewCar)
 
-        var intent: Intent
-
         // инициализация БД
         dao = CarsDatabase.init(this).getCarDatabaseDAO()
 
         //  добавление новой машины
         addActionButton.setOnClickListener {
-            intent = Intent(this, AddCarActivity::class.java)
+            val intent = Intent(this, AddCarActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
@@ -56,26 +49,28 @@ class CarMainActivity : AppCompatActivity() {
             override fun onCarClick(carData: CarData, position: Int, flag: Int) {
                 when (flag) {
                     1 -> {
-                        intent = Intent(applicationContext, EditCarActivity::class.java)
-                        intent.putExtra(OBJECT, carData)
-                        intent.putExtra(POSITION, position)
-                        startActivityForResult(intent, 2)
+                        Intent(applicationContext, EditCarActivity::class.java).apply {
+                            putExtra(Constants.POSITION_CAR_IN_DB, carData.id)
+                            startActivityForResult(this, 2)
+                        }
                     }
                     2 -> {
-                        intent = Intent(applicationContext, CarInfoActivity::class.java)
-                        intent.putExtra(OBJECT, carData)
-                        intent.putExtra(POSITION, position)
-                        startActivityForResult(intent, 3)
+                        Intent(applicationContext, CarInfoActivity::class.java).apply {
+                            putExtra(Constants.POSITION_CAR_IN_DB, carData.id)
+                            startActivityForResult(this, 3)
+                        }
                     }
                 }
             }
         }
 
         // настройка ресайклера и адаптера
-        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        adapter = CarAdapter(this, ArrayList(), onEditButtonClick)
-        recycler.layoutManager = layoutManager
-        recycler.adapter = adapter
+        val localLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        localAdapter = CarAdapter(this, ArrayList(), onEditButtonClick)
+        recycler.apply {
+            layoutManager = localLayoutManager
+            adapter = localAdapter
+        }
 
         checkDataBase()
 
@@ -84,41 +79,14 @@ class CarMainActivity : AppCompatActivity() {
     private fun checkDataBase() {
         val carList = dao.getCarsList()
         if (carList.isNotEmpty()) {
-            adapter.cars = carList as ArrayList<CarData>
-            adapter.sortByCarBrand()
+            localAdapter.cars = carList as ArrayList<CarData>
+            localAdapter.sortByCarBrand()
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-
-            data?.getParcelableExtra<CarData>("add")?.let {
-                it.id = adapter.itemCount.toLong()
-                adapter.add(it)
-                Log.i("FFFF", it.carOwnerName + it.carModelName + it.carGosNumber + it.id)
-
-                dao.addCarToDatabase(it)
-
-            }
-
-            adapter.sortByCarBrand()
-
-        } else if (requestCode == 2 || requestCode == 3) {
-            if (resultCode == RESULT_OK) {
-                val carObject = data?.getParcelableExtra<CarData>(OBJECT)!!
-                val position = data.getIntExtra(POSITION, 0)
-                adapter.edit(carObject, position)
-                adapter.sortByCarBrand()
-                carObject.id = position.toLong()
-                Log.i("FFFF", carObject.carOwnerName + carObject.carModelName + carObject.carGosNumber + carObject.id)
-
-                dao.update(carObject)
-            }
-        }
-
-
+            checkDataBase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
