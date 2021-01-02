@@ -125,7 +125,7 @@ class EditCarActivity : AppCompatActivity() {
         return CarData(ownerName.text.toString(),
                 carName.text.toString(),
                 gosNumber.text.toString(),
-                photoFile?.path ?: carObject?.carImage).also { it.id = carId }
+                photoUri.toString()).also { it.id = carId }
     }
 
     private fun getIntentExtras(intent: Intent) {

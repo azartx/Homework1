@@ -3,6 +3,7 @@ package com.example.homework5.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -21,6 +22,7 @@ import java.util.*
 
 class WorksActivity : AppCompatActivity() {
 
+    private lateinit var logoTextView: TextView
     private var parentCar: String? = null
     private var carId: Long = 0
     private lateinit var localAdapter: WorkAdapter
@@ -43,6 +45,7 @@ class WorksActivity : AppCompatActivity() {
         recycler = findViewById(R.id.recyclerView)
         addWorkActionButton = findViewById(R.id.addNewWork)
         backButton = findViewById(R.id.backButton)
+        logoTextView = findViewById(R.id.worksIsEmptyTextView)
 
         getIntentData(intent, carNameInToolbar)
 
@@ -61,7 +64,6 @@ class WorksActivity : AppCompatActivity() {
         editWorkListener = object : WorkAdapter.OnWorkClickListener {
             override fun onWorkClick(workData: WorkData, position: Int) {
                 Intent(applicationContext, EditWorkActivity::class.java).apply {
-                    //putExtra(Constants.OBJECT, workData)
                     putExtra(Constants.POSITION_CAR_IN_DB, workData.id)
                     startActivityForResult(this, 2)
                 }
@@ -82,10 +84,16 @@ class WorksActivity : AppCompatActivity() {
 
     }
 
+    private fun visibilityForLogoTextView() {
+        if (localAdapter.works.isNotEmpty()) logoTextView.visibility = View.INVISIBLE
+        else logoTextView.visibility = View.VISIBLE
+    }
+
     private fun checkDataBase() {
         val workList = dao.getParentWorks(parentCar)
         if (workList.isNotEmpty()) {
             localAdapter.works = workList as ArrayList<WorkData>
+            visibilityForLogoTextView()
             localAdapter.notifyDataSetChanged()
         }
     }

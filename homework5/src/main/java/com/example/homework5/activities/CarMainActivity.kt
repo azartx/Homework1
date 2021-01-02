@@ -1,10 +1,13 @@
 package com.example.homework5.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +28,7 @@ class CarMainActivity : AppCompatActivity() {
 
     private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
+    private lateinit var logoTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +38,7 @@ class CarMainActivity : AppCompatActivity() {
 
         val recycler: RecyclerView = findViewById(R.id.recyclerView)
         val addActionButton: FloatingActionButton = findViewById(R.id.addNewCar)
+        logoTextView = findViewById(R.id.listIsEmptyTextView)
 
         // инициализация БД
         dao = CarsDatabase.init(this).getCarDatabaseDAO()
@@ -71,7 +76,6 @@ class CarMainActivity : AppCompatActivity() {
             layoutManager = localLayoutManager
             adapter = localAdapter
         }
-
         checkDataBase()
 
     }
@@ -81,12 +85,18 @@ class CarMainActivity : AppCompatActivity() {
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
             localAdapter.sortByCarBrand()
+            visibilityForLogoTextView()
         }
+    }
+
+    private fun visibilityForLogoTextView() {
+        if (localAdapter.cars.isNotEmpty()) logoTextView.visibility = View.INVISIBLE
+        else logoTextView.visibility = View.VISIBLE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-            checkDataBase()
+        checkDataBase()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
