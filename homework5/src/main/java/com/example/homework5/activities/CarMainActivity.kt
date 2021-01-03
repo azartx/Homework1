@@ -1,26 +1,26 @@
 package com.example.homework5.activities
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.homework5.*
+import com.example.homework5.R
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlin.collections.ArrayList
+
 
 class CarMainActivity : AppCompatActivity() {
 
@@ -29,15 +29,20 @@ class CarMainActivity : AppCompatActivity() {
     private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
     private lateinit var logoTextView: TextView
+    private lateinit var recycler: RecyclerView
+    private lateinit var addActionButton: FloatingActionButton
+    private lateinit var toolbar: Toolbar
+    private lateinit var searchView: SearchView
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_main)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val recycler: RecyclerView = findViewById(R.id.recyclerView)
-        val addActionButton: FloatingActionButton = findViewById(R.id.addNewCar)
+        recycler = findViewById(R.id.recyclerView)
+        addActionButton = findViewById(R.id.addNewCar)
         logoTextView = findViewById(R.id.listIsEmptyTextView)
 
         // инициализация БД
@@ -78,12 +83,14 @@ class CarMainActivity : AppCompatActivity() {
         }
         checkDataBase()
 
+
     }
 
     private fun checkDataBase() {
         val carList = dao.getCarsList()
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
+            localAdapter.carsCopy = carList as ArrayList<CarData>
             localAdapter.sortByCarBrand()
             visibilityForLogoTextView()
         }
@@ -102,12 +109,26 @@ class CarMainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
+
+        searchView = menu?.findItem(R.id.search)?.actionView as SearchView
+        searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                localAdapter.filter?.filter(newText)
+                return false
+            }
+        })
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.search) {
-            val searchView = item.actionView as SearchView
+            searchView = item.actionView as SearchView
         }
         return super.onOptionsItemSelected(item)
     }

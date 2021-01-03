@@ -1,31 +1,33 @@
 package com.example.homework5.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 
+
 class CarAdapter(context: Context,
                  var cars: ArrayList<CarData>,
                  private val onCarClickListener: OnCarClickListener) :
-        RecyclerView.Adapter<CarAdapter.ViewHolder>() {
+        RecyclerView.Adapter<CarAdapter.ViewHolder>(), Filterable {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    lateinit var carsCopy: ArrayList<CarData>
 
     interface OnCarClickListener {
         fun onCarClick(carData: CarData, position: Int, flag: Int)
     }
 
+    /*       // эти три братишки перестали иметь ценность, после того, как мы променяли их на DAO
     fun add(carData: CarData) {
         cars.add(carData)
         notifyItemChanged(cars.indexOf(carData))
@@ -39,7 +41,7 @@ class CarAdapter(context: Context,
     fun remove(position: Int) {
         cars.removeAt(position)
         notifyDataSetChanged()
-    }
+    }*/
 
     private fun selector(p: CarData): String = p.carModelName
 
@@ -98,6 +100,36 @@ class CarAdapter(context: Context,
 
     override fun getItemCount(): Int {
         return cars.size
+    }
+
+    override fun getFilter(): Filter {
+        return filter
+    }
+
+    private val filter: Filter = object : Filter() {
+        override fun performFiltering(charSequence: CharSequence): FilterResults {
+            val filteredList: ArrayList<CarData> = arrayListOf()
+            if (charSequence != null) {
+                val filterPattern = charSequence.toString().toLowerCase().trim { it <= ' ' }
+                for (item in carsCopy) {
+                    if (item.carModelName.toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item)
+                    }
+                }
+            }
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
+
+                cars.clear()
+                cars.addAll(filterResults.values as Collection<CarData>)
+                notifyDataSetChanged()
+
+
+        }
     }
 
 }

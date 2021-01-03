@@ -1,5 +1,6 @@
 package com.example.homework5.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -84,6 +85,7 @@ class EditCarActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun getPermissions(intentGetPhoto: Intent) {
         val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(intentGetPhoto,
                 PackageManager.MATCH_DEFAULT_ONLY)
