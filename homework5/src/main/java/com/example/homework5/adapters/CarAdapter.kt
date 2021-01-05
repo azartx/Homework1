@@ -21,7 +21,7 @@ class CarAdapter(context: Context,
         RecyclerView.Adapter<CarAdapter.ViewHolder>(), Filterable {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    lateinit var carsCopy: ArrayList<CarData>
+    var carsCopy: ArrayList<CarData> = ArrayList(cars)
 
     interface OnCarClickListener {
         fun onCarClick(carData: CarData, position: Int, flag: Int)
@@ -47,6 +47,7 @@ class CarAdapter(context: Context,
 
     fun sortByCarBrand() {
         cars.sortBy { selector(it) }
+        carsCopy.sortBy { selector(it) }
         notifyDataSetChanged()
     }
 
@@ -106,14 +107,16 @@ class CarAdapter(context: Context,
         return filter
     }
 
-    private val filter: Filter = object : Filter() {
-        override fun performFiltering(charSequence: CharSequence): FilterResults {
-            val filteredList: ArrayList<CarData> = arrayListOf()
-            if (charSequence != null) {
-                val filterPattern = charSequence.toString().toLowerCase().trim { it <= ' ' }
-                for (item in carsCopy) {
-                    if (item.carModelName.toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item)
+    private val filter: Filter = object: Filter(){
+        override fun performFiltering(chars: CharSequence?): FilterResults {
+            val filteredList = arrayListOf<CarData>()
+            if (chars == null || chars.isEmpty()) {
+                filteredList.addAll(carsCopy)
+            }else{
+                val filterPattern = chars.toString().toLowerCase().trim()
+                carsCopy.forEach {
+                    if (it.carModelName.toLowerCase().contains(filterPattern)||it.carModelName.toLowerCase().contains(filterPattern)) {
+                        filteredList.add(it)
                     }
                 }
             }
@@ -122,13 +125,10 @@ class CarAdapter(context: Context,
             return results
         }
 
-        override fun publishResults(charSequence: CharSequence, filterResults: FilterResults) {
-
-                cars.clear()
-                cars.addAll(filterResults.values as Collection<CarData>)
-                notifyDataSetChanged()
-
-
+        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+            cars.clear()
+            cars.addAll(p1?.values as ArrayList<CarData>);
+            notifyDataSetChanged()
         }
     }
 

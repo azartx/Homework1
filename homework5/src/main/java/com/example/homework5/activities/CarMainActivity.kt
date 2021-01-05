@@ -2,9 +2,7 @@ package com.example.homework5.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -20,6 +18,10 @@ import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class CarMainActivity : AppCompatActivity() {
@@ -33,6 +35,7 @@ class CarMainActivity : AppCompatActivity() {
     private lateinit var addActionButton: FloatingActionButton
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
+    private lateinit var fileOutputStream: FileOutputStream
     private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +43,7 @@ class CarMainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_car_main)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        writeLog()
 
         recycler = findViewById(R.id.recyclerView)
         addActionButton = findViewById(R.id.addNewCar)
@@ -90,7 +94,7 @@ class CarMainActivity : AppCompatActivity() {
         val carList = dao.getCarsList()
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
-            localAdapter.carsCopy = carList as ArrayList<CarData>
+            localAdapter.carsCopy = carList
             localAdapter.sortByCarBrand()
             visibilityForLogoTextView()
         }
@@ -117,8 +121,8 @@ class CarMainActivity : AppCompatActivity() {
                 return false
             }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                localAdapter.filter?.filter(newText)
+            override fun onQueryTextChange(chars: String): Boolean {
+                localAdapter.filter.filter(chars)
                 return false
             }
         })
@@ -126,11 +130,23 @@ class CarMainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.search) {
             searchView = item.actionView as SearchView
         }
         return super.onOptionsItemSelected(item)
+    }*/
+
+    private fun writeLog() {
+        val time = SimpleDateFormat("dd/M/yyyy hh:mm:ss",
+                Locale.getDefault())
+                .format(Date()).toString()
+
+        openFileOutput("appLog.txt", MODE_APPEND).apply {
+            write(("\n" + time).toByteArray())
+            close()
+        }
+
     }
 
 }
