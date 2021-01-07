@@ -4,11 +4,14 @@ import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.WorksDatabaseDAO
+//import com.example.homework5.database.WorksDatabaseDAO
 
+/********************************
+ * Класс относится к Homework6.1
+ * Content provider
+ ********************************/
 
-private lateinit var dao: WorksDatabaseDAO
+//private lateinit var dao: WorksDatabaseDAO
 
 class CarWorksProvider: ContentProvider() {
 

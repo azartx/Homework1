@@ -1,12 +1,13 @@
 package com.example.homework5.activities
 
+import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
@@ -21,6 +22,16 @@ class EditWorkActivity : AppCompatActivity() {
     private var workId: Long = 0
     private var color: Int? = null
     private var progress: String? = null
+    private lateinit var time: TextView
+    private lateinit var workNameEditText: EditText
+    private lateinit var workDescriptionEditText: EditText
+    private lateinit var workCoastEditText: EditText
+    private lateinit var pending: ImageView
+    private lateinit var inProgress: ImageView
+    private lateinit var completed: ImageView
+    private lateinit var submit: ImageView
+    private lateinit var backButton: ImageView
+    private lateinit var removeButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,15 +44,16 @@ class EditWorkActivity : AppCompatActivity() {
 
         getIntentData(intent)
 
-        val time: TextView = findViewById(R.id.setTime)
-        val workNameEditText: EditText = findViewById(R.id.workNameEditText)
-        val workDescriptionEditText: EditText = findViewById(R.id.descriptionEditText)
-        val workCoastEditText: EditText = findViewById(R.id.coastEditText)
-        val pending: ImageView = findViewById(R.id.pending)
-        val inProgress: ImageView = findViewById(R.id.inProgress)
-        val completed: ImageView = findViewById(R.id.completed)
-        val submit: ImageView = findViewById(R.id.submitButton)
-        val backButton: ImageView = findViewById(R.id.backButton)
+        time = findViewById(R.id.setTime)
+        workNameEditText = findViewById(R.id.workNameEditText)
+        workDescriptionEditText = findViewById(R.id.descriptionEditText)
+        workCoastEditText = findViewById(R.id.coastEditText)
+        pending = findViewById(R.id.pending)
+        inProgress = findViewById(R.id.inProgress)
+        completed = findViewById(R.id.completed)
+        submit = findViewById(R.id.submitButton)
+        backButton = findViewById(R.id.backButton)
+        removeButton = findViewById(R.id.removeButton)
 
         findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
                 ?: getString(R.string.edit)
@@ -67,6 +79,11 @@ class EditWorkActivity : AppCompatActivity() {
 
         // нажата кнопка НАЗАД
         backButton.setOnClickListener { finish() }
+
+        // нажата кнопка УДАЛИТЬ
+        removeButton.setOnClickListener {
+            showRemoveDialog()
+        }
 
         // Нажата кнопка SUBMIT
         submit.setOnClickListener {
@@ -157,6 +174,22 @@ class EditWorkActivity : AppCompatActivity() {
                 color!!).also {
             it.parentCar = workObject?.parentCar
             it.id = workObject?.id
+        }
+    }
+
+    private fun showRemoveDialog() {
+        AlertDialog.Builder(this).apply {
+            setTitle(getString(R.string.remove_work))
+            setMessage(getString(R.string.alertRemoveWorkMessage))
+            setPositiveButton(getString(R.string.yesButton)) { _, _ ->
+                workObject?.let { dao.delete(it) }
+                setResult(RESULT_OK, Intent())
+                finish()
+            }
+            setNegativeButton(getString(R.string.cancleButton)) { dialogInterface, _ -> dialogInterface.cancel() }
+            setCancelable(false)
+            create()
+            show()
         }
     }
 

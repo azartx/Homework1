@@ -14,7 +14,10 @@ abstract class CarsDatabase : RoomDatabase() {
     abstract fun getWorkDatabaseDAO(): WorksDatabaseDAO
 
     companion object {
-        fun init(context: Context) = Room.databaseBuilder(context, CarsDatabase::class.java, "database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
+        fun init(context: Context) = Room.databaseBuilder(context, CarsDatabase::class.java, "database")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build()
 
     }
 }

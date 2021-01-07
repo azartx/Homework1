@@ -1,7 +1,11 @@
 package com.example.homework5.database
 
-import androidx.room.*
-import com.example.homework5.data.CarData
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Delete
+import androidx.room.Update
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import com.example.homework5.data.WorkData
 
 @Dao
@@ -24,4 +28,5 @@ interface WorksDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addCarToDatabase(entity: WorkData)
+
 }

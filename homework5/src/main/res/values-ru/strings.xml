@@ -36,4 +36,8 @@
     <string name="fillAllFields">Заполните все поля!</string>
     <string name="car_works">Работы по машине</string>
     <string name="complete">Выполнено</string>
+    <string name="remove_work">Удалить работу</string>
+    <string name="alertRemoveWorkMessage">Вы уверены, что хотите удалить эту работу?</string>
+    <string name="yesButton">Да</string>
+    <string name="cancleButton">Отмена</string>
 </resources>

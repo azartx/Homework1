@@ -5,9 +5,6 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
-import kotlin.collections.ArrayList
-import java.io.File as File
 
 @Entity
 class CarData(@ColumnInfo val carOwnerName: String,
@@ -15,7 +12,9 @@ class CarData(@ColumnInfo val carOwnerName: String,
               @ColumnInfo val carGosNumber: String,
               @ColumnInfo val carImage: String?) : Parcelable {
 
-    @PrimaryKey(autoGenerate = true) @ColumnInfo var id: Long? = null
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo
+    var id: Long? = null
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),

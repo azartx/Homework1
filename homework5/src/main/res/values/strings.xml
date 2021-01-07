@@ -36,4 +36,8 @@
     <string name="fillAllFields">Fill all fields!</string>
     <string name="car_works">Car works</string>
     <string name="complete">complete</string>
+    <string name="remove_work">Remove work</string>
+    <string name="alertRemoveWorkMessage">Are you sure to remove this work?</string>
+    <string name="yesButton">Yes</string>
+    <string name="cancleButton">Cancel</string>
 </resources>

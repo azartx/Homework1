@@ -1,7 +1,6 @@
 package com.example.homework5.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.example.homework5.data.WorkData
 
 class WorkAdapter(context: Context,
                   var works: ArrayList<WorkData>,
-                  private val onWorkClickListener: WorkAdapter.OnWorkClickListener) :
+                  private val onWorkClickListener: OnWorkClickListener) :
         RecyclerView.Adapter<WorkAdapter.ViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -23,28 +22,13 @@ class WorkAdapter(context: Context,
         fun onWorkClick(workData: WorkData, position: Int)
     }
 
-    fun add(workData: WorkData) {
-        works.add(workData)
-        notifyItemChanged(works.indexOf(workData))
-    }
-
-    fun edit(workData: WorkData, position: Int) {
-        works[position] = workData
-        notifyDataSetChanged()
-    }
-
-    fun remove(position: Int) {
-        works.removeAt(position)
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = inflater.inflate(R.layout.item_work_list, parent, false)
 
-        return WorkAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: WorkAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val workData: WorkData = works[position]
 
         holder.bind(workData, holder, onWorkClickListener)
@@ -75,8 +59,6 @@ class WorkAdapter(context: Context,
             holder.parent.setOnClickListener {
                 onWorkClickListener.onWorkClick(workData, adapterPosition)
             }
-
-
         }
 
     }

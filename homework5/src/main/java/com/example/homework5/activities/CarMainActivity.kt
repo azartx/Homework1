@@ -18,16 +18,15 @@ import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.CarsDatabase
 import com.example.homework5.database.CarsDatabaseDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
 import kotlin.collections.ArrayList
 
 
 class CarMainActivity : AppCompatActivity() {
 
     private lateinit var localAdapter: CarAdapter
-
     private lateinit var dao: CarsDatabaseDAO
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
     private lateinit var logoTextView: TextView
@@ -35,8 +34,6 @@ class CarMainActivity : AppCompatActivity() {
     private lateinit var addActionButton: FloatingActionButton
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
-    private lateinit var fileOutputStream: FileOutputStream
-    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,13 +127,6 @@ class CarMainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.search) {
-            searchView = item.actionView as SearchView
-        }
-        return super.onOptionsItemSelected(item)
-    }*/
-
     private fun writeLog() {
         val time = SimpleDateFormat("dd/M/yyyy hh:mm:ss",
                 Locale.getDefault())
@@ -146,7 +136,6 @@ class CarMainActivity : AppCompatActivity() {
             write(("\n" + time).toByteArray())
             close()
         }
-
     }
 
 }

@@ -21,7 +21,6 @@ import com.example.homework5.database.CarsDatabaseDAO
 import java.io.File
 import java.util.UUID
 
-
 class AddCarActivity : AppCompatActivity() {
 
     private lateinit var image: ImageView

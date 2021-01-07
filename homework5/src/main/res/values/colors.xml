@@ -11,5 +11,4 @@
     <color name="inProgressColor">#FF8C00</color>
     <color name="completeColor">#00FF00</color>
     <color name="defaultColor">#616161</color>
-
 </resources>

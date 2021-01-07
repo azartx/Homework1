@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.homework5.R
 import com.example.homework5.data.CarData
-
+import java.util.Locale
+import kotlin.collections.ArrayList
 
 class CarAdapter(context: Context,
                  var cars: ArrayList<CarData>,
@@ -77,7 +78,6 @@ class CarAdapter(context: Context,
             if (carData.carImage == null) {
                 holder.image.setImageResource(R.drawable.ic_background_view)
             } else {
-                //holder.image.setImageURI(carData.carImage.toUri())
                 Glide.with(itemView).load(carData.carImage).into(image)
                 cameraNoPhoto.visibility = View.INVISIBLE
             }
@@ -107,15 +107,18 @@ class CarAdapter(context: Context,
         return filter
     }
 
-    private val filter: Filter = object: Filter(){
+    private val filter: Filter = object : Filter() {
         override fun performFiltering(chars: CharSequence?): FilterResults {
             val filteredList = arrayListOf<CarData>()
             if (chars == null || chars.isEmpty()) {
                 filteredList.addAll(carsCopy)
-            }else{
-                val filterPattern = chars.toString().toLowerCase().trim()
+            } else {
+                val filterPattern = chars.toString().toLowerCase(Locale.getDefault()).trim()
                 carsCopy.forEach {
-                    if (it.carModelName.toLowerCase().contains(filterPattern)||it.carModelName.toLowerCase().contains(filterPattern)) {
+                    if (it.carModelName.toLowerCase(Locale.getDefault())
+                                    .contains(filterPattern) || it.carModelName
+                                    .toLowerCase(Locale.getDefault())
+                                    .contains(filterPattern)) {
                         filteredList.add(it)
                     }
                 }
@@ -125,9 +128,9 @@ class CarAdapter(context: Context,
             return results
         }
 
-        override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+        override fun publishResults(chars: CharSequence?, results: FilterResults?) {
             cars.clear()
-            cars.addAll(p1?.values as ArrayList<CarData>);
+            cars.addAll(results?.values as ArrayList<CarData>)
             notifyDataSetChanged()
         }
     }

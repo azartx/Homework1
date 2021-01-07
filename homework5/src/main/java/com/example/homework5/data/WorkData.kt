@@ -4,10 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity/*(foreignKeys = [ForeignKey(entity = CarData::class,
         parentColumns = arrayOf("id"),
@@ -20,8 +17,11 @@ class WorkData(@ColumnInfo val workName: String,
                @ColumnInfo val coast: String,
                @ColumnInfo val color: Int) : Parcelable {
 
-    @PrimaryKey(autoGenerate = true) @ColumnInfo var id: Long? = null
-    @ColumnInfo var parentCar: String? = null
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo
+    var id: Long? = null
+    @ColumnInfo
+    var parentCar: String? = null
 
     constructor(parcel: Parcel) : this(
             parcel.readString().toString(),

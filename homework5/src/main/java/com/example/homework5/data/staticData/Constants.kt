@@ -8,7 +8,6 @@ class Constants {
     companion object {
         // intent tags
         const val OBJECT = "editCar"
-        const val POSITION = "editPosition"
         const val POSITION_CAR_IN_DB = "carId"
         const val PARENT_CAR = "parentCarName"
 
