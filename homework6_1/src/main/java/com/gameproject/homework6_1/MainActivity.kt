@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var carId: Long = 0
     private lateinit var localAdapter: WorksAdapter
     private lateinit var editWorkListener: WorksAdapter.OnWorkClickListener
-    private lateinit var dao: WorksDatabaseDAO
+    //private lateinit var dao: WorksDatabaseDAO
 
     private lateinit var toolbar: Toolbar
     private lateinit var recycler: RecyclerView
@@ -42,15 +42,15 @@ class MainActivity : AppCompatActivity() {
         backButton = findViewById(R.id.backButton)
         logoTextView = findViewById(R.id.worksIsEmptyTextView)
 
-        getIntentData(intent, carNameInToolbar)
+       // getIntentData(intent, carNameInToolbar)
 
         val path = "com.example.homework5.fileprovider.database"
         val resolver = contentResolver.query(Uri.parse(path), null,null,null,null)!!.close()
-        val workList = arrayListOf<>()
+        //val workList = arrayListOf<>()
 
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
+        //dao = CarsDatabase.init(this).getWorkDatabaseDAO()
 
        /* // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             layoutManager = localLayoutManager
             adapter = localAdapter
         }
-        checkDataBase()
+        //checkDataBase()
 
     }
 
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         else logoTextView.visibility = View.VISIBLE
     }
 
-    private fun checkDataBase() {
+   /* private fun checkDataBase() {
         val workList = dao.getParentWorks(parentCar)
         if (workList.isNotEmpty()) {
             localAdapter.works = workList as ArrayList<WorkData>
@@ -103,10 +103,10 @@ class MainActivity : AppCompatActivity() {
         parentCar = intent.getStringExtra("modelName")
 
         carNameInToolbar.text = parentCar ?: getString(R.string.car_works)
-    }
+    }*/
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         checkDataBase()
-    }
+    }*/
 }
