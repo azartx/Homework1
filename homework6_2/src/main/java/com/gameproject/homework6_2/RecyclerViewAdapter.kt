@@ -7,6 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecyclerViewAdapter(context: Context,
                           var imageList: ArrayList<ImageObject>,
@@ -38,12 +43,17 @@ class RecyclerViewAdapter(context: Context,
     class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view) {
 
         private val thumbnail: ImageView = view.findViewById(R.id.thumbnail)
+        private val activityScope = CoroutineScope(Dispatchers.Main + Job())
 
         fun bind(imageObject: ImageObject, holder: ViewHolder, onImageClickListener: OnImageClickListener) {
 
-            Glide.with(itemView).load(imageObject.imageUri)
-                    .error(R.drawable.glide_error)
-                    .into(thumbnail)
+            activityScope.launch {
+                val imageFromGlide = withContext(Dispatchers.IO) {
+                    Glide.with(itemView).load(imageObject.imageUri)
+                            .error(R.drawable.glide_error)
+                }
+                imageFromGlide.into(thumbnail)
+            }
 
             holder.thumbnail.setOnClickListener {
                 onImageClickListener.onImageClick(imageObject, adapterPosition)
