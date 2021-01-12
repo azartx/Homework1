@@ -76,15 +76,13 @@ class CarMainActivity : AppCompatActivity() {
         }
 
         // настройка ресайклера и адаптера
-        val localLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         localAdapter = CarAdapter(this, ArrayList(), onEditButtonClick)
         recycler.apply {
-            layoutManager = localLayoutManager
+            layoutManager = LinearLayoutManager(this@CarMainActivity,
+                    RecyclerView.VERTICAL, false)
             adapter = localAdapter
         }
         checkDataBase()
-
-
     }
 
     private fun checkDataBase() {

@@ -14,7 +14,7 @@ interface CarsDatabaseDAO {
     @Query("SELECT * FROM CarData")
     fun getCarsList(): List<CarData>
 
-    @Query("SELECT * FROM CarData WHERE id = :carId LIMIT 1")
+    @Query("SELECT * FROM CarData WHERE id = :carId")
     fun getCar(carId: Long): CarData
 
     @Delete

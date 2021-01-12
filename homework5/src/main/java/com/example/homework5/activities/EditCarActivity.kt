@@ -63,7 +63,7 @@ class EditCarActivity : AppCompatActivity() {
 
         getIntentExtras(intent)
 
-        if (carObject != null) fillPage(ownerName, carName, gosNumber, image)
+        if (carObject != null) fillPage()
 
         createFileAndUri()
 
@@ -109,7 +109,7 @@ class EditCarActivity : AppCompatActivity() {
                                    carName: EditText,
                                    gosNumber: EditText) {
         if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
-            val car = fillCarObject(ownerName, carName, gosNumber)
+            val car = fillCarObject()
 
             dao.update(car)
 
@@ -123,19 +123,20 @@ class EditCarActivity : AppCompatActivity() {
         }
     }
 
-    private fun fillCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
-        return CarData(ownerName.text.toString(),
-                carName.text.toString(),
-                gosNumber.text.toString(),
-                photoUri.toString()).also { it.id = carId }
-    }
+    private fun fillCarObject() =
+            CarData(ownerName.text.toString(),
+                    carName.text.toString(),
+                    gosNumber.text.toString(),
+                    photoUri.toString()
+            ).also { it.id = carId }
+
 
     private fun getIntentExtras(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
         carObject = dao.getCar(carId)
     }
 
-    private fun fillPage(ownerName: EditText, carName: EditText, gosNumber: EditText, image: ImageView) {
+    private fun fillPage() {
         ownerName.setText(carObject?.carOwnerName)
         carName.setText(carObject?.carModelName)
         gosNumber.setText(carObject?.carGosNumber)

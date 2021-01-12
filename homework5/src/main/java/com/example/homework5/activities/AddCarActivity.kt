@@ -76,7 +76,7 @@ class AddCarActivity : AppCompatActivity() {
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
 
-                val car = createCarObject(ownerName, carName, gosNumber)
+                val car = createCarObject()
                 dao.addCarToDatabase(car)
 
                 val intent = Intent()
@@ -102,12 +102,12 @@ class AddCarActivity : AppCompatActivity() {
         }
     }
 
-    private fun createCarObject(ownerName: EditText, carName: EditText, gosNumber: EditText): CarData {
-        return CarData(ownerName.text.toString(),
-                carName.text.toString(),
-                gosNumber.text.toString(),
-                photoFile?.path)
-    }
+    private fun createCarObject() =
+            CarData(ownerName.text.toString(),
+                    carName.text.toString(),
+                    gosNumber.text.toString(),
+                    photoFile?.path
+            )
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

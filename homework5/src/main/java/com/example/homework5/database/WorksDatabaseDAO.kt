@@ -17,7 +17,7 @@ interface WorksDatabaseDAO {
     @Query("SELECT * FROM WorkData WHERE parentCar LIKE :parentCar")
     fun getParentWorks(parentCar: String?): List<WorkData>
 
-    @Query("SELECT * FROM WorkData WHERE id = :workId LIMIT 1")
+    @Query("SELECT * FROM WorkData WHERE id = :workId")
     fun getWork(workId: Long): WorkData
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

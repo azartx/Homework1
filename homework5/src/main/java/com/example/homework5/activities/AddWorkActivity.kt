@@ -52,17 +52,11 @@ class AddWorkActivity : AppCompatActivity() {
 
         time.text = getCurrentData()
 
-        pending.setOnClickListener {
-            pendingSetColor(pending, inProgress, completed)
-        }
+        pending.setOnClickListener { pendingSetColor() }
 
-        inProgress.setOnClickListener {
-            inProgressSetColor(pending, inProgress, completed)
-        }
+        inProgress.setOnClickListener { inProgressSetColor() }
 
-        completed.setOnClickListener {
-            completedSetColor(pending, inProgress, completed)
-        }
+        completed.setOnClickListener { completedSetColor() }
 
         // Нажата кнопка SUBMIT
         submit.setOnClickListener {
@@ -91,7 +85,7 @@ class AddWorkActivity : AppCompatActivity() {
                 .format(Date())
     }
 
-    private fun completedSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
+    private fun completedSetColor() {
         pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
         inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
         completed.setColorFilter(resources.getColor(Constants.COMPLETE, theme))
@@ -99,7 +93,7 @@ class AddWorkActivity : AppCompatActivity() {
         progress = getString(Constants.PROGRESS_COMPLETE)
     }
 
-    private fun inProgressSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
+    private fun inProgressSetColor() {
         pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
         inProgress.setColorFilter(resources.getColor(Constants.IN_PROGRESS, theme))
         completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
@@ -107,7 +101,7 @@ class AddWorkActivity : AppCompatActivity() {
         progress = getString(Constants.PROGRESS_IN_PROGRESS)
     }
 
-    private fun pendingSetColor(pending: ImageView, inProgress: ImageView, completed: ImageView) {
+    private fun pendingSetColor() {
         pending.setColorFilter(resources.getColor(Constants.PENDING, theme))
         inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
         completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))

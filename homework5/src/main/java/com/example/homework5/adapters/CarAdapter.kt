@@ -1,6 +1,7 @@
 package com.example.homework5.adapters
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,10 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.homework5.R
 import com.example.homework5.data.CarData
+import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
 import kotlin.collections.ArrayList
 
@@ -27,22 +30,6 @@ class CarAdapter(context: Context,
     interface OnCarClickListener {
         fun onCarClick(carData: CarData, position: Int, flag: Int)
     }
-
-    /*       // эти три братишки перестали иметь ценность, после того, как мы променяли их на DAO
-    fun add(carData: CarData) {
-        cars.add(carData)
-        notifyItemChanged(cars.indexOf(carData))
-    }
-
-    fun edit(carData: CarData, position: Int) {
-        cars[position] = carData
-        notifyDataSetChanged()
-    }
-
-    fun remove(position: Int) {
-        cars.removeAt(position)
-        notifyDataSetChanged()
-    }*/
 
     private fun selector(p: CarData): String = p.carModelName
 
@@ -75,12 +62,13 @@ class CarAdapter(context: Context,
         private val cameraNoPhoto: ImageView = view.findViewById(R.id.cameraNoPhoto)
 
         fun bind(carData: CarData, holder: ViewHolder, onCarClickListener: OnCarClickListener) {
-            if (carData.carImage == null) {
-                holder.image.setImageResource(R.drawable.ic_background_view)
-            } else {
-                Glide.with(itemView).load(carData.carImage).into(image)
-                cameraNoPhoto.visibility = View.INVISIBLE
-            }
+
+            Glide.with(itemView)
+                    .load(carData.carImage)
+                    .apply(RequestOptions()
+                            .error(R.drawable.ic_background_view))
+                    .into(image)
+            if (carData.carImage != null) cameraNoPhoto.visibility = View.INVISIBLE
 
             holder.carOwnerName.text = carData.carOwnerName
             holder.carModelName.text = carData.carModelName
