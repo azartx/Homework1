@@ -1,5 +1,6 @@
 package com.example.homework5.database
 
+import android.database.Cursor
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Delete
@@ -28,5 +29,8 @@ interface WorksDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addCarToDatabase(entity: WorkData)
+
+    @Query("SELECT * FROM WorkData")
+    fun getWorksList(): Cursor?
 
 }
