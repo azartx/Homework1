@@ -91,6 +91,7 @@ class CarMainActivity : AppCompatActivity() {
             localAdapter.cars = carList as ArrayList<CarData>
             localAdapter.carsCopy = carList
             localAdapter.sortByCarBrand()
+            localAdapter.notifyDataSetChanged() // почему то без этого не обновляет адекватно после применения асинхрона
             visibilityForLogoTextView()
         }
     }
