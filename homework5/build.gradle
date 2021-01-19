@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.homework5"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -50,9 +50,4 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.2.6'
     implementation "androidx.room:room-rxjava2:2.2.6"
     kapt 'androidx.room:room-compiler:2.2.6'
-
-
-
-
-
 }
