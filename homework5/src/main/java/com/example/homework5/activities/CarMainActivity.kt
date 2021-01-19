@@ -15,8 +15,7 @@ import com.example.homework5.R
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -27,7 +26,7 @@ import kotlin.collections.ArrayList
 class CarMainActivity : AppCompatActivity() {
 
     private lateinit var localAdapter: CarAdapter
-    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var databaseRepository: DatabaseRepository
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
     private lateinit var logoTextView: TextView
     private lateinit var recycler: RecyclerView
@@ -47,7 +46,7 @@ class CarMainActivity : AppCompatActivity() {
         logoTextView = findViewById(R.id.listIsEmptyTextView)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         //  добавление новой машины
         addActionButton.setOnClickListener {
@@ -86,7 +85,7 @@ class CarMainActivity : AppCompatActivity() {
     }
 
     private fun checkDataBase() {
-        val carList = dao.getCarsList()
+        val carList = databaseRepository.getCarsList()
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
             localAdapter.carsCopy = carList

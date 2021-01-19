@@ -16,8 +16,6 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
 import com.example.homework5.database.DatabaseRepository
 import java.io.File
 import java.util.UUID
@@ -31,7 +29,6 @@ class AddCarActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var submit: ImageView
     private lateinit var camera: ImageView
-    //private lateinit var dao: CarsDatabaseDAO
     private lateinit var databaseRepository: DatabaseRepository
 
     private var photoFile: File? = null
@@ -44,7 +41,6 @@ class AddCarActivity : AppCompatActivity() {
 
         // инициализация БД
         databaseRepository = DatabaseRepository(applicationContext)
-        //dao = CarsDatabase.init(this).getCarDatabaseDAO()
 
         image = findViewById(R.id.background)
         ownerName = findViewById(R.id.workNameEditText)

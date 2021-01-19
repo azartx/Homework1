@@ -14,8 +14,7 @@ import com.example.homework5.adapters.WorkAdapter
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.WorksDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WorksActivity : AppCompatActivity() {
@@ -25,7 +24,7 @@ class WorksActivity : AppCompatActivity() {
     private var carId: Long = 0
     private lateinit var localAdapter: WorkAdapter
     private lateinit var editWorkListener: WorkAdapter.OnWorkClickListener
-    private lateinit var dao: WorksDatabaseDAO
+    private lateinit var databaseRepository: DatabaseRepository
 
     private lateinit var toolbar: Toolbar
     private lateinit var recycler: RecyclerView
@@ -48,7 +47,7 @@ class WorksActivity : AppCompatActivity() {
         getIntentData(intent, carNameInToolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
@@ -88,7 +87,7 @@ class WorksActivity : AppCompatActivity() {
     }
 
     private fun checkDataBase() {
-        val workList = dao.getParentWorks(parentCar)
+        val workList = databaseRepository.getParentWorks(parentCar)
         if (workList.isNotEmpty()) {
             localAdapter.works = workList as ArrayList<WorkData>
             visibilityForLogoTextView()

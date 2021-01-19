@@ -12,12 +12,11 @@ import androidx.appcompat.widget.Toolbar
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.WorksDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 
 class EditWorkActivity : AppCompatActivity() {
 
-    private lateinit var dao: WorksDatabaseDAO
+    private lateinit var databaseRepository: DatabaseRepository
     private var workObject: WorkData? = null
     private var workId: Long = 0
     private var color: Int? = null
@@ -40,7 +39,7 @@ class EditWorkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         getIntentData(intent)
 
@@ -93,7 +92,7 @@ class EditWorkActivity : AppCompatActivity() {
     }
 
     private fun saveDataAndCloseActivity(work: WorkData) {
-        dao.update(work)
+        databaseRepository.updateWork(work)
         finish()
     }
 
@@ -118,7 +117,7 @@ class EditWorkActivity : AppCompatActivity() {
 
     private fun getIntentData(intent: Intent) {
         workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        workObject = dao.getWork(workId)
+        workObject = databaseRepository.getWork(workId)
 
         progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
         color = workObject?.color
@@ -169,7 +168,7 @@ class EditWorkActivity : AppCompatActivity() {
             setTitle(getString(R.string.remove_work))
             setMessage(getString(R.string.alertRemoveWorkMessage))
             setPositiveButton(getString(R.string.yesButton)) { _, _ ->
-                workObject?.let { dao.delete(it) }
+                workObject?.let { databaseRepository.deleteWork(it) }
                 setResult(RESULT_OK, Intent())
                 finish()
             }
