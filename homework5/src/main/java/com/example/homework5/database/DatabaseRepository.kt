@@ -3,6 +3,10 @@ package com.example.homework5.database
 import android.content.Context
 import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.Executors
 
 class DatabaseRepository(context: Context) {
@@ -18,10 +22,15 @@ class DatabaseRepository(context: Context) {
     }
 
     fun getCarsList(): List<CarData> {
-        return executorService.submit<List<CarData>> {
-            database.getCarDatabaseDAO().getCarsList()
-        }.get()
+
+        return Single.create<List<CarData>> {
+            val list = database.getCarDatabaseDAO().getCarsList()
+            it.onSuccess(list)
+        }.subscribeOn(Schedulers.io())
+                .blockingGet()
+
     }
+
 
     fun getCar(carId: Long): CarData {
         val service = executorService.submit<CarData> {
