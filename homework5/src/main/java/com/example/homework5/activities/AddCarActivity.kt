@@ -75,14 +75,14 @@ class AddCarActivity : AppCompatActivity() {
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
 
-                val car = createCarObject()
-                //dao.addCarToDatabase(car)
-                databaseRepository.addCar(car)
+                createCarObject().apply {
+                    databaseRepository.addCar(this)
 
-                val intent = Intent()
-                        .putExtra("objectId", car.id)
-                setResult(RESULT_OK, intent)
-                finish()
+                    val intent = Intent()
+                            .putExtra("objectId", this.id)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             } else {
                 Toast.makeText(this, getString(R.string.fill_all_fields), Toast.LENGTH_LONG).show()
             }

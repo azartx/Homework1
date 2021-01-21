@@ -17,6 +17,7 @@ import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
@@ -85,13 +86,17 @@ class CarMainActivity : AppCompatActivity() {
     }
 
     private fun checkDataBase() {
-        val carList = databaseRepository.getCarsList()
-        if (carList.isNotEmpty()) {
-            localAdapter.cars = carList as ArrayList<CarData>
-            localAdapter.carsCopy = carList
-            localAdapter.sortByCarBrand()
-            localAdapter.notifyDataSetChanged() // почему то без этого не обновляет адекватно после применения асинхрона
-            visibilityForLogoTextView()
+        databaseRepository.mainScope().launch {
+            val carList = databaseRepository.getCarsList()
+            if (carList.isNotEmpty()) {
+                localAdapter.apply {
+                    cars = carList as ArrayList<CarData>
+                    carsCopy = carList
+                    sortByCarBrand()
+                    notifyDataSetChanged() // почему то без этого не обновляет адекватно после применения асинхрона
+                }
+                visibilityForLogoTextView()
+            }
         }
     }
 

@@ -20,6 +20,7 @@ import com.example.homework5.R
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.DatabaseRepository
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.UUID
 
@@ -132,7 +133,7 @@ class EditCarActivity : AppCompatActivity() {
 
     private fun getIntentExtras(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        carObject = databaseRepository.getCar(carId)
+        databaseRepository.mainScope().launch { carObject = databaseRepository.getCar(carId) }
     }
 
     private fun fillPage() {

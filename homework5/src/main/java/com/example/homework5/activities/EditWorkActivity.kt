@@ -13,6 +13,7 @@ import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.DatabaseRepository
+import kotlinx.coroutines.launch
 
 class EditWorkActivity : AppCompatActivity() {
 
@@ -117,7 +118,7 @@ class EditWorkActivity : AppCompatActivity() {
 
     private fun getIntentData(intent: Intent) {
         workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        workObject = databaseRepository.getWork(workId)
+        databaseRepository.mainScope().launch { workObject = databaseRepository.getWork(workId) }
 
         progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
         color = workObject?.color

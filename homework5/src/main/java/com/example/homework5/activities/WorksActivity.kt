@@ -16,6 +16,7 @@ import com.example.homework5.data.staticData.Constants
 import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
 import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 class WorksActivity : AppCompatActivity() {
 
@@ -87,11 +88,15 @@ class WorksActivity : AppCompatActivity() {
     }
 
     private fun checkDataBase() {
-        val workList = databaseRepository.getParentWorks(parentCar)
-        if (workList.isNotEmpty()) {
-            localAdapter.works = workList as ArrayList<WorkData>
-            visibilityForLogoTextView()
-            localAdapter.notifyDataSetChanged()
+        databaseRepository.mainScope().launch {
+            val workList = databaseRepository.getParentWorks(parentCar)
+            if (workList.isNotEmpty()) {
+                localAdapter.apply {
+                    works = workList as ArrayList<WorkData>
+                    visibilityForLogoTextView()
+                    notifyDataSetChanged()
+                }
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.homework5.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,6 +14,7 @@ import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 class CarInfoActivity : AppCompatActivity() {
 
@@ -58,7 +60,7 @@ class CarInfoActivity : AppCompatActivity() {
         }
 
         getIntentData(intent)
-        carObject = databaseRepository.getCar(carId)
+        databaseRepository.mainScope().launch { carObject = databaseRepository.getCar(carId) }
 
         // нажата кнопка РАБОТЫ
         worksButton.setOnClickListener {
@@ -87,7 +89,11 @@ class CarInfoActivity : AppCompatActivity() {
 
     private fun getIntentData(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        carObject = databaseRepository.getCar(carId)
+        Log.i("FFFF", carId.toString())     /** айди вроде приходит**/
+        databaseRepository.mainScope().launch {
+            carObject = databaseRepository.getCar(carId)
+        }
+        Log.i("FFFF", carObject.carModelName + "asd")   /** а объект не приходит...**/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -97,7 +103,7 @@ class CarInfoActivity : AppCompatActivity() {
                 val getCarData = data.getParcelableExtra<CarData>(Constants.OBJECT)
                 if (getCarData != null) carObject = getCarData
                 carId = data.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-                carObject = databaseRepository.getCar(carId)
+                databaseRepository.mainScope().launch { carObject = databaseRepository.getCar(carId) }
                 fillPage()
             }
         }

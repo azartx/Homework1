@@ -3,35 +3,49 @@ package com.example.homework5.database
 import android.content.Context
 import com.example.homework5.data.CarData
 import com.example.homework5.data.WorkData
-import java.util.concurrent.Executors
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DatabaseRepository(context: Context) {
 
-    private val executorService = Executors.newSingleThreadExecutor()
+    private val mainScope = CoroutineScope(Dispatchers.Main + Job())
     private val database = CarsDatabase.init(context)
+    private val threadIO = Dispatchers.IO
+
+    fun mainScope() = mainScope
 
     /*****************************
      * Start cars database block
      *****************************/
     fun addCar(car: CarData) {
-        executorService.submit { database.getCarDatabaseDAO().addCarToDatabase(car) }
-    }
-
-    fun getCarsList(): List<CarData> {
-        return executorService.submit<List<CarData>> {
-            database.getCarDatabaseDAO().getCarsList()
-        }.get()
-    }
-
-    fun getCar(carId: Long): CarData {
-        val service = executorService.submit<CarData> {
-            return@submit database.getCarDatabaseDAO().getCar(carId)
+        mainScope.launch {
+            withContext(threadIO) {
+                database.getCarDatabaseDAO().addCarToDatabase(car)
+            }
         }
-        return service.get()
+    }
+
+    suspend fun getCarsList(): List<CarData> {
+        return withContext(threadIO) {
+            database.getCarDatabaseDAO().getCarsList()
+        }
+    }
+
+    suspend fun getCar(carId: Long): CarData {
+        return withContext(threadIO) {
+            database.getCarDatabaseDAO().getCar(carId)
+        }
     }
 
     fun updateCar(carData: CarData) {
-        executorService.submit { database.getCarDatabaseDAO().update(carData) }
+        mainScope.launch {
+            withContext(threadIO) {
+                database.getCarDatabaseDAO().update(carData)
+            }
+        }
     }
 
     /*****************************
@@ -40,29 +54,40 @@ class DatabaseRepository(context: Context) {
      * Start works database block
      *****************************/
 
-    fun getParentWorks(parentCar: String?): List<WorkData> {
-        return executorService.submit<List<WorkData>> {
+    suspend fun getParentWorks(parentCar: String?): List<WorkData> {
+        return withContext(threadIO) {
             database.getWorkDatabaseDAO().getParentWorks(parentCar)
-        }.get()
+        }
     }
 
-    fun getWork(workId: Long): WorkData {
-        val service = executorService.submit<WorkData> {
-            return@submit database.getWorkDatabaseDAO().getWork(workId)
+    suspend fun getWork(workId: Long): WorkData {
+        return withContext(threadIO) {
+            database.getWorkDatabaseDAO().getWork(workId)
         }
-        return service.get()
     }
 
     fun updateWork(workData: WorkData) {
-        executorService.submit { database.getWorkDatabaseDAO().update(workData) }
+        mainScope.launch {
+            withContext(threadIO) {
+                database.getWorkDatabaseDAO().update(workData)
+            }
+        }
     }
 
     fun deleteWork(workData: WorkData) {
-        executorService.submit { database.getWorkDatabaseDAO().delete(workData) }
+        mainScope.launch {
+            withContext(threadIO) {
+                database.getWorkDatabaseDAO().delete(workData)
+            }
+        }
     }
 
     fun addWorkToDatabase(workData: WorkData) {
-        executorService.submit { database.getWorkDatabaseDAO().addWorkToDatabase(workData) }
+        mainScope.launch {
+            withContext(threadIO) {
+                database.getWorkDatabaseDAO().addWorkToDatabase(workData)
+            }
+        }
     }
 
     /*********
