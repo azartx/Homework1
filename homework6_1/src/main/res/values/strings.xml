@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Data from Provider</string>
+    <string name="back">Back</string>
+    <string name="works_empty_list">Work list is empty!</string>
+    <string name="add_car">Add car</string>
+    <string name="work_progress">Work progress</string>
+    <string name="progress_text">Progress text</string>
+    <string name="type_of_work">Type of work</string>
+    <string name="time">Time</string>
+    <string name="coast">Coast</string>
+</resources>
