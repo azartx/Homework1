@@ -58,8 +58,6 @@ class EditWorkActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
                 ?: getString(R.string.edit)
 
-        fillPage()
-
         pending.setOnClickListener { pendingSetColor() }
 
         inProgress.setOnClickListener { inProgressSetColor() }
@@ -118,10 +116,12 @@ class EditWorkActivity : AppCompatActivity() {
 
     private fun getIntentData(intent: Intent) {
         workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        databaseRepository.mainScope().launch { workObject = databaseRepository.getWork(workId) }
-
-        progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
-        color = workObject?.color
+        databaseRepository.mainScope().launch {
+            workObject = databaseRepository.getWork(workId)
+            fillPage()
+            progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
+            color = workObject?.color
+        }
     }
 
     private fun completedSetColor() {

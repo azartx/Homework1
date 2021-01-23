@@ -2,7 +2,6 @@ package com.example.homework5.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -59,8 +58,10 @@ class CarInfoActivity : AppCompatActivity() {
             }
         }
 
-        getIntentData(intent)
-        databaseRepository.mainScope().launch { carObject = databaseRepository.getCar(carId) }
+        databaseRepository.mainScope().launch {
+            getIntentData(intent)
+            fillPage()
+        }
 
         // нажата кнопка РАБОТЫ
         worksButton.setOnClickListener {
@@ -70,8 +71,6 @@ class CarInfoActivity : AppCompatActivity() {
                 startActivityForResult(this, 2)
             }
         }
-
-        fillPage()
 
     }
 
@@ -87,13 +86,9 @@ class CarInfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun getIntentData(intent: Intent) {
+    private suspend fun getIntentData(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        Log.i("FFFF", carId.toString())     /** айди вроде приходит**/
-        databaseRepository.mainScope().launch {
-            carObject = databaseRepository.getCar(carId)
-        }
-        Log.i("FFFF", carObject.carModelName + "asd")   /** а объект не приходит...**/
+        carObject = databaseRepository.getCar(carId)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -107,7 +102,6 @@ class CarInfoActivity : AppCompatActivity() {
                 fillPage()
             }
         }
-
     }
 
 }

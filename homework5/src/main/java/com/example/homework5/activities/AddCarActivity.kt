@@ -74,10 +74,8 @@ class AddCarActivity : AppCompatActivity() {
         // нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
-
                 createCarObject().apply {
                     databaseRepository.addCar(this)
-
                     val intent = Intent()
                             .putExtra("objectId", this.id)
                     setResult(RESULT_OK, intent)

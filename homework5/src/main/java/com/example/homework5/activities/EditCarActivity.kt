@@ -63,8 +63,6 @@ class EditCarActivity : AppCompatActivity() {
 
         getIntentExtras(intent)
 
-        if (carObject != null) fillPage()
-
         createFileAndUri()
 
         // нажата кнопка НАЗАД
@@ -133,7 +131,10 @@ class EditCarActivity : AppCompatActivity() {
 
     private fun getIntentExtras(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        databaseRepository.mainScope().launch { carObject = databaseRepository.getCar(carId) }
+        databaseRepository.mainScope().launch {
+            carObject = databaseRepository.getCar(carId)
+            fillPage()
+        }
     }
 
     private fun fillPage() {

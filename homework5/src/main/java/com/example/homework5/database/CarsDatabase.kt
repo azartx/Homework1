@@ -17,6 +17,5 @@ abstract class CarsDatabase : RoomDatabase() {
         fun init(context: Context) = Room.databaseBuilder(context, CarsDatabase::class.java, "database")
                 .fallbackToDestructiveMigration()
                 .build()
-
     }
 }
