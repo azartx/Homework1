@@ -28,5 +28,4 @@ interface WorksDatabaseDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addWorkToDatabase(entity: WorkData)
-
 }

@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.DatabaseRepository
+import com.example.homework5.database.CarsDatabaseRepository
 import java.io.File
 import java.util.UUID
 
@@ -27,7 +27,7 @@ class EditCarActivity : AppCompatActivity() {
 
     private var carId: Long = 0
     private lateinit var toolbar: Toolbar
-    private lateinit var databaseRepository: DatabaseRepository
+    private lateinit var carsDatabaseRepository: CarsDatabaseRepository
     private var photoFile: File? = null
     private var photoUri: Uri? = null
 
@@ -41,6 +41,7 @@ class EditCarActivity : AppCompatActivity() {
     private lateinit var submit: ImageView
     private lateinit var camera: ImageView
     private lateinit var noPhotoTextView: TextView
+    private lateinit var callbackListener: (CarData) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +50,7 @@ class EditCarActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        databaseRepository = DatabaseRepository(applicationContext)
+        carsDatabaseRepository = CarsDatabaseRepository(applicationContext)
 
         ownerName = findViewById(R.id.workNameEditText)
         carName = findViewById(R.id.carNameEditText)
@@ -61,8 +62,6 @@ class EditCarActivity : AppCompatActivity() {
         noPhotoTextView = findViewById(R.id.noPhotoTextView)
 
         getIntentExtras(intent)
-
-        if (carObject != null) fillPage()
 
         createFileAndUri()
 
@@ -110,7 +109,7 @@ class EditCarActivity : AppCompatActivity() {
         if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
             val car = fillCarObject()
 
-            databaseRepository.updateCar(car)
+            carsDatabaseRepository.updateCar(car)
 
             Intent().apply {
                 putExtra(Constants.POSITION_CAR_IN_DB, carId)
@@ -131,8 +130,12 @@ class EditCarActivity : AppCompatActivity() {
 
 
     private fun getIntentExtras(intent: Intent) {
+        callbackListener = { carData ->
+            carObject = carData
+            fillPage()
+        }
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        carObject = databaseRepository.getCar(carId)
+        carsDatabaseRepository.getCar(carId, callbackListener)
     }
 
     private fun fillPage() {

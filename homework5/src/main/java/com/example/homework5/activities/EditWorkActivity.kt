@@ -12,11 +12,11 @@ import androidx.appcompat.widget.Toolbar
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.DatabaseRepository
+import com.example.homework5.database.WorksDatabaseRepository
 
 class EditWorkActivity : AppCompatActivity() {
 
-    private lateinit var databaseRepository: DatabaseRepository
+    private lateinit var worksDatabaseRepository: WorksDatabaseRepository
     private var workObject: WorkData? = null
     private var workId: Long = 0
     private var color: Int? = null
@@ -31,6 +31,7 @@ class EditWorkActivity : AppCompatActivity() {
     private lateinit var submit: ImageView
     private lateinit var backButton: ImageView
     private lateinit var removeButton: ImageView
+    private lateinit var callbackListener: (WorkData) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class EditWorkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        databaseRepository = DatabaseRepository(applicationContext)
+        worksDatabaseRepository = WorksDatabaseRepository(applicationContext)
 
         getIntentData(intent)
 
@@ -56,8 +57,6 @@ class EditWorkActivity : AppCompatActivity() {
 
         findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
                 ?: getString(R.string.edit)
-
-        fillPage()
 
         pending.setOnClickListener { pendingSetColor() }
 
@@ -92,7 +91,7 @@ class EditWorkActivity : AppCompatActivity() {
     }
 
     private fun saveDataAndCloseActivity(work: WorkData) {
-        databaseRepository.updateWork(work)
+        worksDatabaseRepository.updateWork(work)
         finish()
     }
 
@@ -116,11 +115,16 @@ class EditWorkActivity : AppCompatActivity() {
     }
 
     private fun getIntentData(intent: Intent) {
-        workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        workObject = databaseRepository.getWork(workId)
+        callbackListener = { workData ->
+            workObject = workData
 
-        progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
-        color = workObject?.color
+            progress = workObject?.progress ?: getString(Constants.PROGRESS_PENDING)
+            color = workObject?.color
+
+            fillPage()
+        }
+        workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
+        worksDatabaseRepository.getWork(workId, callbackListener)
     }
 
     private fun completedSetColor() {
@@ -168,7 +172,7 @@ class EditWorkActivity : AppCompatActivity() {
             setTitle(getString(R.string.remove_work))
             setMessage(getString(R.string.alertRemoveWorkMessage))
             setPositiveButton(getString(R.string.yesButton)) { _, _ ->
-                workObject?.let { databaseRepository.deleteWork(it) }
+                workObject?.let { worksDatabaseRepository.deleteWork(it) }
                 setResult(RESULT_OK, Intent())
                 finish()
             }
