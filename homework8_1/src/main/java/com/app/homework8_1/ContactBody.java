@@ -1,4 +1,4 @@
-package com.app.homework4;
+package com.app.homework8_1;
 
 import android.os.Parcel;
 
@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 public class ContactBody implements Serializable {
 
-    private final long serialVersionUID = 1L;
     private int image;
     private String contactName;
     private String emailOrNumber;

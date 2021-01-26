@@ -1,13 +1,12 @@
-package com.app.homework4;
+package com.app.homework8_1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import java.io.Serializable;
 
 public class EditContactActivity extends AppCompatActivity {
 
@@ -45,25 +44,23 @@ public class EditContactActivity extends AppCompatActivity {
 
         // нажатие кнопки сабмит
         findViewById(R.id.submitButton).setOnClickListener(v -> {
-            if (name != null && emailOfPhone != null) {
-                actualData.setContactName(name.getText().toString());
-                actualData.setEmailOrNumber(emailOfPhone.getText().toString());
-
-                finishActivity(intent);
-            }
+            actualData.setContactName(name.getText().toString());
+            actualData.setEmailOrNumber(emailOfPhone.getText().toString());
+            finishActivity(intent);
         });
 
         // нажатие кнопки remove
         findViewById(R.id.removeContactButton).setOnClickListener(v -> {
-            intent.putExtra("remove", position);
-            setResult(RESULT_OK, intent);
+            Intent removeIntent = new Intent().putExtra("remove", position);
+            Log.i("FFFF", String.valueOf(position));
+            setResult(RESULT_OK, removeIntent);
             finish();
         });
 
     }
 
     private void finishActivity(Intent intent) {
-        intent.putExtra("edit", (Serializable) actualData);
+        intent.putExtra("edit", actualData);
         intent.putExtra("position", position);
         setResult(RESULT_OK, intent);
         finish();

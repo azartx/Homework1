@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.app.homework8_1.EditContactActivity"></activity>
-        <activity android:name="com.app.homework8_1.AddContactActivity" />
-        <activity android:name="com.app.homework8_1.MainActivity">
+        <activity android:name=".EditContactActivity"></activity>
+        <activity android:name=".AddContactActivity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
