@@ -30,29 +30,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbarSearch);
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        //RecyclerView recyclerView = findViewById(R.id.recyclerView);
         setSupportActionBar(toolbar);
 
         SearchView searchView = findViewById(R.id.searchView);
-        noContactsTextView = findViewById(R.id.noContactsTextView);
+        //noContactsTextView = findViewById(R.id.noContactsTextView);
 
-        onContactClickListener = (contactBody, position) -> {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.rootFragments, RecyclerListFragment.class, null)
+                .commit();
+
+        /*onContactClickListener = (contactBody, position) -> {
             intent = new Intent(MainActivity.this, EditContactActivity.class);
             intent.putExtra("edit pool", contactBody);
             intent.putExtra("position", position);
             startActivityForResult(intent, 2);
-        };
+        }*/;
 
-        findViewById(R.id.addContactButton).setOnClickListener(v -> {
+        /*findViewById(R.id.addContactButton).setOnClickListener(v -> {
             intent = new Intent(MainActivity.this, AddContactActivity.class);
             startActivityForResult(intent, 1);
-        });
+        });*/
 
         restoreDataAfterRotate(savedInstanceState);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        /*LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(manager);*/
 
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
