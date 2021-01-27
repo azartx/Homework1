@@ -84,17 +84,23 @@ class CarMainActivity : AppCompatActivity() {
         checkDataBase()
     }
 
+    /**
+     * ошибка тут
+     */
     private fun checkDataBase() {
-        val carList = databaseRepository.getCarsList()
+        databaseRepository.getCarsList().thenAcceptAsync({ carList ->
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
             localAdapter.carsCopy = carList
             localAdapter.sortByCarBrand()
-            localAdapter.notifyDataSetChanged() // почему то без этого не обновляет адекватно после применения асинхрона
+            localAdapter.notifyDataSetChanged()
             visibilityForLogoTextView()
         }
+        }, mainExecutor)
     }
-
+    /**
+     * ошибка тут
+     */
     private fun visibilityForLogoTextView() {
         if (localAdapter.cars.isNotEmpty()) logoTextView.visibility = View.INVISIBLE
         else logoTextView.visibility = View.VISIBLE

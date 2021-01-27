@@ -17,13 +17,15 @@ class DatabaseRepository(context: Context) {
             database.getCarDatabaseDAO().addCarToDatabase(car)
         }
     }
-
-    fun getCarsList(): List<CarData> {
-        return CompletableFuture.supplyAsync<List<CarData>> {
-            database.getCarDatabaseDAO().getCarsList()
-        }.get()
-    }
-
+    /**
+     * ошибка тут
+     */
+    fun getCarsList(): CompletableFuture<List<CarData>> = CompletableFuture.supplyAsync<List<CarData>> {
+            return@supplyAsync database.getCarDatabaseDAO().getCarsList()
+        }
+    /**
+     * ошибка тут
+     */
     fun getCar(carId: Long): CarData {
         val service = CompletableFuture.supplyAsync<CarData> {
             return@supplyAsync database.getCarDatabaseDAO().getCar(carId)
