@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,12 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import static com.app.homework8_1.Constants.ADD_CONTACT_FRAGMENT;
+import static com.app.homework8_1.Constants.EDIT_CONTACT_FRAGMENT;
+import static com.app.homework8_1.Constants.RECYCLER_LIST_FRAGMENT;
+
+public class MainActivity extends AppCompatActivity implements ChangeFragmentListener {
 
     private static final String KEY = "KEY";
     private TextView noContactsTextView;
@@ -52,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, 1);
         });*/
 
-        restoreDataAfterRotate(savedInstanceState);
+        /*restoreDataAfterRotate(savedInstanceState);*/
 
         /*LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(manager);*/
 
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        /*searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 adapter.getFilter().filter(newText);
                 return false;
             }
-        });
+        });*/
     }
 
     protected void restoreDataAfterRotate(Bundle savedInstanceState) {
@@ -128,4 +129,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onChangeFragment(int id, Bundle args) {
+        switch(id) {
+            case RECYCLER_LIST_FRAGMENT: getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rootFragments, RecyclerListFragment.class, null)
+                    .addToBackStack(null)
+                    .commit();
+            break;
+            case ADD_CONTACT_FRAGMENT: getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rootFragments, AddContactFragment.class, null)
+                    .addToBackStack(null)
+                    .commit();
+            break;
+            case EDIT_CONTACT_FRAGMENT: getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rootFragments, EditContactFragment.class, args)
+                    .addToBackStack(null)
+                    .commit();
+            break;
+        }
+    }
 }

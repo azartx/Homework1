@@ -29,6 +29,9 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         backButton.setOnClickListener {
             /*setResult(Activity.RESULT_CANCELED, intent)
             finish()*/
+
+            
+
         }
 
         radioGroup.setOnCheckedChangeListener { _, button ->
