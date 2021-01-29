@@ -74,7 +74,7 @@ public class EditContactActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putInt("position", position);
-        savedInstanceState.putSerializable("object", actualData);
+        savedInstanceState.putParcelable("object", actualData);
 
         super.onSaveInstanceState(savedInstanceState);
     }

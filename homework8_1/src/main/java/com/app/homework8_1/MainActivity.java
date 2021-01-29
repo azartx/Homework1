@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragmentLis
             startActivityForResult(intent, 1);
         });*/
 
-        /*restoreDataAfterRotate(savedInstanceState);*/
+        restoreDataAfterRotate(savedInstanceState);
 
         /*LinearLayoutManager manager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setAdapter(adapter);

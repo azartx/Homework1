@@ -43,6 +43,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         notifyDataSetChanged();
     }
 
+    public void replaceContacts(ArrayList<ContactBody> contact) {
+        contacts.addAll(contact);
+        contactsCopy.addAll(contact);
+        notifyDataSetChanged();
+    }
+
     public void remove(int position) {
         contacts.remove(position);
         contactsCopy.remove(position);
