@@ -1,7 +1,6 @@
 package com.app.homework8_1
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
@@ -56,7 +55,12 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
 /*dataAdapter.add(ContactBody(R.drawable.ic_baseline_contact_phone_24, "name", "email"))
 dataAdapter.add(ContactBody(R.drawable.ic_baseline_contact_phone_24, "name", "email"))*/
 
+        checkState()
+    }
 
+    private fun checkState() {
+        if (dataAdapter.isEmpty) noContactsTextView.visibility = View.VISIBLE
+        else noContactsTextView.visibility = View.INVISIBLE
     }
 
 

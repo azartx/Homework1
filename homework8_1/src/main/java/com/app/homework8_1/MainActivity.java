@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragmentLis
             adapter = new DataAdapter(this,
                     (ArrayList<ContactBody>) savedInstanceState.getSerializable(KEY),
                     onContactClickListener);
-            checkState();
+            //checkState();
         } else {
             adapter = new DataAdapter(this, new ArrayList<>(), onContactClickListener);
         }
@@ -105,16 +105,10 @@ public class MainActivity extends AppCompatActivity implements ChangeFragmentLis
                 adapter.edit(cb, position);
             }
         }
-        checkState();
+        //checkState();
     }
 
-    private void checkState() {
-        if (adapter.getItemCount() == 0) {
-            noContactsTextView.setVisibility(View.VISIBLE);
-        } else {
-            noContactsTextView.setVisibility(View.INVISIBLE);
-        }
-    }
+
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -125,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements ChangeFragmentLis
             } else {
                 outState.putParcelableArrayList(KEY, new ArrayList<>());
             }
-            checkState();
+            //checkState();
         }
     }
 
@@ -134,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements ChangeFragmentLis
         switch(id) {
             case RECYCLER_LIST_FRAGMENT: getSupportFragmentManager().beginTransaction()
                     .replace(R.id.rootFragments, RecyclerListFragment.class, null)
-                    .addToBackStack(null)
                     .commit();
             break;
             case ADD_CONTACT_FRAGMENT: getSupportFragmentManager().beginTransaction()

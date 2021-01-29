@@ -55,6 +55,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         notifyDataSetChanged();
     }
 
+    public boolean isEmpty() {
+        return getItemCount() == 0;
+    }
+
     @NonNull
     @Override
     public DataAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
