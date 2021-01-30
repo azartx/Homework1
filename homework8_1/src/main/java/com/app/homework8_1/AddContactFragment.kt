@@ -35,6 +35,8 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
 
         backButton.setOnClickListener { this.activity?.onBackPressed() }
 
+        submitButton.setOnClickListener { submitIsPressed() }
+
         radioGroup.setOnCheckedChangeListener { _, button ->
             when (button) {
                 R.id.numberRadioButton -> numberOrEmailEditText.setHint(R.string.number)
@@ -42,45 +44,29 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
             }
         }
 
-        submitButton.setOnClickListener {
-
-            var image = 0
-            val name = nameEditText.text.toString()
-            val numberOrEmail = numberOrEmailEditText.text.toString()
-
-            when {
-                numberRadioButton.isChecked -> {
-                    image = R.drawable.ic_baseline_contact_phone_24
-                }
-                emailRadioButton.isChecked -> {
-                    image = R.drawable.ic_baseline_email_24
-                }
-            }
-
-            if (name.isEmpty() || numberOrEmail.isEmpty()) {
-                Toast.makeText(view.context, "Заполните все поля", Toast.LENGTH_LONG).show()
-            } else {
-                /*Bundle().apply {
-                    putParcelable("newContact", */
-
-                        contactDB.addContactToDB(ContactBody(image, name, numberOrEmail))
-
-
-                    parentFragmentManager.beginTransaction()
-                            .replace(R.id.rootFragments, RecyclerListFragment::class.java, null)
-                            .commit()
-                }
-
-                /*this.activity?.onBackPressed()*/
-            }
-            //finishActivity(intent, image, name, numberOrEmail, check)
-
-        }
-
-
     }
 
+    private fun submitIsPressed() {
+        var image = 0
+        val name = nameEditText.text.toString()
+        val numberOrEmail = numberOrEmailEditText.text.toString()
 
+        when {
+            numberRadioButton.isChecked -> {
+                image = R.drawable.ic_baseline_contact_phone_24
+            }
+            emailRadioButton.isChecked -> {
+                image = R.drawable.ic_baseline_email_24
+            }
+        }
 
-
-
+        if (name.isEmpty() || numberOrEmail.isEmpty()) {
+            Toast.makeText(context, "Заполните все поля", Toast.LENGTH_LONG).show()
+        } else {
+            contactDB.addContactToDB(ContactBody(image, name, numberOrEmail))
+            parentFragmentManager.beginTransaction()
+                    .replace(R.id.rootFragments, RecyclerListFragment::class.java, null)
+                    .commit()
+        }
+    }
+}

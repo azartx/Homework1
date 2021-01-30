@@ -1,20 +1,20 @@
 package com.app.homework8_1
 
-import android.app.Instrumentation
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent.KEYCODE_BACK
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.app.homework8_1.Constants.Companion.RECYCLER_LIST_FRAGMENT
+import com.app.homework8_1.db.ContactsDAO
+import com.app.homework8_1.db.ContactsDB
 
 class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
 
+    private lateinit var contactDB: ContactsDAO
     private lateinit var actualData: ContactBody
-    private var position: Int? = null
+    private var contactId: Long = 0
 
     private lateinit var backButton: ImageButton
     private lateinit var submitButton: ImageButton
@@ -24,6 +24,7 @@ class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        contactDB = ContactsDB.init(view.context).getContactsDatabaseDAO()
 
         backButton = view.findViewById(R.id.backButton)
         submitButton = view.findViewById(R.id.submitButton)
@@ -31,24 +32,41 @@ class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
         name = view.findViewById(R.id.nameEditEditText)
         emailOfPhone = view.findViewById(R.id.numberOrEmailEditEditText)
 
+        backButton.setOnClickListener { this.activity?.onBackPressed() }
+        submitButton.setOnClickListener { submitIsPressed() }
+
+        removeButton.setOnClickListener { contactDB.delete(contact = actualData).also { this.activity?.onBackPressed() } }
+
         getData()
         fillPage()
-
-        backButton.setOnClickListener {
-            this.activity?.onBackPressed()
-        }
 
     }
 
     private fun getData() {
-        actualData = arguments?.getSerializable("edit pool") as ContactBody
-        position = arguments?.getInt("position")
-        Log.i("FFFF", position.toString())
+        contactId = arguments?.getLong("contactId") ?: 0
+        actualData = contactDB.getContact(contactId)
     }
 
     private fun fillPage() {
         name.setText(actualData.contactName)
         emailOfPhone.setText(actualData.emailOrNumber)
     }
+
+    private fun submitIsPressed() {
+        val name = name.text.toString()
+        val numberOrEmail = emailOfPhone.text.toString()
+
+        if (name.isEmpty() || numberOrEmail.isEmpty()) {
+            Toast.makeText(context, "Заполните все поля", Toast.LENGTH_LONG).show()
+        } else {
+            contactDB.update(fillContact(name, numberOrEmail))
+            parentFragmentManager.beginTransaction()
+                    .replace(R.id.rootFragments, RecyclerListFragment::class.java, null)
+                    .commit()
+        }
+    }
+
+    private fun fillContact(name: String, numberOrEmail: String) =
+            ContactBody(actualData.image, name, numberOrEmail).also { it.id = contactId }
 
 }
