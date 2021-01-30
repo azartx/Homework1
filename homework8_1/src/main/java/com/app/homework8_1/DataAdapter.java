@@ -37,30 +37,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
         return contacts;
     }
 
-    public void add(ContactBody contact) {
-        contacts.add(contact);
-        contactsCopy.add(contact);
-        notifyDataSetChanged();
-    }
-
-    public void replaceContacts(ArrayList<ContactBody> contact) {
-        contacts.addAll(contact);
-        contactsCopy.addAll(contact);
-        notifyDataSetChanged();
-    }
-
-    public void remove(int position) {
-        contacts.remove(position);
-        contactsCopy.remove(position);
-        notifyDataSetChanged();
-    }
-
-    public void edit(ContactBody contact, int position) {
-        contacts.set(position, contact);
-        contactsCopy.set(position, contact);
-        notifyDataSetChanged();
-    }
-
     public boolean isEmpty() {
         return getItemCount() == 0;
     }

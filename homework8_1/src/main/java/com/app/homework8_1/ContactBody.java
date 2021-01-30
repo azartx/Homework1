@@ -7,16 +7,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
-
 @Entity
 public class ContactBody implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo private Long id;
-    @ColumnInfo private int image;
-    @ColumnInfo private String contactName;
-    @ColumnInfo private String emailOrNumber;
+    @ColumnInfo
+    private Long id;
+    @ColumnInfo
+    private final int image;
+    @ColumnInfo
+    private final String contactName;
+    @ColumnInfo
+    private final String emailOrNumber;
 
     public ContactBody(int image, String contactName, String emailOrNumber) {
         this.image = image;
@@ -55,24 +57,12 @@ public class ContactBody implements Parcelable {
         return image;
     }
 
-    public void setImage(int image) {
-        this.image = image;
-    }
-
     public String getContactName() {
         return contactName;
     }
 
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
-    }
-
     public String getEmailOrNumber() {
         return emailOrNumber;
-    }
-
-    public void setEmailOrNumber(String emailOrNumber) {
-        this.emailOrNumber = emailOrNumber;
     }
 
     @Override

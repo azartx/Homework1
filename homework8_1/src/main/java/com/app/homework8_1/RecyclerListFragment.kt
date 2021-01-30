@@ -52,7 +52,7 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
             layoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)
         }
 
-        searchUtil() //не доделан
+        //searchUtil() //не доделан
 
         getData()
         checkState()
