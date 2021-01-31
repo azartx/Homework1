@@ -1,4 +1,4 @@
-package com.app.homework8_1
+package com.app.homework8_1.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -8,12 +8,14 @@ import android.widget.RadioButton
 import android.widget.Toast
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
+import com.app.homework8_1.ContactBody
+import com.app.homework8_1.R
 import com.app.homework8_1.db.ContactsDAO
 import com.app.homework8_1.db.ContactsDB
+import com.app.homework8_1.db.SingletonDatabase
 
 class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
 
-    private lateinit var contactDB: ContactsDAO
     private lateinit var numberRadioButton: RadioButton
     private lateinit var emailRadioButton: RadioButton
     private lateinit var nameEditText: EditText
@@ -32,8 +34,6 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         radioGroup = view.findViewById(R.id.radioGroup)
         backButton = view.findViewById(R.id.backButton)
         submitButton = view.findViewById(R.id.submitButton)
-
-        contactDB = ContactsDB.init(view.context).getContactsDatabaseDAO()
 
         backButton.setOnClickListener { this.activity?.onBackPressed() }
 
@@ -65,7 +65,7 @@ class AddContactFragment : Fragment(R.layout.fragment_add_contact) {
         if (name.isEmpty() || numberOrEmail.isEmpty()) {
             Toast.makeText(context, "Заполните все поля", Toast.LENGTH_LONG).show()
         } else {
-            contactDB.addContactToDB(ContactBody(image, name, numberOrEmail))
+            SingletonDatabase.contactDB.addContact(ContactBody(image, name, numberOrEmail))
             parentFragmentManager.beginTransaction()
                     .replace(R.id.rootFragments, RecyclerListFragment::class.java, null)
                     .commit()

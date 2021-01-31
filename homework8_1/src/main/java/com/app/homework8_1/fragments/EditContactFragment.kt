@@ -1,4 +1,4 @@
-package com.app.homework8_1
+package com.app.homework8_1.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -7,12 +7,13 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.app.homework8_1.db.ContactsDAO
-import com.app.homework8_1.db.ContactsDB
+import com.app.homework8_1.ContactBody
+import com.app.homework8_1.R
+import com.app.homework8_1.db.SingletonDatabase.Companion.contactDB
+import kotlinx.coroutines.launch
 
 class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
 
-    private lateinit var contactDB: ContactsDAO
     private lateinit var actualData: ContactBody
     private var contactId: Long = 0
 
@@ -24,7 +25,6 @@ class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contactDB = ContactsDB.init(view.context).getContactsDatabaseDAO()
 
         backButton = view.findViewById(R.id.backButton)
         submitButton = view.findViewById(R.id.submitButton)
@@ -35,14 +35,16 @@ class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
         backButton.setOnClickListener { this.activity?.onBackPressed() }
         submitButton.setOnClickListener { submitIsPressed() }
 
-        removeButton.setOnClickListener { contactDB.delete(contact = actualData).also { this.activity?.onBackPressed() } }
+        removeButton.setOnClickListener { contactDB.removeContact(contact = actualData).also { this.activity?.onBackPressed() } }
 
-        getData()
-        fillPage()
+        contactDB.mainScope().launch {
+            getData()
+            fillPage()
+        }
 
     }
 
-    private fun getData() {
+    private suspend fun getData() {
         contactId = arguments?.getLong("contactId") ?: 0
         actualData = contactDB.getContact(contactId)
     }
@@ -59,7 +61,7 @@ class EditContactFragment : Fragment(R.layout.fragment_edit_contact) {
         if (name.isEmpty() || numberOrEmail.isEmpty()) {
             Toast.makeText(context, "Заполните все поля", Toast.LENGTH_LONG).show()
         } else {
-            contactDB.update(fillContact(name, numberOrEmail))
+            contactDB.updateContact(fillContact(name, numberOrEmail))
             parentFragmentManager.beginTransaction()
                     .replace(R.id.rootFragments, RecyclerListFragment::class.java, null)
                     .commit()

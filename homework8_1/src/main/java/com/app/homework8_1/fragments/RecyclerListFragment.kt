@@ -1,4 +1,4 @@
-package com.app.homework8_1
+package com.app.homework8_1.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -9,31 +9,37 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.homework8_1.Constants.Companion.ADD_CONTACT_FRAGMENT
-import com.app.homework8_1.Constants.Companion.EDIT_CONTACT_FRAGMENT
-import com.app.homework8_1.db.ContactsDAO
-import com.app.homework8_1.db.ContactsDB
+import com.app.homework8_1.ContactBody
+import com.app.homework8_1.R
+import com.app.homework8_1.adapters.DataAdapter
+import com.app.homework8_1.db.ContactsRepository
+import com.app.homework8_1.db.SingletonDatabase.Companion.contactDB
+import com.app.homework8_1.db.SingletonDatabase.Companion.getDB
+import com.app.homework8_1.utils.ChangeFragmentListener
+import com.app.homework8_1.utils.Constants.Companion.ADD_CONTACT_FRAGMENT
+import com.app.homework8_1.utils.Constants.Companion.EDIT_CONTACT_FRAGMENT
+import kotlinx.coroutines.launch
 
 class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
 
-    private lateinit var contactDB: ContactsDAO
     private lateinit var recyclerView: RecyclerView
     private lateinit var noContactsTextView: TextView
     private lateinit var onContactClickListener: DataAdapter.OnContactClickListener
     private lateinit var addContactButton: ImageButton
     private lateinit var dataAdapter: DataAdapter
     private lateinit var searchView: SearchView
-
+    private lateinit var contactsRepository:ContactsRepository
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        getDB(view.context)
+        contactsRepository = ContactsRepository(view.context)
 
         searchView = view.findViewById(R.id.searchView)
         recyclerView = view.findViewById(R.id.recyclerView)
         noContactsTextView = view.findViewById(R.id.noContactsTextView)
         addContactButton = view.findViewById(R.id.addContactButton)
-
-        contactDB = ContactsDB.init(view.context).getContactsDatabaseDAO()
 
         onContactClickListener = DataAdapter.OnContactClickListener { contactBody: ContactBody?, _ ->
             Bundle().apply {
@@ -53,9 +59,10 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
         }
 
         //searchUtil() //не доделан
-
-        getData()
-        checkState()
+        contactDB.mainScope().launch {
+            getData()
+            checkState()
+        }
     }
 
     private fun searchUtil() {
@@ -77,8 +84,8 @@ class RecyclerListFragment : Fragment(R.layout.fragment_recycler_list) {
         else noContactsTextView.visibility = View.INVISIBLE
     }
 
-    private fun getData() {
-        dataAdapter.contacts.addAll(contactDB.getContactList())
+    private suspend fun getData() {
+        dataAdapter.contacts.addAll(contactDB.getContactsList())
         dataAdapter.notifyDataSetChanged()
     }
 }

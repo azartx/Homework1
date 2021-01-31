@@ -1,4 +1,4 @@
-package com.app.homework8_1;
+package com.app.homework8_1.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.app.homework8_1.ContactBody;
+import com.app.homework8_1.R;
+
 import java.util.ArrayList;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> implements Filterable {
@@ -22,7 +25,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> im
     private final ArrayList<ContactBody> contactsCopy;
     private final DataAdapter.OnContactClickListener onContactClickListener;
 
-    DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
+    public DataAdapter(Context context, ArrayList<ContactBody> contacts, DataAdapter.OnContactClickListener onContactClickListener) {
         this.contacts = contacts;
         contactsCopy = new ArrayList<>(contacts);
         this.inflater = LayoutInflater.from(context);
