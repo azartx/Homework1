@@ -1,52 +1,48 @@
 package com.example.homework5.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.add
+import androidx.fragment.app.replace
 import com.example.homework5.R
 import com.example.homework5.adapters.CarAdapter
-import com.example.homework5.data.CarData
-import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.DatabaseRepository
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.*
+import com.example.homework5.data.staticData.Constants.Companion.CAR_ADD_FRAGMENT
+import com.example.homework5.data.staticData.Constants.Companion.CAR_EDIT_FRAGMENT
+import com.example.homework5.data.staticData.Constants.Companion.CAR_INFO_FRAGMENT
+import com.example.homework5.data.staticData.Constants.Companion.CAR_RECYCLE_FRAGMENT
+import com.example.homework5.data.staticData.Constants.Companion.WORK_RECYCLE_FRAGMENT
+import com.example.homework5.fragments.*
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
-import kotlin.collections.ArrayList
 
-
-class CarMainActivity : AppCompatActivity() {
+class CarMainActivity : AppCompatActivity(), ChangeFragmentListener {
 
     private lateinit var localAdapter: CarAdapter
-    private lateinit var databaseRepository: DatabaseRepository
-    private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
-    private lateinit var logoTextView: TextView
-    private lateinit var recycler: RecyclerView
-    private lateinit var addActionButton: FloatingActionButton
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_main)
-        toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        /*toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)*/
         writeLog()
+        supportFragmentManager.beginTransaction()
+                .add<RecycleFragment>(R.id.rootFragment)
+                .commit()
 
-        recycler = findViewById(R.id.recyclerView)
+
+
+        /*recycler = findViewById(R.id.recyclerView)
         addActionButton = findViewById(R.id.addNewCar)
-        logoTextView = findViewById(R.id.listIsEmptyTextView)
+        logoTextView = findViewById(R.id.listIsEmptyTextView)*/
 
-        // инициализация БД
+        /*// инициализация БД
         databaseRepository = DatabaseRepository(applicationContext)
 
         //  добавление новой машины
@@ -72,10 +68,10 @@ class CarMainActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
+            }*/
         }
 
-        // настройка ресайклера и адаптера
+        /*// настройка ресайклера и адаптера
         localAdapter = CarAdapter(this, ArrayList(), onEditButtonClick)
         recycler.apply {
             layoutManager = LinearLayoutManager(this@CarMainActivity,
@@ -83,9 +79,9 @@ class CarMainActivity : AppCompatActivity() {
             adapter = localAdapter
         }
         checkDataBase()
-    }
+    }*/
 
-    private fun checkDataBase() {
+    /*private fun checkDataBase() {
         databaseRepository.mainScope().launch {
             val carList = databaseRepository.getCarsList()
             if (carList.isNotEmpty()) {
@@ -98,17 +94,17 @@ class CarMainActivity : AppCompatActivity() {
                 visibilityForLogoTextView()
             }
         }
-    }
+    }*/
 
-    private fun visibilityForLogoTextView() {
+    /*private fun visibilityForLogoTextView() {
         if (localAdapter.cars.isNotEmpty()) logoTextView.visibility = View.INVISIBLE
         else logoTextView.visibility = View.VISIBLE
-    }
+    }*/
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         checkDataBase()
-    }
+    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -140,5 +136,30 @@ class CarMainActivity : AppCompatActivity() {
             close()
         }
     }
+
+    override fun onChangeFragment(id: Int, bundle: Bundle?) {
+        when(id){
+            CAR_RECYCLE_FRAGMENT -> supportFragmentManager.beginTransaction()
+                    .replace<RecycleFragment>(R.id.rootFragment, null, bundle)
+                    .commit()
+            CAR_ADD_FRAGMENT -> supportFragmentManager.beginTransaction()
+                    .replace<AddCarFragment>(R.id.rootFragment, null, bundle)
+                    .addToBackStack(null)
+                    .commit()
+            CAR_EDIT_FRAGMENT -> supportFragmentManager.beginTransaction()
+                    .replace<EditCarFragment>(R.id.rootFragment, null, bundle)
+                    .addToBackStack(null)
+                    .commit()
+            CAR_INFO_FRAGMENT -> supportFragmentManager.beginTransaction()
+                    .replace<CarInfoFragment>(R.id.rootFragment, null, bundle)
+                    .addToBackStack(null)
+                    .commit()
+            WORK_RECYCLE_FRAGMENT -> supportFragmentManager.beginTransaction()
+                    .replace<WorkRecycleFragment>(R.id.rootFragment, null, bundle)
+                    .addToBackStack(null)
+                    .commit()
+        }
+    }
+
 
 }
