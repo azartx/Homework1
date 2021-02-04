@@ -15,18 +15,19 @@ import com.example.homework5.R
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.DatabaseRepository
+import com.example.homework5.database.CarsDatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
+import java.util.function.Consumer
 import kotlin.collections.ArrayList
 
 
 class CarMainActivity : AppCompatActivity() {
 
     private lateinit var localAdapter: CarAdapter
-    private lateinit var databaseRepository: DatabaseRepository
+    private lateinit var carsDatabaseRepository: CarsDatabaseRepository
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
     private lateinit var logoTextView: TextView
     private lateinit var recycler: RecyclerView
@@ -46,7 +47,7 @@ class CarMainActivity : AppCompatActivity() {
         logoTextView = findViewById(R.id.listIsEmptyTextView)
 
         // инициализация БД
-        databaseRepository = DatabaseRepository(applicationContext)
+        carsDatabaseRepository = CarsDatabaseRepository(applicationContext)
 
         //  добавление новой машины
         addActionButton.setOnClickListener {
@@ -84,11 +85,8 @@ class CarMainActivity : AppCompatActivity() {
         checkDataBase()
     }
 
-    /**
-     * ошибка тут
-     */
     private fun checkDataBase() {
-        databaseRepository.getCarsList().thenAcceptAsync({ carList ->
+        carsDatabaseRepository.getCarsList().thenAcceptAsync(Consumer<List<CarData>>{ carList ->
         if (carList.isNotEmpty()) {
             localAdapter.cars = carList as ArrayList<CarData>
             localAdapter.carsCopy = carList
@@ -98,9 +96,7 @@ class CarMainActivity : AppCompatActivity() {
         }
         }, mainExecutor)
     }
-    /**
-     * ошибка тут
-     */
+
     private fun visibilityForLogoTextView() {
         if (localAdapter.cars.isNotEmpty()) logoTextView.visibility = View.INVISIBLE
         else logoTextView.visibility = View.VISIBLE
