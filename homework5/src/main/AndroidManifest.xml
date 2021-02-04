@@ -10,18 +10,12 @@
     <application
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Homework1">
-        <activity android:name=".activities.EditWorkActivity"></activity>
-        <activity android:name=".activities.AddWorkActivity" />
-        <activity android:name=".activities.WorksActivity" />
-        <activity android:name=".activities.CarInfoActivity" />
-        <activity android:name=".activities.EditCarActivity" />
-        <activity android:name=".activities.AddCarActivity" />
+        android:theme="@style/Theme.Homework1"
+        android:usesCleartextTraffic="true">
         <activity android:name=".activities.CarMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

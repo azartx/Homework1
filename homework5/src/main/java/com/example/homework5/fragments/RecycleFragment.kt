@@ -7,12 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.R
-import com.example.homework5.activities.CarInfoActivity
-import com.example.homework5.activities.EditCarActivity
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
