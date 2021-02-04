@@ -1,21 +1,21 @@
-package com.example.homework5.activities
+package com.example.homework5.fragments
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
+import com.example.homework5.data.staticData.Constants.Companion.WORK_RECYCLE_FRAGMENT
 import com.example.homework5.database.DatabaseRepository
 import kotlinx.coroutines.launch
 
-class EditWorkActivity : AppCompatActivity() {
+class EditWorkFragment : Fragment(R.layout.fragment_edit_work) {
 
     private lateinit var databaseRepository: DatabaseRepository
     private var workObject: WorkData? = null
@@ -33,29 +33,26 @@ class EditWorkActivity : AppCompatActivity() {
     private lateinit var backButton: ImageView
     private lateinit var removeButton: ImageView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_edit_work)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // инициализация БД
-        databaseRepository = DatabaseRepository(applicationContext)
+        databaseRepository = DatabaseRepository(view.context)
 
-        getIntentData(intent)
+        getIntentData()
 
-        time = findViewById(R.id.setTime)
-        workNameEditText = findViewById(R.id.workNameEditText)
-        workDescriptionEditText = findViewById(R.id.descriptionEditText)
-        workCoastEditText = findViewById(R.id.coastEditText)
-        pending = findViewById(R.id.pending)
-        inProgress = findViewById(R.id.inProgress)
-        completed = findViewById(R.id.completed)
-        submit = findViewById(R.id.submitButton)
-        backButton = findViewById(R.id.backButton)
-        removeButton = findViewById(R.id.removeButton)
+        time = view.findViewById(R.id.setTime)
+        workNameEditText = view.findViewById(R.id.workNameEditText)
+        workDescriptionEditText = view.findViewById(R.id.descriptionEditText)
+        workCoastEditText = view.findViewById(R.id.coastEditText)
+        pending = view.findViewById(R.id.pending)
+        inProgress = view.findViewById(R.id.inProgress)
+        completed = view.findViewById(R.id.completed)
+        submit = view.findViewById(R.id.submitButton)
+        backButton = view.findViewById(R.id.backButton)
+        removeButton = view.findViewById(R.id.removeButton)
 
-        findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
+        view.findViewById<TextView>(R.id.totleInToolbar).text = workObject?.workName
                 ?: getString(R.string.edit)
 
         pending.setOnClickListener { pendingSetColor() }
@@ -65,7 +62,7 @@ class EditWorkActivity : AppCompatActivity() {
         completed.setOnClickListener { completedSetColor() }
 
         // нажата кнопка НАЗАД
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener { this.activity?.onBackPressed() }
 
         // нажата кнопка УДАЛИТЬ
         removeButton.setOnClickListener { showRemoveDialog() }
@@ -73,7 +70,7 @@ class EditWorkActivity : AppCompatActivity() {
         // Нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (color == null) {
-                Toast.makeText(this, getString(R.string.selectProgress), Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, getString(R.string.selectProgress), Toast.LENGTH_LONG).show()
             } else if (workNameEditText.text.isNotEmpty()
                     && workDescriptionEditText.text.isNotEmpty()
                     && workCoastEditText.text.isNotEmpty()) {
@@ -84,7 +81,7 @@ class EditWorkActivity : AppCompatActivity() {
                                 workDescriptionEditText,
                                 workCoastEditText))
             } else {
-                Toast.makeText(this, getString(R.string.fillAllFields), Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, getString(R.string.fillAllFields), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -92,7 +89,7 @@ class EditWorkActivity : AppCompatActivity() {
 
     private fun saveDataAndCloseActivity(work: WorkData) {
         databaseRepository.updateWork(work)
-        finish()
+        (activity as ChangeFragmentListener).onChangeFragment(WORK_RECYCLE_FRAGMENT, null)
     }
 
     private fun fillPage() {
@@ -104,18 +101,18 @@ class EditWorkActivity : AppCompatActivity() {
 
             when (progress) {
                 getString(Constants.PROGRESS_PENDING) -> pending
-                        .setColorFilter(resources.getColor(Constants.PENDING, theme))
+                        .setColorFilter(resources.getColor(Constants.PENDING, context?.theme))
                 getString(Constants.PROGRESS_IN_PROGRESS) -> inProgress
-                        .setColorFilter(resources.getColor(Constants.IN_PROGRESS, theme))
+                        .setColorFilter(resources.getColor(Constants.IN_PROGRESS, context?.theme))
                 getString(Constants.PROGRESS_COMPLETE) -> completed
-                        .setColorFilter(resources.getColor(Constants.COMPLETE, theme))
+                        .setColorFilter(resources.getColor(Constants.COMPLETE, context?.theme))
             }
 
         }
     }
 
-    private fun getIntentData(intent: Intent) {
-        workId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
+    private fun getIntentData() {
+        workId = arguments?.getLong(Constants.POSITION_CAR_IN_DB, 0) ?: 0
         databaseRepository.mainScope().launch {
             workObject = databaseRepository.getWork(workId)
             fillPage()
@@ -125,25 +122,25 @@ class EditWorkActivity : AppCompatActivity() {
     }
 
     private fun completedSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        completed.setColorFilter(resources.getColor(Constants.COMPLETE, theme))
+        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.COMPLETE, context?.theme))
         color = Constants.COMPLETE
         progress = getString(Constants.PROGRESS_COMPLETE)
     }
 
     private fun inProgressSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.IN_PROGRESS, theme))
-        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
+        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.IN_PROGRESS, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
         color = Constants.IN_PROGRESS
         progress = getString(Constants.PROGRESS_IN_PROGRESS)
     }
 
     private fun pendingSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.PENDING, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
+        pending.setColorFilter(resources.getColor(Constants.PENDING, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
         color = Constants.PENDING
         progress = getString(Constants.PROGRESS_PENDING)
     }
@@ -165,13 +162,12 @@ class EditWorkActivity : AppCompatActivity() {
     }
 
     private fun showRemoveDialog() {
-        AlertDialog.Builder(this).apply {
+        AlertDialog.Builder(context).apply {
             setTitle(getString(R.string.remove_work))
             setMessage(getString(R.string.alertRemoveWorkMessage))
             setPositiveButton(getString(R.string.yesButton)) { _, _ ->
                 workObject?.let { databaseRepository.deleteWork(it) }
-                setResult(RESULT_OK, Intent())
-                finish()
+                (activity as ChangeFragmentListener).onChangeFragment(WORK_RECYCLE_FRAGMENT, null)
             }
             setNegativeButton(getString(R.string.cancleButton)) { dialogInterface, _ -> dialogInterface.cancel() }
             setCancelable(false)

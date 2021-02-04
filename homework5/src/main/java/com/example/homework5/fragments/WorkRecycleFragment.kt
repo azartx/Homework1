@@ -3,20 +3,17 @@ package com.example.homework5.fragments
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homework5.R
-import com.example.homework5.activities.AddWorkActivity
-import com.example.homework5.activities.EditWorkActivity
+import com.example.homework5.data.staticData.Constants.Companion.WORK_ADD_FRAGMENT
 import com.example.homework5.adapters.WorkAdapter
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
+import com.example.homework5.data.staticData.Constants.Companion.WORK_EDIT_FRAGMENT
 import com.example.homework5.database.DatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
@@ -29,8 +26,6 @@ class WorkRecycleFragment : Fragment(R.layout.fragment_work_recycle) {
     private lateinit var localAdapter: WorkAdapter
     private lateinit var editWorkListener: WorkAdapter.OnWorkClickListener
     private lateinit var databaseRepository: DatabaseRepository
-
-    private lateinit var toolbar: Toolbar
     private lateinit var recycler: RecyclerView
     private lateinit var addWorkActionButton: FloatingActionButton
     private lateinit var carNameInToolbar: TextView
@@ -52,24 +47,24 @@ class WorkRecycleFragment : Fragment(R.layout.fragment_work_recycle) {
 
         // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
-            /*Intent(this, AddWorkActivity::class.java).apply {
-                putExtra(Constants.PARENT_CAR, parentCar)
-                startActivityForResult(this, 1)
-            }*/
+            Bundle().apply {
+                putString(Constants.PARENT_CAR, parentCar)
+                (activity as ChangeFragmentListener).onChangeFragment(WORK_ADD_FRAGMENT, this)
+            }
         }
 
         // нажатие на работу
         editWorkListener = object : WorkAdapter.OnWorkClickListener {
             override fun onWorkClick(workData: WorkData, position: Int) {
-                /*Intent(applicationContext, EditWorkActivity::class.java).apply {
-                    putExtra(Constants.POSITION_CAR_IN_DB, workData.id)
-                    startActivityForResult(this, 2)
-                }*/
+                Bundle().apply {
+                    putLong(Constants.POSITION_CAR_IN_DB, workData.id ?: 0)
+                    (activity as ChangeFragmentListener).onChangeFragment(WORK_EDIT_FRAGMENT, this)
+                }
             }
         }
 
         // нажата кнопка назад
-        backButton.setOnClickListener { /*finish()*/ }
+        backButton.setOnClickListener { this.activity?.onBackPressed() }
 
         // настройка ресайклера и адаптера
         val localLayoutManager = LinearLayoutManager(view.context, RecyclerView.VERTICAL, false)

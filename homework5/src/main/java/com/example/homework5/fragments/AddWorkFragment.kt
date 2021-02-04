@@ -1,22 +1,20 @@
-package com.example.homework5.activities
+package com.example.homework5.fragments
 
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
 import com.example.homework5.database.DatabaseRepository
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
-class AddWorkActivity : AppCompatActivity() {
+class AddWorkFragment : Fragment(R.layout.fragment_add_work) {
 
     private var color: Int? = null
     private var progress: String? = null
@@ -31,23 +29,20 @@ class AddWorkActivity : AppCompatActivity() {
     private lateinit var inProgress: ImageView
     private lateinit var completed: ImageView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_add_work)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // инициализация БД
-        databaseRepository = DatabaseRepository(applicationContext)
+        databaseRepository = DatabaseRepository(view.context)
 
-        submit = findViewById(R.id.submitButton)
-        time = findViewById(R.id.setTime)
-        workNameEditText = findViewById(R.id.workNameEditText)
-        workDescriptionEditText = findViewById(R.id.descriptionEditText)
-        coastEditText = findViewById(R.id.coastEditText)
-        pending = findViewById(R.id.pending)
-        inProgress = findViewById(R.id.inProgress)
-        completed = findViewById(R.id.completed)
+        submit = view.findViewById(R.id.submitButton)
+        time = view.findViewById(R.id.setTime)
+        workNameEditText = view.findViewById(R.id.workNameEditText)
+        workDescriptionEditText = view.findViewById(R.id.descriptionEditText)
+        coastEditText = view.findViewById(R.id.coastEditText)
+        pending = view.findViewById(R.id.pending)
+        inProgress = view.findViewById(R.id.inProgress)
+        completed = view.findViewById(R.id.completed)
 
         time.text = getCurrentData()
 
@@ -60,18 +55,18 @@ class AddWorkActivity : AppCompatActivity() {
         // Нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (color == null) {
-                Toast.makeText(this, getString(R.string.selectProgress), Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, getString(R.string.selectProgress), Toast.LENGTH_LONG).show()
             } else if (workNameEditText.text.isNotEmpty()
                     && workDescriptionEditText.text.isNotEmpty()
                     && coastEditText.text.isNotEmpty()) {
 
                 createObject(workNameEditText, time, workDescriptionEditText, coastEditText).apply {
-                    parentCar = intent.getStringExtra(PARENT_CAR)
+                    parentCar = arguments?.getString(Constants.PARENT_CAR)
                     databaseRepository.addWorkToDatabase(this)
-                    finish()
+                    this@AddWorkFragment.activity?.onBackPressed()
                 }
             } else {
-                Toast.makeText(this, getString(R.string.fillAllFields), Toast.LENGTH_LONG).show()
+                Toast.makeText(view.context, getString(R.string.fillAllFields), Toast.LENGTH_LONG).show()
             }
         }
 
@@ -85,25 +80,25 @@ class AddWorkActivity : AppCompatActivity() {
     }
 
     private fun completedSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        completed.setColorFilter(resources.getColor(Constants.COMPLETE, theme))
+        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.COMPLETE, context?.theme))
         color = Constants.COMPLETE
         progress = getString(Constants.PROGRESS_COMPLETE)
     }
 
     private fun inProgressSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.IN_PROGRESS, theme))
-        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
+        pending.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.IN_PROGRESS, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
         color = Constants.IN_PROGRESS
         progress = getString(Constants.PROGRESS_IN_PROGRESS)
     }
 
     private fun pendingSetColor() {
-        pending.setColorFilter(resources.getColor(Constants.PENDING, theme))
-        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
-        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, theme))
+        pending.setColorFilter(resources.getColor(Constants.PENDING, context?.theme))
+        inProgress.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
+        completed.setColorFilter(resources.getColor(Constants.DEFAULT_COLOR, context?.theme))
         color = Constants.PENDING
         progress = getString(Constants.PROGRESS_PENDING)
     }
