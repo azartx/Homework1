@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">homework9</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_country_is_choice">No country is choice</string>
+    <string name="no_data">no data</string>
+    <string name="weather_image">Weather image</string>
+    <string name="degrees">DEGREES</string>
 </resources>
