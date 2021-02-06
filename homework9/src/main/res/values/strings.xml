@@ -6,4 +6,5 @@
     <string name="no_data">no data</string>
     <string name="weather_image">Weather image</string>
     <string name="degrees">DEGREES</string>
+    <string name="clouds">Clouds</string>
 </resources>

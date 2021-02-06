@@ -4,5 +4,5 @@
     android:id="@+id/rootFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-</FrameLayout>
+    android:background="@color/aLittleGray"
+    tools:context=".MainActivity" />
