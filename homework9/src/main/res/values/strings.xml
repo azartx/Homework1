@@ -7,4 +7,6 @@
     <string name="weather_image">Weather image</string>
     <string name="degrees">DEGREES</string>
     <string name="clouds">Clouds</string>
+    <string name="error_city_name">City name is incorrect!</string>
+    <string name="simple_text">Simple text</string>
 </resources>
