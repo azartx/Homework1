@@ -3,6 +3,7 @@ package com.gameproject.homework9
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.add
+import com.gameproject.homework9.fragments.CityChoiceFragment
 import com.gameproject.homework9.fragments.WeatherFragment
 
 class MainActivity : AppCompatActivity() {
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportFragmentManager.beginTransaction()
-                .add<WeatherFragment>(R.id.rootFragment)
+                .add<CityChoiceFragment>(R.id.rootFragment)
                 .commit()
 
 

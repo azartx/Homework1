@@ -9,4 +9,8 @@
     <string name="clouds">Clouds</string>
     <string name="error_city_name">City name is incorrect!</string>
     <string name="simple_text">Simple text</string>
+    <string name="bottom_line">bottom line</string>
+    <string name="submit_check">submit check</string>
+    <string name="add_new_city">Add new city</string>
+    <string name="insert_city_name">Insert City Name</string>
 </resources>
