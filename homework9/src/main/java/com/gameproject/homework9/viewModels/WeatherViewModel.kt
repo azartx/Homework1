@@ -11,17 +11,18 @@ import com.gameproject.homework9.database.Cities
 import com.gameproject.homework9.database.CitiesRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class WeatherViewModel : ViewModel() {
 
     private val weatherRepository = WeatherRepository()
-    private lateinit var citiesRepository : CitiesRepository
+    private lateinit var citiesRepository: CitiesRepository
 
     private val mutableWeatherLiveData = MutableLiveData<WeatherFromApi>()
     val newsWeatherLaveData: LiveData<WeatherFromApi> = mutableWeatherLiveData
 
-    private var mutableCitiesLiveData = MutableLiveData<Cities>()
-    var citiesLaveData: LiveData<Cities> = mutableCitiesLiveData
+    private var mutableCitiesLiveData = MutableLiveData<List<Cities>>()
+    var citiesLaveData: LiveData<List<Cities>> = mutableCitiesLiveData
 
     private val errorMutableWeatherLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = errorMutableWeatherLiveData
@@ -42,12 +43,7 @@ class WeatherViewModel : ViewModel() {
 
     fun addCityIntoDb(context: Context, city: String) {
         citiesRepository = CitiesRepository(context)
-        Cities(city).apply {
-            citiesRepository.addCity(this)
-            mutableCitiesLiveData.setValue(this)
-        }
-
-
+        citiesRepository.mainScope().launch { mutableCitiesLiveData.value = citiesRepository.addCityGetList(Cities(city)) }
     }
 
     override fun onCleared() {

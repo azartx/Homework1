@@ -12,5 +12,8 @@
     <string name="bottom_line">bottom line</string>
     <string name="submit_check">submit check</string>
     <string name="add_new_city">Add new city</string>
-    <string name="insert_city_name">Insert City Name</string>
+    <string name="enter_city_name">Enter the city name</string>
+    <string name="enter_city_name_et">Write the name of the city here</string>
+    <string name="ok_dialog_button">Ok</string>
+    <string name="cancle_dialog_button">Cancel</string>
 </resources>

@@ -6,13 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gameproject.homework9.database.Cities
 import com.gameproject.homework9.databinding.ItemRecycleLayoutBinding
 
-class CitiesAdapter : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
+class CitiesAdapter(val listener: CitiesAdapter.OnCityClickListener) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
+     var cityList: List<Cities> = emptyList()
 
-     var cityList: ArrayList<Cities> = ArrayList()
 
-
-    fun addCity(cityName: Cities) {
-        cityList.add(cityName)
+    fun addCity(cityName: List<Cities>) {
+        cityList = cityName
         notifyDataSetChanged()
     }
 
@@ -22,15 +21,22 @@ class CitiesAdapter : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
                     false))
 
     override fun onBindViewHolder(holder: CitiesViewHolder, position: Int) {
-        holder.bind(cityList[position])
+        holder.bind(cityList[position], listener)
     }
 
     override fun getItemCount() = cityList.size
 
     class CitiesViewHolder(private val binding: ItemRecycleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(city: Cities) {
+        fun bind(city: Cities, listener: OnCityClickListener) {
             binding.cityName.text = city.city
+
+
+
         }
+    }
+
+    interface OnCityClickListener{
+        fun onCityClick()
     }
 
 }

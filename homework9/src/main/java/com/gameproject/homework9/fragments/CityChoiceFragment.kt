@@ -18,12 +18,17 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
 
     private lateinit var binding: FragmentCityChoiceBinding
     private lateinit var localAdapter: CitiesAdapter
+    private lateinit var onCityClickListener: CitiesAdapter.OnCityClickListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCityChoiceBinding.bind(view)
 
-        localAdapter = CitiesAdapter()
+        onCityClickListener = CitiesAdapter.OnCityClickListener{
+
+        }
+
+        localAdapter = CitiesAdapter(onCityClickListener)
         binding.recycler.apply {
             adapter = localAdapter
             layoutManager = LinearLayoutManager(context)
@@ -34,44 +39,27 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
 
         }
 
-
-/*val a = arrayListOf<Cities>()
-        a.add(Cities("44Grodno"))
-        a.add(Cities("qwe"))
-        a.add(Cities("Groasddno"))
-        a.add(Cities("Grozxcdno"))
-        a.add(Cities("sdsd"))
-
-        localAdapter.addCity(a)*/
-
-
     }
 
     private fun getCityName(view: View) {
         val itemDialogBinding: ItemDialogBinding = ItemDialogBinding.inflate(LayoutInflater.from(view.context))
         AlertDialog.Builder(view.context).apply {
             setView(itemDialogBinding.root)
-            setTitle("Title")
-            setMessage("Message")
-            setPositiveButton("Ok") { _, _ ->
-                if (true) {
-
+            setTitle(getString(R.string.enter_city_name))
+            setPositiveButton(getString(R.string.ok_dialog_button)) { _, _ ->
+                if (itemDialogBinding.cityNameEditText.text.toString().isNotEmpty()) {
                     ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java)
                             .also {
-                                it.citiesLaveData.observe(viewLifecycleOwner, { city ->
-                                    localAdapter.addCity(city)
-                                    Log.i("FFFF", "fghdfgh")
-                                })
+                                it.citiesLaveData.observe(viewLifecycleOwner, { city -> localAdapter.addCity(city) })
                                 it.addCityIntoDb(view.context, itemDialogBinding.cityNameEditText.text.toString())
                             }
                 }
             }
-            setNegativeButton("Cancel") { dialogInterface, _ -> dialogInterface.cancel() }
+            setNegativeButton(getString(R.string.cancle_dialog_button)) { dialogInterface, _ -> dialogInterface.cancel() }
             setCancelable(false)
             create()
             show()
         }
     }
-
 
 }
