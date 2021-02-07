@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">homework5</string>
+    <string name="edit">Edit</string>
+    <string name="viewbackground" translatable="false">ViewBackground</string>
+    <string name="car_gos_number">car gos number</string>
+    <string name="no_image">No photo</string>
+    <string name="no_number">no number</string>
+    <string name="driver_name">Driver Name</string>
+    <string name="car_name">Car Name</string>
+    <string name="list_is_empty_please_add_new_car">List is empty! Please, add new car</string>
+    <string name="search">search</string>
+    <string name="add_car">Add car</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="owner_name">Owner name</string>
+    <string name="carName">Car name</string>
+    <string name="gos_number">Gos number</string>
+    <string name="back">Back</string>
+    <string name="submit">Submit</string>
+    <string name="fill_all_fields">Fill in all the fields</string>
+    <string name="view_works">View works</string>
+    <string name="info">Info</string>
+    <string name="work_progress">Work Progress</string>
+    <string name="progress_text">progress text</string>
+    <string name="type_of_work">Type of work</string>
+    <string name="coast">Coast</string>
+    <string name="time">Time</string>
+    <string name="works_empty_list">The work list is empty! Please, add.</string>
+    <string name="add_work">Add work</string>
+    <string name="application_data_text">Application data - </string>
+    <string name="work_name">Work name</string>
+    <string name="description">Description</string>
+    <string name="pending">pending</string>
+    <string name="arrow_forward">Arrow forward</string>
+    <string name="in_progress">in progress</string>
+    <string name="selectProgress">Select one of the work progress buttons</string>
+    <string name="fillAllFields">Fill all fields!</string>
+    <string name="car_works">Car works</string>
+    <string name="complete">complete</string>
+    <string name="remove_work">Remove work</string>
+    <string name="alertRemoveWorkMessage">Are you sure to remove this work?</string>
+    <string name="yesButton">Yes</string>
+    <string name="cancleButton">Cancel</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
