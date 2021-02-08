@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey
 data class Cities(
         @ColumnInfo val city: String
 ) {
-
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo
     var cityId: Int = 0
+    @ColumnInfo
+    var flag: Boolean = false
 }

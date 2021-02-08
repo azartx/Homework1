@@ -13,14 +13,14 @@ class CitiesRepository(context: Context) {
     private val database = WeatherDB.init(context)
     private val threadIO = Dispatchers.IO
 
-    /*fun addCity(city: Cities) {
+    fun addCity(city: Cities) {
         mainScope.launch {
             withContext(threadIO) {
                 database.getCitiesDAO().addCityToDB(city)
 
             }
         }
-    }*/
+    }
     fun mainScope() = mainScope
 
     suspend fun getCitiesList(): List<Cities> {
@@ -33,6 +33,12 @@ class CitiesRepository(context: Context) {
          return withContext(threadIO) {
             database.getCitiesDAO().addCityToDB(city)
              return@withContext database.getCitiesDAO().getCitiesList()
+        }
+    }
+
+    suspend fun changeOldFlag(): Cities {
+        return withContext(threadIO) {
+            database.getCitiesDAO().changeFlag(true)
         }
     }
 

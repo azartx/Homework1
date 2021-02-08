@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.gameproject.homework9.OnChangeFragmentListener
 import com.gameproject.homework9.R
 import com.gameproject.homework9.data.WeatherFromApi
 import com.gameproject.homework9.databinding.FragmentWeatherBinding
+import com.gameproject.homework9.utils.Constants.CITY_CHOICE_FRAGMENT
+import com.gameproject.homework9.utils.Constants.actualCity
 import com.gameproject.homework9.viewModels.WeatherViewModel
 import com.google.android.material.snackbar.Snackbar
 
@@ -23,11 +27,11 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
         ViewModelProvider(this).get(WeatherViewModel::class.java).also {
             it.newsWeatherLaveData.observe(viewLifecycleOwner, { data -> showContent(data) })
             it.errorLiveData.observe(viewLifecycleOwner, { errorMsg -> showError(errorMsg) })
-            it.fetchWeather("Лида")
+            it.fetchWeather(actualCity)
         }
 
         binding.changeCountry.setOnClickListener {
-
+            (activity as OnChangeFragmentListener).onFragmentChange(CITY_CHOICE_FRAGMENT, null)
         }
 
     }

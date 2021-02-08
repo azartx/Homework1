@@ -1,6 +1,7 @@
 package com.gameproject.homework9.viewModels
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,6 +28,9 @@ class WeatherViewModel : ViewModel() {
     private val errorMutableWeatherLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = errorMutableWeatherLiveData
 
+    private val getOldCityMutableWeatherLiveData = MutableLiveData<Cities>()
+    val getOldCityLiveData: LiveData<Cities> = getOldCityMutableWeatherLiveData
+
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -43,7 +47,18 @@ class WeatherViewModel : ViewModel() {
 
     fun addCityIntoDb(context: Context, city: String) {
         citiesRepository = CitiesRepository(context)
-        citiesRepository.mainScope().launch { mutableCitiesLiveData.value = citiesRepository.addCityGetList(Cities(city)) }
+        citiesRepository.mainScope().launch { mutableCitiesLiveData.value = citiesRepository.addCityGetList(Cities(city))
+        }
+    }
+
+    fun getCityWithTrueFlag() {
+        citiesRepository.mainScope().launch {
+            getOldCityMutableWeatherLiveData.value = citiesRepository.changeOldFlag()
+        }
+    }
+
+    fun updateNewCityFlag(city: Cities) {
+        citiesRepository.updateCity(city)
     }
 
     override fun onCleared() {

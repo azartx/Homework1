@@ -11,6 +11,7 @@ abstract class WeatherDB : RoomDatabase() {
 
     companion object {
         fun init(context: Context) = Room.databaseBuilder(context, WeatherDB::class.java, "CitiesDB")
+                .fallbackToDestructiveMigration()
                 .build()
     }
 

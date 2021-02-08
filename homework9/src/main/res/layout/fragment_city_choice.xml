@@ -19,4 +19,13 @@
         android:layout_margin="20dp"
         android:contentDescription="@string/add_new_city"
         android:src="@drawable/ic_choice_the_city" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/add_new_city"
+        android:src="@drawable/ic_back" />
 </FrameLayout>

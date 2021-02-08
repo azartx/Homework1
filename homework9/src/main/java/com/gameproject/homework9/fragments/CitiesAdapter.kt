@@ -1,14 +1,15 @@
 package com.gameproject.homework9.fragments
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.gameproject.homework9.database.Cities
 import com.gameproject.homework9.databinding.ItemRecycleLayoutBinding
 
-class CitiesAdapter(val listener: CitiesAdapter.OnCityClickListener) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
-     var cityList: List<Cities> = emptyList()
-
+class CitiesAdapter(var listener: OnCityClickListener) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
+    var cityList: List<Cities> = emptyList()
 
     fun addCity(cityName: List<Cities>) {
         cityList = cityName
@@ -30,13 +31,18 @@ class CitiesAdapter(val listener: CitiesAdapter.OnCityClickListener) : RecyclerV
         fun bind(city: Cities, listener: OnCityClickListener) {
             binding.cityName.text = city.city
 
+            binding.root.setOnClickListener {
+                binding.submitCheck.visibility = View.VISIBLE
+                listener.onCityClick(city = city, viewNeedToCheck = binding.submitCheck)
 
+                city.flag = true
+            }
 
         }
     }
 
-    interface OnCityClickListener{
-        fun onCityClick()
+    interface OnCityClickListener {
+        fun onCityClick(city: Cities, viewNeedToCheck: ImageView)
     }
 
 }
