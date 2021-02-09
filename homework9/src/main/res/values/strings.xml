@@ -16,4 +16,8 @@
     <string name="enter_city_name_et">Write the name of the city here</string>
     <string name="ok_dialog_button">Ok</string>
     <string name="cancle_dialog_button">Cancel</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="weather_pic">Weather pic</string>
 </resources>
