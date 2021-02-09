@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">homework4_2</string>
+    <string name="use_snackbar">use SnackBar</string>
+    <string name="koords">Координаты %d, %d</string>
+</resources>

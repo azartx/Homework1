@@ -1,4 +1,10 @@
-package com.app.homework2.data;
+/*package com.app.homework2.data;
+
+
+
+            ТЕСТИРОВАЛ ОБСЕРВЕРА ПО ДРУГОМУ НО ЗАПУТАЛСЯ :)
+
+
 
 public class Results {
 
@@ -13,4 +19,4 @@ public class Results {
     }
 
 
-}
+}*/
