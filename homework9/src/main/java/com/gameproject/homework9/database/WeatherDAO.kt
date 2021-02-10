@@ -15,10 +15,6 @@ interface WeatherDAO {
     @Query("SELECT * FROM Cities WHERE cityId = :cityId")
     fun getCity(cityId: Int): Cities
 
-    // Будет искать объект с переданным флагом
-    @Query("SELECT * FROM Cities WHERE flag = :flag")
-    fun changeFlag(flag: Boolean): Cities
-
     @Delete
     fun delete(city: Cities)
 

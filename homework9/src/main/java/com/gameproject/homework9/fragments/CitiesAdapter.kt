@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gameproject.homework9.database.Cities
 import com.gameproject.homework9.databinding.ItemRecycleLayoutBinding
 
-class CitiesAdapter(var listener: OnCityClickListener) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
-    var cityList: List<Cities> = emptyList()
+class CitiesAdapter(private var listener: OnCityClickListener) : RecyclerView.Adapter<CitiesAdapter.CitiesViewHolder>() {
+    private var cityList: List<Cities> = emptyList()
 
     fun addCity(cityName: List<Cities>) {
         cityList = cityName
@@ -32,13 +32,18 @@ class CitiesAdapter(var listener: OnCityClickListener) : RecyclerView.Adapter<Ci
             binding.cityName.text = city.city
             binding.root.setOnClickListener {
                 binding.submitCheck.visibility = View.VISIBLE
-                listener.onCityClick(city = city, viewNeedToCheck = binding.submitCheck)
+                listener.onCityClick(city = city, viewNeedToCheck = binding.submitCheck, false)
+            }
+
+            binding.root.setOnLongClickListener {
+                listener.onCityClick(city = city, viewNeedToCheck = binding.submitCheck, true)
+                return@setOnLongClickListener true
             }
         }
     }
 
     interface OnCityClickListener {
-        fun onCityClick(city: Cities, viewNeedToCheck: ImageView)
+        fun onCityClick(city: Cities, viewNeedToCheck: ImageView, isLongClick: Boolean)
     }
 
 }

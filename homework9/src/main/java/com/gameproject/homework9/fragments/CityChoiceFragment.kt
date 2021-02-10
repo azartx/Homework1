@@ -35,10 +35,17 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
                 }
 
         onCityClickListener = object : CitiesAdapter.OnCityClickListener {
-            override fun onCityClick(city: Cities, viewNeedToCheck: ImageView) {
-                actualCity = city.city
-                checkedView?.visibility = View.INVISIBLE
-                checkedView = viewNeedToCheck
+            override fun onCityClick(city: Cities, viewNeedToCheck: ImageView, isLongClick: Boolean) {
+                if (!isLongClick) {
+                    actualCity = city.city
+                    checkedView?.visibility = View.INVISIBLE
+                    checkedView = viewNeedToCheck
+                } else {
+                    ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java).also {
+                        it.citiesLaveData.observe(viewLifecycleOwner, { cityList -> localAdapter.addCity(cityList) })
+                        it.deleteCityUpdateList(view.context, city)
+                    }
+                }
             }
         }
 

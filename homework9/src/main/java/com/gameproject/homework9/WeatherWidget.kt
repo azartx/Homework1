@@ -3,25 +3,27 @@ package com.gameproject.homework9
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.util.Log
 import android.widget.RemoteViews
+import android.widget.Toast
+import com.gameproject.homework9.data.WeatherRepository
+import com.gameproject.homework9.utils.Constants.actualCity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
-/**
- * Implementation of App Widget functionality.
- * App Widget Configuration implemented in [WeatherWidgetConfigureActivity]
- */
 class WeatherWidget : AppWidgetProvider() {
+
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        // When the user deletes the widget, delete the preference associated with it.
-        for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
-        }
+
     }
 
     override fun onEnabled(context: Context) {
@@ -29,16 +31,30 @@ class WeatherWidget : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context) {
+        compositeDisposable.clear()
         // Enter relevant functionality for when the last widget is disabled
     }
-}
 
-internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
-    val widgetText = loadTitlePref(context, appWidgetId)
-    // Construct the RemoteViews object
+
+private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
+
     val views = RemoteViews(context.packageName, R.layout.weather_widget)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
 
-    // Instruct the widget manager to update the widget
+        WeatherRepository().getWeather(actualCity)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { newsList ->
+                            Toast.makeText(context, "asdsadasd", Toast.LENGTH_LONG).show()
+                            Log.i("FFFF", newsList.city.country)
+                            views.setTextViewText(R.id.countryWidget, "newsList.city.name.toString()")
+                            views.setTextViewText(R.id.currentData, newsList.list[0].dt_txt)
+                            views.setTextViewText(R.id.degreesWidget, newsList.list[0].main.temp.toInt().toString())
+                        },
+                        { error -> Toast.makeText(context, "Widget Weather ERROR: $error", Toast.LENGTH_LONG).show()
+
+
+                        }
+                ).apply { /*compositeDisposable.add(this) */}
+
     appWidgetManager.updateAppWidget(appWidgetId, views)
-}
+}}

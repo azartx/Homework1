@@ -13,14 +13,6 @@ class CitiesRepository(context: Context) {
     private val database = WeatherDB.init(context)
     private val threadIO = Dispatchers.IO
 
-    fun addCity(city: Cities) {
-        mainScope.launch {
-            withContext(threadIO) {
-                database.getCitiesDAO().addCityToDB(city)
-
-            }
-        }
-    }
     fun mainScope() = mainScope
 
     suspend fun getCitiesList(): List<Cities> {
@@ -30,43 +22,16 @@ class CitiesRepository(context: Context) {
     }
 
     suspend fun addCityGetList(city: Cities): List<Cities> {
-         return withContext(threadIO) {
+        return withContext(threadIO) {
             database.getCitiesDAO().addCityToDB(city)
-             return@withContext database.getCitiesDAO().getCitiesList()
+            return@withContext database.getCitiesDAO().getCitiesList()
         }
     }
 
-    suspend fun changeOldFlag(): Cities {
+    suspend fun removeCityGetList(city: Cities): List<Cities> {
         return withContext(threadIO) {
-            database.getCitiesDAO().changeFlag(true)
-        }
-    }
-
-    suspend fun getCity(cityId: Int): Cities {
-        return withContext(threadIO) {
-            database.getCitiesDAO().getCity(cityId)
-        }
-    }
-
-    fun updateCity(city: Cities) {
-        mainScope.launch {
-            withContext(threadIO) {
-                database.getCitiesDAO().update(city)
-            }
-        }
-    }
-
-    fun removeCity(city: Cities) {
-        mainScope.launch {
-            withContext(threadIO) {
-                database.getCitiesDAO().delete(city)
-            }
-        }
-    }
-
-    fun closeDB() {
-        mainScope.launch {
-            withContext(threadIO) { database.close() }
+            database.getCitiesDAO().delete(city)
+            return@withContext database.getCitiesDAO().getCitiesList()
         }
     }
 

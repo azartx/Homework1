@@ -53,6 +53,13 @@ class WeatherViewModel : ViewModel() {
         }
     }
 
+    fun deleteCityUpdateList(context: Context, city: Cities) {
+        citiesRepository = CitiesRepository(context)
+        citiesRepository.mainScope().launch {
+            mutableCitiesLiveData.value = citiesRepository.removeCityGetList(city)
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

@@ -11,6 +11,4 @@ data class Cities(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo
     var cityId: Int = 0
-    @ColumnInfo
-    var flag: Boolean = false
 }
