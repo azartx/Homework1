@@ -7,5 +7,6 @@ object Constants {
 
     const val WEATHER_FRAGMENT = 1
     const val CITY_CHOICE_FRAGMENT = 2
+    const val ACTUAL_CITY = "city"
 
 }

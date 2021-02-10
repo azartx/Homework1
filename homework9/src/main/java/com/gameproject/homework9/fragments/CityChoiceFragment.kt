@@ -28,21 +28,15 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCityChoiceBinding.bind(view)
 
+        ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java)
+                .also {
+                    it.citiesLaveData.observe(viewLifecycleOwner, { cityList -> localAdapter.addCity(cityList) })
+                    it.loadCityList(view.context)
+                }
+
         onCityClickListener = object : CitiesAdapter.OnCityClickListener {
             override fun onCityClick(city: Cities, viewNeedToCheck: ImageView) {
-
                 actualCity = city.city
-
-                /*ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java)
-                        .also { viewModel ->
-                            viewModel.getOldCityLiveData.observe(viewLifecycleOwner, { oldCity ->
-                                oldCity.flag = false
-                                city.flag = true
-                                viewModel.updateNewCityFlag(oldCity)
-                                viewModel.updateNewCityFlag(city)
-
-                            viewModel.getCityWithTrueFlag()
-                        }})*/
                 checkedView?.visibility = View.INVISIBLE
                 checkedView = viewNeedToCheck
             }
@@ -60,7 +54,6 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
                 (activity as OnChangeFragmentListener).onFragmentChange(WEATHER_FRAGMENT, null)
             }
         }
-
 
     }
 

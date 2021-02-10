@@ -1,11 +1,9 @@
 package com.gameproject.homework9.viewModels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.gameproject.homework9.data.City
 import com.gameproject.homework9.data.WeatherFromApi
 import com.gameproject.homework9.data.WeatherRepository
 import com.gameproject.homework9.database.Cities
@@ -28,10 +26,6 @@ class WeatherViewModel : ViewModel() {
     private val errorMutableWeatherLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = errorMutableWeatherLiveData
 
-    private val getOldCityMutableWeatherLiveData = MutableLiveData<Cities>()
-    val getOldCityLiveData: LiveData<Cities> = getOldCityMutableWeatherLiveData
-
-
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun fetchWeather(country: String) {
@@ -47,18 +41,16 @@ class WeatherViewModel : ViewModel() {
 
     fun addCityIntoDb(context: Context, city: String) {
         citiesRepository = CitiesRepository(context)
-        citiesRepository.mainScope().launch { mutableCitiesLiveData.value = citiesRepository.addCityGetList(Cities(city))
-        }
-    }
-
-    fun getCityWithTrueFlag() {
         citiesRepository.mainScope().launch {
-            getOldCityMutableWeatherLiveData.value = citiesRepository.changeOldFlag()
+            mutableCitiesLiveData.value = citiesRepository.addCityGetList(Cities(city))
         }
     }
 
-    fun updateNewCityFlag(city: Cities) {
-        citiesRepository.updateCity(city)
+    fun loadCityList(context: Context) {
+        citiesRepository = CitiesRepository(context)
+        citiesRepository.mainScope().launch {
+            mutableCitiesLiveData.value = citiesRepository.getCitiesList()
+        }
     }
 
     override fun onCleared() {

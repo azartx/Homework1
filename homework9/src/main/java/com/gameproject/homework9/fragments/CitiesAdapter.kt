@@ -30,14 +30,10 @@ class CitiesAdapter(var listener: OnCityClickListener) : RecyclerView.Adapter<Ci
     class CitiesViewHolder(private val binding: ItemRecycleLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(city: Cities, listener: OnCityClickListener) {
             binding.cityName.text = city.city
-
             binding.root.setOnClickListener {
                 binding.submitCheck.visibility = View.VISIBLE
                 listener.onCityClick(city = city, viewNeedToCheck = binding.submitCheck)
-
-                city.flag = true
             }
-
         }
     }
 
