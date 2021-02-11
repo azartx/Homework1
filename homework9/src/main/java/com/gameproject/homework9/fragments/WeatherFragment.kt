@@ -18,12 +18,14 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherFragment : Fragment(R.layout.fragment_weather) {
 
     private lateinit var binding: FragmentWeatherBinding
+    private lateinit var viewModelProvider: ViewModelProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentWeatherBinding.bind(view)
+        viewModelProvider = ViewModelProvider(this)
 
-        ViewModelProvider(this).get(WeatherViewModel::class.java).also {
+        viewModelProvider.get(WeatherViewModel::class.java).also {
             it.newsWeatherLaveData.observe(viewLifecycleOwner, { data -> showContent(data) })
             it.errorLiveData.observe(viewLifecycleOwner, { errorMsg -> showError(errorMsg) })
             it.fetchWeather(actualCity)

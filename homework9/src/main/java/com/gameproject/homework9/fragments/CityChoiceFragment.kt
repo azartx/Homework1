@@ -23,13 +23,14 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
     private lateinit var localAdapter: CitiesAdapter
     private lateinit var onCityClickListener: CitiesAdapter.OnCityClickListener
     private var checkedView: ImageView? = null
+    private lateinit var viewModelProvider: ViewModelProvider
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCityChoiceBinding.bind(view)
+        viewModelProvider = ViewModelProvider(this)
 
-        ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java)
-                .also {
+        viewModelProvider.get(WeatherViewModel::class.java).also {
                     it.citiesLaveData.observe(viewLifecycleOwner, { cityList -> localAdapter.addCity(cityList) })
                     it.loadCityList(view.context)
                 }
@@ -41,7 +42,7 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
                     checkedView?.visibility = View.INVISIBLE
                     checkedView = viewNeedToCheck
                 } else {
-                    ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java).also {
+                    viewModelProvider.get(WeatherViewModel::class.java).also {
                         it.citiesLaveData.observe(viewLifecycleOwner, { cityList -> localAdapter.addCity(cityList) })
                         it.deleteCityUpdateList(view.context, city)
                     }
@@ -71,8 +72,7 @@ class CityChoiceFragment : Fragment(R.layout.fragment_city_choice) {
             setTitle(getString(R.string.enter_city_name))
             setPositiveButton(getString(R.string.ok_dialog_button)) { _, _ ->
                 if (itemDialogBinding.cityNameEditText.text.toString().isNotEmpty()) {
-                    ViewModelProvider(this@CityChoiceFragment).get(WeatherViewModel::class.java)
-                            .also {
+                    viewModelProvider.get(WeatherViewModel::class.java).also {
                                 it.citiesLaveData.observe(viewLifecycleOwner, { city -> localAdapter.addCity(city) })
                                 it.addCityIntoDb(view.context, itemDialogBinding.cityNameEditText.text.toString())
                             }
