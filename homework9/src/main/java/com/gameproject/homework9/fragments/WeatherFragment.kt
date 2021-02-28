@@ -28,6 +28,7 @@ class WeatherFragment : Fragment(R.layout.fragment_weather) {
         viewModelProvider.get(WeatherViewModel::class.java).also {
             it.newsWeatherLaveData.observe(viewLifecycleOwner, { data -> showContent(data) })
             it.errorLiveData.observe(viewLifecycleOwner, { errorMsg -> showError(errorMsg) })
+            it.tooMachDegreesLiveData.observe(viewLifecycleOwner, { useCase -> showError(useCase)})
             it.fetchWeather(actualCity)
         }
 

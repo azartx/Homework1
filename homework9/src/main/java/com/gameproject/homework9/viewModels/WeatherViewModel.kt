@@ -26,13 +26,22 @@ class WeatherViewModel : ViewModel() {
     private val errorMutableWeatherLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> = errorMutableWeatherLiveData
 
+    private val tooMachDegreesMutableWeatherLiveData = MutableLiveData<String>()
+    val tooMachDegreesLiveData: LiveData<String> = tooMachDegreesMutableWeatherLiveData
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun fetchWeather(country: String) {
         weatherRepository.getWeather(country)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { newsList -> mutableWeatherLiveData.value = newsList },
+                        { weather ->
+                            if (WeatherUsesCase().filterTemp(weather)) {
+                                mutableWeatherLiveData.value = weather
+                            } else {
+                                tooMachDegreesMutableWeatherLiveData.value = "This country is TOO HAT!!"
+                            }
+                        },
                         { error -> errorMutableWeatherLiveData.value = "Error: " + error.message }
                 ).also {
                     compositeDisposable.add(it)
