@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">homework9</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_country_is_choice">No country is choice</string>
+    <string name="no_data">no data</string>
+    <string name="weather_image">Weather image</string>
+    <string name="degrees">DEGREES</string>
+    <string name="clouds">Clouds</string>
+    <string name="error_city_name">City name is incorrect!</string>
+    <string name="simple_text">Simple text</string>
+    <string name="bottom_line">bottom line</string>
+    <string name="submit_check">submit check</string>
+    <string name="add_new_city">Add new city</string>
+    <string name="enter_city_name">Enter the city name</string>
+    <string name="enter_city_name_et">Write the name of the city here</string>
+    <string name="ok_dialog_button">OK</string>
+    <string name="cancle_dialog_button">Cancel</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="weather_pic">Weather pic</string>
+</resources>

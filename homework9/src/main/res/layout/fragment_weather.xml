@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    tools:context=".fragments.WeatherFragment">
+
+    <TextView
+        android:id="@+id/countryName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_country_is_choice"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/currentData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/no_data"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/countryName" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/changeCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/aLittleGray"
+        android:src="@drawable/ic_choice_the_city"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/weatherImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/weather_image"
+        android:src="@drawable/ic_weather_pic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/currentData" />
+
+    <TextView
+        android:id="@+id/degrees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/degrees"
+        android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weatherImage" />
+
+    <TextView
+        android:id="@+id/day2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/day3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/degrees" />
+
+    <TextView
+        android:id="@+id/day3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/day4"
+        app:layout_constraintStart_toEndOf="@id/day2"
+        app:layout_constraintTop_toBottomOf="@id/degrees" />
+
+    <TextView
+        android:id="@+id/day4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/day5"
+        app:layout_constraintStart_toEndOf="@id/day3"
+        app:layout_constraintTop_toBottomOf="@id/degrees" />
+
+    <TextView
+        android:id="@+id/day5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_data"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/day4"
+        app:layout_constraintTop_toBottomOf="@id/degrees" />
+
+    <ImageView
+        android:id="@+id/imgDay2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/weather_image"
+        android:src="@drawable/ic_weather_pic"
+        app:layout_constraintEnd_toEndOf="@id/day2"
+        app:layout_constraintStart_toStartOf="@id/day2"
+        app:layout_constraintTop_toBottomOf="@id/day2" />
+
+    <ImageView
+        android:id="@+id/imgDay3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/weather_image"
+        android:src="@drawable/ic_weather_pic"
+        app:layout_constraintEnd_toEndOf="@id/day3"
+        app:layout_constraintStart_toStartOf="@id/day3"
+        app:layout_constraintTop_toBottomOf="@id/day3" />
+
+    <ImageView
+        android:id="@+id/imgDay4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/weather_image"
+        android:src="@drawable/ic_weather_pic"
+        app:layout_constraintEnd_toEndOf="@id/day4"
+        app:layout_constraintStart_toStartOf="@id/day4"
+        app:layout_constraintTop_toBottomOf="@id/day4" />
+
+    <ImageView
+        android:id="@+id/imgDay5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/weather_image"
+        android:src="@drawable/ic_weather_pic"
+        app:layout_constraintEnd_toEndOf="@id/day5"
+        app:layout_constraintStart_toStartOf="@id/day5"
+        app:layout_constraintTop_toBottomOf="@id/day5" />
+
+    <TextView
+        android:id="@+id/degrees2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/degrees"
+        app:layout_constraintEnd_toEndOf="@id/imgDay2"
+        app:layout_constraintStart_toStartOf="@id/imgDay2"
+        app:layout_constraintTop_toBottomOf="@id/imgDay2" />
+
+    <TextView
+        android:id="@+id/degrees3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/degrees"
+        app:layout_constraintEnd_toEndOf="@id/imgDay3"
+        app:layout_constraintStart_toStartOf="@id/imgDay3"
+        app:layout_constraintTop_toBottomOf="@id/imgDay3" />
+
+    <TextView
+        android:id="@+id/degrees4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/degrees"
+        app:layout_constraintEnd_toEndOf="@id/imgDay4"
+        app:layout_constraintStart_toStartOf="@id/imgDay4"
+        app:layout_constraintTop_toBottomOf="@id/imgDay4" />
+
+    <TextView
+        android:id="@+id/degrees5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/degrees"
+        app:layout_constraintEnd_toEndOf="@id/imgDay5"
+        app:layout_constraintStart_toStartOf="@id/imgDay5"
+        app:layout_constraintTop_toBottomOf="@id/imgDay5" />
+
+    <TextView
+        android:id="@+id/clouds2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clouds"
+        app:layout_constraintEnd_toEndOf="@id/degrees2"
+        app:layout_constraintStart_toStartOf="@id/degrees2"
+        app:layout_constraintTop_toBottomOf="@id/degrees2" />
+
+    <TextView
+        android:id="@+id/clouds3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clouds"
+        app:layout_constraintEnd_toEndOf="@id/degrees3"
+        app:layout_constraintStart_toStartOf="@id/degrees3"
+        app:layout_constraintTop_toBottomOf="@id/degrees3" />
+
+    <TextView
+        android:id="@+id/clouds4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clouds"
+        app:layout_constraintEnd_toEndOf="@id/degrees4"
+        app:layout_constraintStart_toStartOf="@id/degrees4"
+        app:layout_constraintTop_toBottomOf="@id/degrees4" />
+
+    <TextView
+        android:id="@+id/clouds5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clouds"
+        app:layout_constraintEnd_toEndOf="@id/degrees5"
+        app:layout_constraintStart_toStartOf="@id/degrees5"
+        app:layout_constraintTop_toBottomOf="@id/degrees5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
