@@ -4,8 +4,12 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
 import android.util.JsonWriter
+import android.util.Log
 import com.google.gson.Gson
+import java.io.File
 import java.io.FileWriter
 import java.io.Writer
 import java.text.SimpleDateFormat
@@ -16,24 +20,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startService(Intent(this, BroadcastService::class.java))
+        initBroadcastReceiver()
+
+        //bindService()
 
 
 
 
 
 
-        val time = SimpleDateFormat("dd/M/yyyy hh:mm:ss",
-                Locale.getDefault())
-                .format(Date()).toString()
+    }
 
-
-        openFileOutput("appLog.txt", MODE_APPEND).apply {
-            write(("\n" + time).toByteArray())
-            close()
+    private fun initBroadcastReceiver() {
+        IntentFilter().apply {
+            addAction(Intent.ACTION_TIMEZONE_CHANGED)
+            addAction(Intent.ACTION_TIME_CHANGED)
+            addAction(Intent.ACTION_BATTERY_LOW)
+            registerReceiver(EventReceiver(), this)
         }
-
-
-
     }
 }
