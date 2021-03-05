@@ -48,6 +48,12 @@ class BroadcastService : Service() {
         return START_STICKY
     }
 
+    /**
+     * !!!!! Обьясни пожалуйста, почему внутри корутины мне выделяет жёлтым работу с файлом !!!!!
+     * !!!!! и пишет что это блокирующий запрос, я ведь по идее в другом потоке запусткаю   !!!!!
+     * !!!!! В чем может быть проблема?                                                     !!!!!
+     */
+
     private fun writeLogToFile(gsonObject: String?) {
         CoroutineScope(Dispatchers.Main + Job()).launch {
             withContext(Dispatchers.Unconfined) {
