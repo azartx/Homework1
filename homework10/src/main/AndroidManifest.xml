@@ -18,13 +18,13 @@
             android:enabled="true"
             android:exported="true" />
 
-        <receiver android:name=".EventReceiver">
+        <!--<receiver android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
                 <action android:name="android.intent.action.BATTERY_LOW" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <activity android:name=".MainActivity">
             <intent-filter>

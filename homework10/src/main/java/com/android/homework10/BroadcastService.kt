@@ -14,6 +14,8 @@ import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.CATEGORY_SERVICE
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +44,10 @@ class BroadcastService : Service() {
                 writeLogToFile(Gson().toJson(this))
             }
         }
+        Intent("FILE_UPDATED").putExtra("qwe", "qwe").apply {
+            applicationContext.sendBroadcast(this)
+        }
+
         return START_STICKY
     }
 
@@ -88,8 +94,12 @@ class BroadcastService : Service() {
                 }
     }
 
+    interface OnUpdateListener{
+        fun onFileUpdate()
+    }
+
     override fun onBind(intent: Intent?): IBinder = bindService
     inner class BindService : Binder() {
-        // if need to call service into the activity on some els, need to use this class
+        fun getService(): BroadcastService = this@BroadcastService
     }
 }
