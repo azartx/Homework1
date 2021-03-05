@@ -13,9 +13,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
 import androidx.core.app.NotificationCompat.Builder
 import androidx.core.app.NotificationCompat.CATEGORY_SERVICE
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.android.homework10.Constants.INTENT_TAG
 import com.google.gson.Gson
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
@@ -36,15 +34,14 @@ class BroadcastService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         if (intent?.extras?.containsKey(INTENT_TAG) == true) {
-            Log.i("FFFF", "MSG FROM SERVICE - CONNECT DONE! ${intent.getStringExtra(INTENT_TAG)}")
             LogData(intent.getStringExtra(INTENT_TAG)
                     ?: "error load event name", getCurrentTime()).apply {
                 writeLogToFile(Gson().toJson(this))
             }
         }
-        Intent("FILE_UPDATED").putExtra("qwe", "qwe").apply {
+
+        Intent("FILE_UPDATED").apply {
             applicationContext.sendBroadcast(this)
         }
 
@@ -58,6 +55,7 @@ class BroadcastService : Service() {
                     write(("\n" + gsonObject).toByteArray())
                     close()
                 }
+                openFileInput("log.txt").readBytes()
             }
         }
     }
@@ -85,8 +83,8 @@ class BroadcastService : Service() {
 
     private fun showServiceNotification() {
         Builder(baseContext, "broadcastChannel")
-                .setContentTitle("Broadcast service is running")
-                .setContentText("Broadcast receiver is getting mobile events and create log for your application")
+                .setContentTitle(getString(R.string.notifTitle))
+                .setContentText(getString(R.string.notifText))
                 .setCategory(CATEGORY_SERVICE)
                 .setPriority(PRIORITY_MAX)
                 .build().apply {
@@ -94,12 +92,9 @@ class BroadcastService : Service() {
                 }
     }
 
-    interface OnUpdateListener{
-        fun onFileUpdate()
-    }
-
     override fun onBind(intent: Intent?): IBinder = bindService
     inner class BindService : Binder() {
         fun getService(): BroadcastService = this@BroadcastService
     }
+
 }

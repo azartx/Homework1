@@ -1,26 +1,27 @@
 package com.android.homework10
 
-import android.content.*
+import android.content.Context
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.getExternalStorageDirectory
-import android.os.IBinder
-import android.util.JsonWriter
 import android.util.Log
-import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.android.homework10.Constants.INTENT_TAG
 import com.android.homework10.Constants.STATE_APP
 import com.android.homework10.Constants.STATE_APP_KEY
 import com.google.gson.Gson
+import java.io.BufferedReader
 import java.io.File
-import java.io.FileWriter
-import java.io.Writer
-import java.text.SimpleDateFormat
-import java.util.*
+import java.io.FileReader
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var broadcastReceiver: BroadcastReceiver
+    private lateinit var localAdapter: LogInfoAdapter
 
     override fun onStart() {
         STATE_APP = true
@@ -30,13 +31,50 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        localAdapter = LogInfoAdapter()
 
+        initRecyclerView()
         initBroadcastReceiver()
+        getCurrentLog()
 
     }
 
-    fun qweqwe() {
-        Toast.makeText(applicationContext, "asdasdasd", Toast.LENGTH_SHORT).show()
+    private fun initRecyclerView() {
+        findViewById<RecyclerView>(R.id.recyclerView).apply {
+            adapter = localAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun getCurrentLog() {
+        try {
+            val logFilePath = File(filesDir.toString().plus("/log.txt"))
+            BufferedReader(FileReader(logFilePath)).apply {
+                val list = mutableListOf<LogData>()
+                try {
+                    while (true) {
+                        val line = this.readLine()
+                        if (line != "") {
+                            list.add(Gson().fromJson(line, LogData::class.java))
+                        } else {
+                            continue
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.i("FFFF", "Exception in MainActivity.getCurrentLog: $e")
+                }
+                if (list.size > 0) {
+                    localAdapter.updateList(list)
+                }
+            }
+        } catch (e: Exception) {
+            Log.i("FFFF", "log is not created yet")
+        }
+
+    }
+
+    fun updateFileList() {
+        getCurrentLog()
     }
 
     private fun initBroadcastReceiver() {
@@ -52,8 +90,7 @@ class MainActivity : AppCompatActivity() {
                 if (!intent?.action.equals("FILE_UPDATED")) {
                     context?.startService(Intent(context, BroadcastService::class.java).putExtra(INTENT_TAG, intent?.action))
                 } else if (intent?.action.equals("FILE_UPDATED") && STATE_APP) {
-                    qweqwe()
-
+                    updateFileList()
                 }
             }
         }
@@ -67,4 +104,5 @@ class MainActivity : AppCompatActivity() {
         }.apply()
         super.onDestroy()
     }
+
 }
