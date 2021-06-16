@@ -16,8 +16,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 import java.io.File
 import java.util.UUID
 
@@ -30,7 +29,7 @@ class AddCarActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var submit: ImageView
     private lateinit var camera: ImageView
-    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var databaseRepository: DatabaseRepository
 
     private var photoFile: File? = null
 
@@ -41,7 +40,7 @@ class AddCarActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         image = findViewById(R.id.background)
         ownerName = findViewById(R.id.workNameEditText)
@@ -75,14 +74,13 @@ class AddCarActivity : AppCompatActivity() {
         // нажата кнопка SUBMIT
         submit.setOnClickListener {
             if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
-
-                val car = createCarObject()
-                dao.addCarToDatabase(car)
-
-                val intent = Intent()
-                        .putExtra("objectId", car.id)
-                setResult(RESULT_OK, intent)
-                finish()
+                createCarObject().apply {
+                    databaseRepository.addCar(this)
+                    val intent = Intent()
+                            .putExtra("objectId", this.id)
+                    setResult(RESULT_OK, intent)
+                    finish()
+                }
             } else {
                 Toast.makeText(this, getString(R.string.fill_all_fields), Toast.LENGTH_LONG).show()
             }
