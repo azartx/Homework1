@@ -1,7 +1,6 @@
 package com.example.homework5.adapters
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.homework5.R
 import com.example.homework5.data.CarData
-import org.xmlpull.v1.XmlPullParser
 import java.util.Locale
 import kotlin.collections.ArrayList
 

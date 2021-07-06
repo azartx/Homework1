@@ -15,8 +15,7 @@ import com.example.homework5.R
 import com.example.homework5.adapters.CarAdapter
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
+import com.example.homework5.database.CarsDatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -27,13 +26,14 @@ import kotlin.collections.ArrayList
 class CarMainActivity : AppCompatActivity() {
 
     private lateinit var localAdapter: CarAdapter
-    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var carsDatabaseRepository: CarsDatabaseRepository
     private lateinit var onEditButtonClick: CarAdapter.OnCarClickListener
     private lateinit var logoTextView: TextView
     private lateinit var recycler: RecyclerView
     private lateinit var addActionButton: FloatingActionButton
     private lateinit var toolbar: Toolbar
     private lateinit var searchView: SearchView
+    private lateinit var callbackListener: (List<CarData>) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +47,7 @@ class CarMainActivity : AppCompatActivity() {
         logoTextView = findViewById(R.id.listIsEmptyTextView)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        carsDatabaseRepository = CarsDatabaseRepository(applicationContext)
 
         //  добавление новой машины
         addActionButton.setOnClickListener {
@@ -82,17 +82,21 @@ class CarMainActivity : AppCompatActivity() {
                     RecyclerView.VERTICAL, false)
             adapter = localAdapter
         }
+
         checkDataBase()
     }
 
     private fun checkDataBase() {
-        val carList = dao.getCarsList()
-        if (carList.isNotEmpty()) {
-            localAdapter.cars = carList as ArrayList<CarData>
-            localAdapter.carsCopy = carList
-            localAdapter.sortByCarBrand()
-            visibilityForLogoTextView()
+        callbackListener = { carList ->
+            if (carList.isNotEmpty()) {
+                localAdapter.cars = carList as ArrayList<CarData>
+                localAdapter.carsCopy = carList
+                localAdapter.sortByCarBrand()
+                localAdapter.notifyDataSetChanged() // почему то без этого не обновляет адекватно после применения асинхрона
+                visibilityForLogoTextView()
+            }
         }
+        carsDatabaseRepository.getCarsList(callbackListener)
     }
 
     private fun visibilityForLogoTextView() {
@@ -135,5 +139,4 @@ class CarMainActivity : AppCompatActivity() {
             close()
         }
     }
-
 }

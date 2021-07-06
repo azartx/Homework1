@@ -11,13 +11,12 @@ import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
+import com.example.homework5.database.CarsDatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CarInfoActivity : AppCompatActivity() {
 
-    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var carsDatabaseRepository: CarsDatabaseRepository
     private lateinit var carObject: CarData
     private var carId: Long = 0
     private lateinit var image: ImageView
@@ -28,6 +27,7 @@ class CarInfoActivity : AppCompatActivity() {
     private lateinit var back: ImageView
     private lateinit var worksButton: FloatingActionButton
     private lateinit var editButton: FloatingActionButton
+    private lateinit var callbackListener: (CarData) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,7 @@ class CarInfoActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        carsDatabaseRepository = CarsDatabaseRepository(applicationContext)
 
         image = findViewById(R.id.background)
         back = findViewById(R.id.backButton)
@@ -59,7 +59,12 @@ class CarInfoActivity : AppCompatActivity() {
         }
 
         getIntentData(intent)
-        carObject = dao.getCar(carId)
+
+        callbackListener = {
+            carObject = it
+            fillPage()
+        }
+        carsDatabaseRepository.getCar(carId, callbackListener)
 
         // нажата кнопка РАБОТЫ
         worksButton.setOnClickListener {
@@ -69,8 +74,6 @@ class CarInfoActivity : AppCompatActivity() {
                 startActivityForResult(this, 2)
             }
         }
-
-        fillPage()
 
     }
 
@@ -88,7 +91,11 @@ class CarInfoActivity : AppCompatActivity() {
 
     private fun getIntentData(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        carObject = dao.getCar(carId)
+        callbackListener = {
+            carObject = it
+        }
+        carsDatabaseRepository.getCar(carId, callbackListener)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,8 +105,12 @@ class CarInfoActivity : AppCompatActivity() {
                 val getCarData = data.getParcelableExtra<CarData>(Constants.OBJECT)
                 if (getCarData != null) carObject = getCarData
                 carId = data.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-                carObject = dao.getCar(carId)
-                fillPage()
+                callbackListener = {
+                    carObject = it
+                    fillPage()
+                }
+                carsDatabaseRepository.getCar(carId, callbackListener)
+
             }
         }
 

@@ -12,7 +12,7 @@ import com.example.homework5.data.WorkData
 interface WorksDatabaseDAO {
 
     @Query("SELECT * FROM WorkData")
-    fun getCarsList(): List<WorkData>
+    fun getWorksList(): List<WorkData>
 
     @Query("SELECT * FROM WorkData WHERE parentCar LIKE :parentCar")
     fun getParentWorks(parentCar: String?): List<WorkData>
@@ -24,9 +24,8 @@ interface WorksDatabaseDAO {
     fun update(workData: WorkData)
 
     @Delete
-    fun delete(carData: WorkData)
+    fun delete(workData: WorkData)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addCarToDatabase(entity: WorkData)
-
+    fun addWorkToDatabase(entity: WorkData)
 }

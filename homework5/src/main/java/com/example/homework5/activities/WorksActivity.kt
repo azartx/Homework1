@@ -14,8 +14,7 @@ import com.example.homework5.adapters.WorkAdapter
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.WorksDatabaseDAO
+import com.example.homework5.database.WorksDatabaseRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WorksActivity : AppCompatActivity() {
@@ -25,13 +24,14 @@ class WorksActivity : AppCompatActivity() {
     private var carId: Long = 0
     private lateinit var localAdapter: WorkAdapter
     private lateinit var editWorkListener: WorkAdapter.OnWorkClickListener
-    private lateinit var dao: WorksDatabaseDAO
+    private lateinit var worksDatabaseRepository: WorksDatabaseRepository
 
     private lateinit var toolbar: Toolbar
     private lateinit var recycler: RecyclerView
     private lateinit var addWorkActionButton: FloatingActionButton
     private lateinit var carNameInToolbar: TextView
     private lateinit var backButton: ImageView
+    private lateinit var callbackListener: (List<WorkData>) -> Unit
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class WorksActivity : AppCompatActivity() {
         getIntentData(intent, carNameInToolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
+        worksDatabaseRepository = WorksDatabaseRepository(applicationContext)
 
         // нажата кнопка ДОБАВИТЬ РАБОТУ
         addWorkActionButton.setOnClickListener {
@@ -88,12 +88,14 @@ class WorksActivity : AppCompatActivity() {
     }
 
     private fun checkDataBase() {
-        val workList = dao.getParentWorks(parentCar)
-        if (workList.isNotEmpty()) {
-            localAdapter.works = workList as ArrayList<WorkData>
-            visibilityForLogoTextView()
-            localAdapter.notifyDataSetChanged()
+        callbackListener = { workList ->
+            if (workList.isNotEmpty()) {
+                localAdapter.works = workList as ArrayList<WorkData>
+                visibilityForLogoTextView()
+                localAdapter.notifyDataSetChanged()
+            }
         }
+        worksDatabaseRepository.getParentWorks(parentCar, callbackListener)
     }
 
     private fun getIntentData(intent: Intent, carNameInToolbar: TextView) {
