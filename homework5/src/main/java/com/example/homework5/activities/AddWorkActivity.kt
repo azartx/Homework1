@@ -11,18 +11,17 @@ import com.example.homework5.R
 import com.example.homework5.data.WorkData
 import com.example.homework5.data.staticData.Constants
 import com.example.homework5.data.staticData.Constants.Companion.PARENT_CAR
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.WorksDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
 
 class AddWorkActivity : AppCompatActivity() {
 
-    private lateinit var dao: WorksDatabaseDAO
     private var color: Int? = null
     private var progress: String? = null
 
+    private lateinit var databaseRepository: DatabaseRepository
     private lateinit var submit: ImageView
     private lateinit var time: TextView
     private lateinit var workNameEditText: EditText
@@ -39,7 +38,7 @@ class AddWorkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getWorkDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         submit = findViewById(R.id.submitButton)
         time = findViewById(R.id.setTime)
@@ -68,7 +67,7 @@ class AddWorkActivity : AppCompatActivity() {
 
                 createObject(workNameEditText, time, workDescriptionEditText, coastEditText).apply {
                     parentCar = intent.getStringExtra(PARENT_CAR)
-                    dao.addCarToDatabase(this)
+                    databaseRepository.addWorkToDatabase(this)
                     finish()
                 }
             } else {

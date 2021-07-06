@@ -19,8 +19,7 @@ import androidx.core.net.toUri
 import com.example.homework5.R
 import com.example.homework5.data.CarData
 import com.example.homework5.data.staticData.Constants
-import com.example.homework5.database.CarsDatabase
-import com.example.homework5.database.CarsDatabaseDAO
+import com.example.homework5.database.DatabaseRepository
 import java.io.File
 import java.util.UUID
 
@@ -28,7 +27,7 @@ class EditCarActivity : AppCompatActivity() {
 
     private var carId: Long = 0
     private lateinit var toolbar: Toolbar
-    private lateinit var dao: CarsDatabaseDAO
+    private lateinit var databaseRepository: DatabaseRepository
     private var photoFile: File? = null
     private var photoUri: Uri? = null
 
@@ -50,7 +49,7 @@ class EditCarActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // инициализация БД
-        dao = CarsDatabase.init(this).getCarDatabaseDAO()
+        databaseRepository = DatabaseRepository(applicationContext)
 
         ownerName = findViewById(R.id.workNameEditText)
         carName = findViewById(R.id.carNameEditText)
@@ -111,7 +110,7 @@ class EditCarActivity : AppCompatActivity() {
         if (ownerName.text.isNotEmpty() && carName.text.isNotEmpty() && gosNumber.text.isNotEmpty()) {
             val car = fillCarObject()
 
-            dao.update(car)
+            databaseRepository.updateCar(car)
 
             Intent().apply {
                 putExtra(Constants.POSITION_CAR_IN_DB, carId)
@@ -133,7 +132,7 @@ class EditCarActivity : AppCompatActivity() {
 
     private fun getIntentExtras(intent: Intent) {
         carId = intent.getLongExtra(Constants.POSITION_CAR_IN_DB, 0)
-        carObject = dao.getCar(carId)
+        carObject = databaseRepository.getCar(carId)
     }
 
     private fun fillPage() {
